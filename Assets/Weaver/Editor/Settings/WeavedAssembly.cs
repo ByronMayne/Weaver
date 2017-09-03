@@ -15,8 +15,12 @@ namespace Weaver
         private string m_FilePath;
         [SerializeField]
         private bool m_Enabled;
+        [SerializeField]
+        private int m_LastWriteTime; 
+
         private FileSystemWatcher m_Watcher;
         private bool m_IsValid;
+        private bool m_HasChanged = false;
 
         /// <summary>
         /// Returns back true if the assembly is
@@ -39,7 +43,7 @@ namespace Weaver
             set { m_Enabled = value; }
         }
 
-        public void AddListener(FileSystemEventHandler handler)
+        public void Initialize()
         {
             if (m_Watcher == null)
             {
@@ -48,19 +52,46 @@ namespace Weaver
                 if (File.Exists(filePath))
                 {
                     m_Watcher = new FileSystemWatcher(directory, assemblyName);
-                    m_Watcher.Changed += handler;
-                }
-                else
-                {
-                    m_IsValid = false;
+                    m_Watcher.IncludeSubdirectories = false;
+                    m_Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+                    m_IsValid = true;
+                    int writeTime = File.GetLastWriteTime(filePath).Second;
+                    if(m_LastWriteTime != writeTime)
+                    {
+                        m_HasChanged = true;
+                        m_LastWriteTime = writeTime;
+                    }
+                    else
+                    {
+                        m_HasChanged = false;
+                    }
                 }
             }
+            else
+            {
+                m_IsValid = false;
+            }
+        }
 
+        public void AddListener(FileSystemEventHandler handler)
+        {
+            if (isValid)
+            {
+                m_Watcher.Changed += handler;
+
+                if(m_HasChanged)
+                {
+                    string directory = Path.GetDirectoryName(filePath);
+                    string assemblyName = Path.GetFileName(filePath);
+                    FileSystemEventArgs fileChangedArg = new FileSystemEventArgs(WatcherChangeTypes.Changed, directory, assemblyName);
+                    handler.Invoke(this, fileChangedArg);
+                }
+            }
         }
 
         public void RemoveListener(FileSystemEventHandler handler)
         {
-            if (m_Watcher != null)
+            if (isValid)
             {
                 m_Watcher.Changed -= handler;
             }

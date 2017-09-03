@@ -25,6 +25,7 @@ namespace Weaver
         {
             for (int i = 0; i < m_WeavedAssemblies.Count; i++)
             {
+                m_WeavedAssemblies[i].Initialize();
                 m_WeavedAssemblies[i].AddListener(OnAssemblyChanged);
             }
         }
@@ -39,7 +40,9 @@ namespace Weaver
 
         private void OnAssemblyChanged(object sender, FileSystemEventArgs e)
         {
-            Debug.Log("Assembly Changed: " + sender + " : " + e.ToString());
+            // Save our write times to disk.
+            EditorUtility.SetDirty(this);
+            Debug.Log("Assembly Changed: " + sender + " : " + e.FullPath);
         }
     }
 }
