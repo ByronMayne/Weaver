@@ -120,6 +120,7 @@
     <Compile Include="Assets\Weaver\Editor\Addins\PropertyChanged\PropertyChangedAttribute.cs" />
     <Compile Include="Assets\Weaver\Editor\AssemblyPosprocessor.cs" />
     <Compile Include="Assets\Weaver\Editor\AssemblyUtility.cs" />
+    <Compile Include="Assets\Weaver\Editor\AttributeFinder.cs" />
     <Compile Include="Assets\Weaver\Editor\Inspectors\WeavedAssemblyDrawer.cs" />
     <Compile Include="Assets\Weaver\Editor\Inspectors\WeaverSettingsEditor.cs" />
     <Compile Include="Assets\Weaver\Editor\Settings\SerializedWeaver.cs" />

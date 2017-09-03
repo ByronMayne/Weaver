@@ -18,7 +18,6 @@ namespace Weaver
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            //string[] guids = AssetDatabase.FindAssets("t:WeaverSettings"); 
         }
 
         private void OnEnable()
@@ -38,11 +37,16 @@ namespace Weaver
             }
         }
 
+        /// <summary>
+        /// Invoked when ever one of the assemblies we are
+        /// watching has changed. 
+        /// </summary>
         private void OnAssemblyChanged(object sender, FileSystemEventArgs e)
         {
             // Save our write times to disk.
             EditorUtility.SetDirty(this);
-            Debug.Log("Assembly Changed: " + sender + " : " + e.FullPath);
+            // Search for our attributes
+            AttributeFinder.SerachAssembly(e.FullPath);
         }
     }
 }
