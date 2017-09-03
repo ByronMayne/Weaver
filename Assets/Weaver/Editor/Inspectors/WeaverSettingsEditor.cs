@@ -17,6 +17,7 @@ namespace Weaver
 
         // Labels
         private GUIContent m_RefreshAssembliesLabel;
+        private GUIContent m_WeavedAssemblyHeaderLabel; 
 
         // Assemblies
         private List<string> m_AssemblyCache;
@@ -29,9 +30,11 @@ namespace Weaver
             m_WeavedAssembliesList = new ReorderableList(serializedObject, m_WeavedAssemblies);
             m_WeavedAssembliesList.drawElementCallback += OnDrawWeavedAssemblyElement;
             m_WeavedAssembliesList.onAddCallback += OnWeavedAssemblyElementAdded;
+            m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyHeader;
 
             // Labels 
             m_RefreshAssembliesLabel = new GUIContent("Refresh Assemblies");
+            m_WeavedAssemblyHeaderLabel = new GUIContent("Weaved Assemblies");
 
             PopulateAssembliesCache();
         }
@@ -40,6 +43,9 @@ namespace Weaver
 
         public override void OnInspectorGUI()
         {
+            GUILayout.Label("Weaver", EditorStyles.boldLabel);
+
+            GUILayout.FlexibleSpace(); 
             m_WeavedAssembliesList.DoLayoutList();
         }
 
@@ -89,6 +95,11 @@ namespace Weaver
                 }
                 menu.ShowAsContext();
             }
+        }
+
+        private void OnWeavedAssemblyHeader(Rect rect)
+        {
+            GUI.Label(rect, m_WeavedAssemblyHeaderLabel);
         }
 
         private void AddWeavedAssembly(object path)
