@@ -1,22 +1,13 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 
 namespace Weaver
 {
-    [InitializeOnLoad]
-    internal class WeaverSettings : SerializedWeaver<WeaverSettings>
+    [CreateAssetMenu(fileName="Weaver Settings")]
+    public class WeaverSettings : ScriptableObject // SerializedWeaver<WeaverSettings>
     {
-        /// <summary>
-        /// Invoked when Unity loads our assemblies 
-        /// </summary>
-        static WeaverSettings()
-        {
-            EditorApplication.delayCall += LoadInstance;
-        }
-
-        protected void OnEnable()
-        {
-            Debug.Log("On Enable");
-        }
+        [SerializeField]
+        private List<WeavedAssembly> m_WeavedAssemblies;
     }
 }

@@ -118,7 +118,10 @@
   <ItemGroup>
     <Compile Include="Assets\Weaver\Editor\AssemblyPosprocessor.cs" />
     <Compile Include="Assets\Weaver\Editor\AssemblyUtility.cs" />
+    <Compile Include="Assets\Weaver\Editor\Inspectors\WeavedAssemblyDrawer.cs" />
+    <Compile Include="Assets\Weaver\Editor\Inspectors\WeaverSettingsEditor.cs" />
     <Compile Include="Assets\Weaver\Editor\Settings\SerializedWeaver.cs" />
+    <Compile Include="Assets\Weaver\Editor\Settings\WeavedAssembly.cs" />
     <Compile Include="Assets\Weaver\Editor\Settings\WeaverSettings.cs" />
   </ItemGroup>
   <ItemGroup />

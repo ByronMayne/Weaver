@@ -13,12 +13,7 @@ namespace Weaver
 
         static AssemblyPosprocessor()
         {
-            ICollection<string> assemblies = AssemblyUtility.GetUserAssemblies(); 
-
-            foreach(string assembly in assemblies)
-            {
-                Debug.Log("Assembly:  " + assembly);
-            }
+ 
         }
     }
 }

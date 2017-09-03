@@ -5,7 +5,8 @@ using System.IO;
 
 namespace Weaver
 {
-    internal abstract class SerializedWeaver<T> : Editor where T : SerializedWeaver<T> 
+    // TODO: Make scriptable singleton
+    public abstract class SerializedWeaver<T> : ScriptableObject where T : SerializedWeaver<T>
     {
         private const string FILE_NAME = "Weaver";
         private const string EXTENSION = ".asset";
@@ -27,16 +28,17 @@ namespace Weaver
         /// Loads the current instance of Weaver from disk
         /// or creates a new one. 
         /// </summary>
-        protected static void LoadInstance()
+        protected static T GetInstance()
         {
             if (m_Instance == null)
             {
                 // Try to find all instances
                 T[] instances = Resources.FindObjectsOfTypeAll<T>();
                 // Loop over them all
-                for(int i = 0; i < instances.Length; i++)
+
+                for (int i = instances.Length - 1; i >= 0; i--)
                 {
-                    if(i == 0)
+                    if (i == 0)
                     {
                         m_Instance = instances[i];
                     }
@@ -63,39 +65,41 @@ namespace Weaver
                             {
                                 // We are good
                                 m_Instance = (T)loadedObjects[0];
-                                return;
                             }
                         }
-                        // If we made it to this point the file that was saved was invalid. So remove it
-                        File.Delete(savePath);
+
+                        if (m_Instance == null)
+                        {
+                            // If we made it to this point the file that was saved was invalid. So remove it
+                            File.Delete(savePath);
+                        }
                     }
                     // If we made it to this point we don't have an instance
                     m_Instance = CreateInstance<T>();
-                    Debug.Log(typeof(SerializedWeaver<T>).FullName);
-                    // Save it to disk to make sure it's there for next time
-                    m_Instance.Save();
                 }
             }
+            return m_Instance;
+        }
+
+        [MenuItem("Window/Weaver Settings...")]
+        protected static void Select()
+        {
+            Selection.activeObject = GetInstance();
         }
 
         /// <summary>
         /// Takes this instance and writes it to disk. 
         /// </summary>
-        private void Save()
+        protected void Save()
         {
+            // Create a copy so we don't destroy ourself.
+            Object instance = Instantiate(this); 
             // Populate our list of things we are saving
-            Object[] objectsToSave = new Object[] { this };
+            Object[] objectsToSave = new Object[] { instance };
             // Write to disk
             InternalEditorUtility.SaveToSerializedFileAndForget(objectsToSave, savePath, true);
-        }
-
-        /// <summary>
-        /// Invoked when our instance gets unloaded. 
-        /// </summary>
-        protected virtual void OnDisable()
-        {
-            // Apply all changes and force a write to disk. 
-            Save();
+            // Destroy our copy 
+            DestroyImmediate(instance);
         }
     }
 }
