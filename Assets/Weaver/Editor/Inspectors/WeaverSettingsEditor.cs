@@ -12,12 +12,18 @@ namespace Weaver
     [CustomEditor(typeof(WeaverSettings))]
     public class WeaverSettingsEditor : Editor
     {
+        // Properties
         private SerializedProperty m_WeavedAssemblies;
+        private SerializedProperty m_Addins;
+
+        // Lists
         private ReorderableList m_WeavedAssembliesList;
+        private ReorderableList m_AddinList;
 
         // Labels
         private GUIContent m_RefreshAssembliesLabel;
-        private GUIContent m_WeavedAssemblyHeaderLabel; 
+        private GUIContent m_WeavedAssemblyHeaderLabel;
+        private GUIContent m_AddinsHeaderLabel;
 
         // Assemblies
         private List<string> m_AssemblyCache;
@@ -28,13 +34,20 @@ namespace Weaver
         {
             m_WeavedAssemblies = serializedObject.FindProperty("m_WeavedAssemblies");
             m_WeavedAssembliesList = new ReorderableList(serializedObject, m_WeavedAssemblies);
-            m_WeavedAssembliesList.drawElementCallback += OnDrawWeavedAssemblyElement;
+            m_WeavedAssembliesList.drawElementCallback += OnWeavedAssemblyDrawElement;
             m_WeavedAssembliesList.onAddCallback += OnWeavedAssemblyElementAdded;
             m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyHeader;
+
+            m_Addins = serializedObject.FindProperty("m_Addins");
+            m_AddinList = new ReorderableList(serializedObject, m_Addins);
+            m_AddinList.drawElementCallback += OnAddinsDrawElement;
+            m_AddinList.drawHeaderCallback += OnAddinsHeader;
+            m_AddinList.onAddCallback += OnAddinAdd;
 
             // Labels 
             m_RefreshAssembliesLabel = new GUIContent("Refresh Assemblies");
             m_WeavedAssemblyHeaderLabel = new GUIContent("Weaved Assemblies");
+            m_AddinsHeaderLabel = new GUIContent("Addins");
 
             PopulateAssembliesCache();
         }
@@ -45,7 +58,9 @@ namespace Weaver
         {
             GUILayout.Label("Weaver", EditorStyles.boldLabel);
 
-            GUILayout.FlexibleSpace(); 
+            GUILayout.FlexibleSpace();
+
+            m_AddinList.DoLayoutList();
             m_WeavedAssembliesList.DoLayoutList();
         }
 
@@ -64,7 +79,37 @@ namespace Weaver
             GUILayout.Space(10);
         }
 
-        private void OnDrawWeavedAssemblyElement(Rect rect, int index, bool isActive, bool isFocused)
+        #region -= Weaved Assemblies =-
+        private void OnAddinsHeader(Rect rect)
+        {
+            GUI.Label(rect, m_AddinsHeaderLabel);
+        }
+
+        private void OnAddinsDrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty current = m_Addins.GetArrayElementAtIndex(index);
+
+            EditorGUI.BeginChangeCheck();
+            {
+                EditorGUI.PropertyField(rect, current);
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedObject.ApplyModifiedProperties();
+            }
+        }
+
+
+        private void OnAddinAdd(ReorderableList list)
+        {
+            list.serializedProperty.arraySize++;
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        #endregion
+
+        #region -= Weaved Assemblies =-
+        private void OnWeavedAssemblyDrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty indexProperty = m_WeavedAssemblies.GetArrayElementAtIndex(index);
             EditorGUI.PropertyField(rect, indexProperty);
@@ -81,17 +126,17 @@ namespace Weaver
                 {
                     SerializedProperty current = m_WeavedAssemblies.GetArrayElementAtIndex(y);
                     SerializedProperty assetPath = current.FindPropertyRelative("m_FilePath");
-                    if(string.Equals(m_AssemblyCache[x], assetPath.stringValue, StringComparison.Ordinal))
+                    if (string.Equals(m_AssemblyCache[x], assetPath.stringValue, StringComparison.Ordinal))
                     {
                         foundMatch = true;
                         break;
                     }
                 }
-                if(!foundMatch)
+                if (!foundMatch)
                 {
                     string name = Path.GetFileName(m_AssemblyCache[x]);
                     GUIContent content = new GUIContent(name);
-                    menu.AddItem(content, false, AddWeavedAssembly, m_AssemblyCache[x]);
+                    menu.AddItem(content, false, OnWeavedAssemblyAdded, m_AssemblyCache[x]);
                 }
                 menu.ShowAsContext();
             }
@@ -102,7 +147,7 @@ namespace Weaver
             GUI.Label(rect, m_WeavedAssemblyHeaderLabel);
         }
 
-        private void AddWeavedAssembly(object path)
+        private void OnWeavedAssemblyAdded(object path)
         {
             m_WeavedAssemblies.arraySize++;
             SerializedProperty weaved = m_WeavedAssemblies.GetArrayElementAtIndex(m_WeavedAssemblies.arraySize - 1);
@@ -110,6 +155,7 @@ namespace Weaver
             weaved.FindPropertyRelative("m_Enabled").boolValue = true;
             serializedObject.ApplyModifiedProperties();
         }
+        #endregion
 
         private void PopulateAssembliesCache()
         {

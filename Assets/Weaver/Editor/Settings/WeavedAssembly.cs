@@ -11,6 +11,8 @@ namespace Weaver
     [Serializable]
     public class WeavedAssembly
     {
+        public delegate void AssemblyChangedDelegate(string filePath); 
+
         [SerializeField]
         private string m_FilePath;
         [SerializeField]
@@ -21,6 +23,7 @@ namespace Weaver
         private FileSystemWatcher m_Watcher;
         private bool m_IsValid;
         private bool m_HasChanged = false;
+        private AssemblyChangedDelegate m_OnChanged; 
 
         /// <summary>
         /// Returns back true if the assembly is
@@ -54,6 +57,7 @@ namespace Weaver
                     m_Watcher = new FileSystemWatcher(directory, assemblyName);
                     m_Watcher.IncludeSubdirectories = false;
                     m_Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+                    m_Watcher.Changed += OnAssemblyChanged; 
                     m_IsValid = true;
                     int writeTime = File.GetLastWriteTime(filePath).Second;
                     if(m_LastWriteTime != writeTime)
@@ -73,28 +77,35 @@ namespace Weaver
             }
         }
 
-        public void AddListener(FileSystemEventHandler handler)
+        private void OnAssemblyChanged(object sender, FileSystemEventArgs e)
         {
-            if (isValid)
-            {
-                m_Watcher.Changed += handler;
+            InvokeChangedEvent(); 
+        }
 
-                if(m_HasChanged)
+        private void InvokeChangedEvent()
+        {
+            if (enabled)
+            {
+                if (m_OnChanged != null)
                 {
-                    string directory = Path.GetDirectoryName(filePath);
-                    string assemblyName = Path.GetFileName(filePath);
-                    FileSystemEventArgs fileChangedArg = new FileSystemEventArgs(WatcherChangeTypes.Changed, directory, assemblyName);
-                    handler.Invoke(this, fileChangedArg);
+                    m_OnChanged(m_FilePath);
                 }
             }
         }
 
-        public void RemoveListener(FileSystemEventHandler handler)
+        public void AddListener(AssemblyChangedDelegate listener)
         {
-            if (isValid)
+            m_OnChanged += listener;
+
+            if (m_HasChanged && m_Enabled)
             {
-                m_Watcher.Changed -= handler;
+                listener(m_FilePath); 
             }
+        }
+
+        public void RemoveListener(AssemblyChangedDelegate listner)
+        {
+            m_OnChanged -= listner;
         }
     }
 }
