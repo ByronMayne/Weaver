@@ -34,10 +34,10 @@ public class ExampleBehaviour : MonoBehaviour
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-        this.hand = GameObject.Find("Hand");
-        this.hand = GameObject.Find("/Hand");
-        this.hand = GameObject.Find("/Monster/Arm/Hand");
-        this.hand = GameObject.Find("Monster/Arm/Hand");
+        hand = GameObject.Find("Hand");
+        hand = GameObject.Find("/Hand");
+        hand = GameObject.Find("/Monster/Arm/Hand");
+        hand = GameObject.Find("Monster/Arm/Hand");
         stopwatch.Stop();
         long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
         Debug.Log("Example" + elapsedMilliseconds);
