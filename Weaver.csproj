@@ -73,6 +73,9 @@
     <Compile Include="Assets\Weaver\Addins\MethodTimer\MethodTimerAttribute.cs" />
     <Compile Include="Assets\Weaver\Addins\PropertyChanged\PropertyChangedAttribute.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Weaver\Addins\MethodTimer\README.md" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

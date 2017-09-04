@@ -3,24 +3,19 @@ using Weaver;
 
 public class ExampleBehaviour : MonoBehaviour
 {
-    public void OnEnable()
-    {
-        new GameObject("OnEnable");
-    }
+    public GameObject hand;
 
     [MethodTimer]
-    public void OnDisable()
+    private void Example()
     {
-        GameObject go = new GameObject("OnDisable");
-        go.name = "Test";
+        hand = GameObject.Find("Hand");
+        hand = GameObject.Find("/Hand");
+        hand = GameObject.Find("/Monster/Arm/Hand");
+        hand = GameObject.Find("Monster/Arm/Hand");
     }
 
-    [MethodTimer]
-    public void Start()
+    private void EmptyMethod()
     {
-    }
-
-    public void Awake()
-    {
+        // Nothing Here
     }
 }
