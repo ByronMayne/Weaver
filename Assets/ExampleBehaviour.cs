@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Weaver;
 
 public class ExampleBehaviour : MonoBehaviour
 {
@@ -7,12 +8,14 @@ public class ExampleBehaviour : MonoBehaviour
         new GameObject("OnEnable");
     }
 
+    [MethodTimer]
     public void OnDisable()
     {
         GameObject go = new GameObject("OnDisable");
         go.name = "Test";
     }
 
+    [MethodTimer]
     public void Start()
     {
     }

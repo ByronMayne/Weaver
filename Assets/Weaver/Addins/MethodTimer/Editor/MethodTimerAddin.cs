@@ -33,7 +33,6 @@ namespace Weaver
         private MethodReference m_StringConcatMethodRef;
         private MethodReference m_DebugLogMethodRef;
         private TypeReference m_StopwatchTypeReference;
-        private bool m_IsVistingType;
 
         public override string addinName
         {
@@ -48,57 +47,8 @@ namespace Weaver
         {
             get
             {
-                return DefinitionType.Module | DefinitionType.Method | DefinitionType.Type;
+                return DefinitionType.Module | DefinitionType.Method;
             }
-        }
-
-
-        public void Initialize(ModuleDefinition moduleDefinition)
-        {
-            /*
-            UnityEngine.Debug.Log("Initialize: " + moduleDefinition.Name);
-            // Cache type system
-            TypeSystem typeSystem = moduleDefinition.TypeSystem;
-
-            // Create type
-            TypeAttributes typeAttributes = TypeAttributes.BeforeFieldInit;
-            TypeDefinition methodTimerTypeDefinition = new TypeDefinition("Weaver.Generated", "MethodTimer", typeAttributes, typeSystem.Object);
-            moduleDefinition.Types.Add(methodTimerTypeDefinition);
-
-            // Import Date Time
-            TypeReference stopwatchTypeReference = moduleDefinition.Import(typeof(Stopwatch));
-
-            // Create a StopWatch field
-            FieldDefinition stopwatchField = new FieldDefinition("m_StopWatch", FieldAttributes.Private | FieldAttributes.Static, stopwatchTypeReference);
-            methodTimerTypeDefinition.Fields.Add(stopwatchField);
-
-            // StartTimer Method
-            MethodDefinition StartMethod = new MethodDefinition("Start", MethodAttributes.Public | MethodAttributes.Static, typeSystem.Void);
-            methodTimerTypeDefinition.Methods.Add(StartMethod);
-
-            // StopTimer Method
-            MethodDefinition StopMethod = new MethodDefinition("Stop", MethodAttributes.Public | MethodAttributes.Static, typeSystem.Void);
-            methodTimerTypeDefinition.Methods.Add(StopMethod);
-
-            TypeDefinition stopWatchTypeDefinition = stopwatchTypeReference.Resolve();
-            MethodDefinition stopWatchStartMethod = stopWatchTypeDefinition.Methods.FirstOrDefault(x => x.Name == "Start");
-            MethodBody startMethodBody = StartMethod.Body;
-
-            var startMetho =  moduleDefinition.Import(stopWatchStartMethod);
-
-            Instruction One = Instruction.Create(OpCodes.Ldsfld, stopwatchField);
-            Instruction Two = Instruction.Create(OpCodes.Callvirt, startMetho);
-            Instruction Three = Instruction.Create(OpCodes.Ret);
-            startMethodBody.Instructions.Add(One);
-            startMethodBody.Instructions.Add(Two);
-            startMethodBody.Instructions.Add(Three);*/
-
-        }
-
-        public override void VisitType(TypeDefinition typeDefinition)
-        {
-            UnityEngine.Debug.Log(typeDefinition.Name);
-            m_IsVistingType = typeDefinition.Name == "ExampleBehaviour";
         }
 
         public override void VisitModule(ModuleDefinition moduleDefinition)
@@ -115,17 +65,19 @@ namespace Weaver
             TypeDefinition stringTypeDef = m_TypeSystem.String.Resolve();
             m_StringConcatMethodRef = moduleDefinition.Import(stringTypeDef.GetMethod("Concat", 2));
 
-            TypeReference debugTypeRef = moduleDefinition.Import(typeof(UnityEngine.Debug));
+            TypeReference debugTypeRef = moduleDefinition.Import(typeof(Debug));
             TypeDefinition debugTypeDeff = debugTypeRef.Resolve();
             m_DebugLogMethodRef = moduleDefinition.Import(debugTypeDeff.GetMethod("Log", 1));
         }
 
         public override void VisitMethod(MethodDefinition methodDefinition)
         {
-            if (!m_IsVistingType)
+            // Check if we have our attribute
+            if(!methodDefinition.HasCustomAttribute<MethodTimerAttribute>())
             {
                 return;
             }
+
             MethodBody body = methodDefinition.Body;
             Collection<Instruction> instructions = new Collection<Instruction>();
             ILProcessor bodyProcessor = body.GetILProcessor();
