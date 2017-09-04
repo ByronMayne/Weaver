@@ -1,15 +1,23 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class ExampleBehaviour : MonoBehaviour {
+public class ExampleBehaviour : MonoBehaviour
+{
+    public void OnEnable()
+    {
+        new GameObject("OnEnable");
+    }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public void OnDisable()
+    {
+        GameObject go = new GameObject("OnDisable");
+        go.name = "Test";
+    }
+
+    public void Start()
+    {
+    }
+
+    public void Awake()
+    {
+    }
 }

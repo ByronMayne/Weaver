@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.4.0b22-HTP</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -127,8 +125,10 @@
     <Compile Include="Assets\Weaver\Editor\AssemblyPosprocessor.cs" />
     <Compile Include="Assets\Weaver\Editor\AssemblyUtility.cs" />
     <Compile Include="Assets\Weaver\Editor\AttributeFinder.cs" />
+    <Compile Include="Assets\Weaver\Editor\Extensions\TypeDefinitionExtensions.cs" />
     <Compile Include="Assets\Weaver\Editor\Inspectors\WeavedAssemblyDrawer.cs" />
     <Compile Include="Assets\Weaver\Editor\Inspectors\WeaverSettingsEditor.cs" />
+    <Compile Include="Assets\Weaver\Editor\Resolver\WeaverAssemblyResolver.cs" />
     <Compile Include="Assets\Weaver\Editor\Settings\SerializedWeaver.cs" />
     <Compile Include="Assets\Weaver\Editor\Settings\WeavedAssembly.cs" />
     <Compile Include="Assets\Weaver\Editor\Settings\WeaverSettings.cs" />

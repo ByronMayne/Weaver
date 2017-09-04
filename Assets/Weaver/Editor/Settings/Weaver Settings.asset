@@ -13,17 +13,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_WeavedAssemblies:
   - m_FilePath: D:\Repositories\Weaver\Assets\Weaver\Editor\Lib\Mono.Cecil.dll
-    m_Enabled: 1
+    m_Enabled: 0
     m_LastWriteTime: 16
   - m_FilePath: D:\Repositories\Weaver\Assets\Weaver\Editor\Lib\Mono.Cecil.Pdb.dll
-    m_Enabled: 1
+    m_Enabled: 0
     m_LastWriteTime: 24
   - m_FilePath: D:\Repositories\Weaver\Assets\Weaver\Editor\Lib\Mono.Cecil.Mdb.dll
-    m_Enabled: 1
+    m_Enabled: 0
     m_LastWriteTime: 24
   - m_FilePath: D:\Repositories\Weaver\Assets\Weaver\Editor\Lib\Unity.CecilTools.dll
-    m_Enabled: 1
+    m_Enabled: 0
     m_LastWriteTime: 14
   - m_FilePath: D:\Repositories\Weaver\Library\ScriptAssemblies\Assembly-CSharp-Editor.dll
+    m_Enabled: 0
+    m_LastWriteTime: 43
+  - m_FilePath: D:\Repositories\Weaver\Library\ScriptAssemblies\Assembly-CSharp.dll
     m_Enabled: 1
-    m_LastWriteTime: 44
+    m_LastWriteTime: 42
+  m_Addins:
+  - {fileID: 11400000, guid: 0ff5e26d479f4e04ca26b9fb6b45ed26, type: 2}
+  - {fileID: 11400000, guid: 787565d1b18eae049867fd03db2f4234, type: 2}

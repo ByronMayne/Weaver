@@ -14,20 +14,5 @@ namespace Weaver
                 return "Property Changed";
             }
         }
-
-        public override Type[] GetAttributes()
-        {
-            return new Type[] { typeof(PropertyChangedAttribute) };
-        }
-
-        public override void Initialize(ModuleDefinition moduleDefinition)
-        {
-
-        }
-
-        public override void OnMatch(Type attributeType, MemberReference effectedMemeber)
-        {
-
-        }
     }
 }
