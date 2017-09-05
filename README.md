@@ -19,8 +19,35 @@ Weaver for now only uses IL Weaving which runs every time one of your project dy
 * Filter only the assemblies you want to weave. 
 * Easy to extend using [ScriptableObjects](https://docs.unity3d.com/ScriptReference/ScriptableObject.html).
 
-## Current Addins
+
+## How To Use
+Weaver is built using ScriptableObjects as their base so to start using Weaver we need to create a few. First step is to create a Waver Settings. In Unity use the create menu to create a new instance. 
+
+
+![](./docs/Weaver_CreateSettings.png)
+*Right click in the Project Window* `Create/Weaver/Settings`
+
+
+**Tip:** Try to only have one instance of Weaver Settings in your project as every one will subscribe and execute when assemblies are recompiled. 
+
+
+#### Target Assmblies
+When you create a new instance by default Weaver will not edit any assemblies. It is up to you to define which assemblies you want to be modified. Click on the + icon on the bottom right and a context menu will pop up with all the valid assemblies you can target. You can also disable the assemblies in this list by unchecking the check box beside it's name. 
+
+![](./docs/Weaver_Assemblies.png)
+
+
+#### Adding Extensions
+To use Extensions you first need to create a new instance of the scriptable object extension you want to use. Then hit the + button and drag that extension index into the list. 
+
+![](./docs/Weaver_Extensions.png)
+
+**Tip:** Try to only have one instance of of each extension. If you have more then one it's effect will be applied twice which is most likely not what you want. 
+
+## Current Extensions
 * [**Method Timer**](./Assets/Weaver/Addins/MethodTimer/README.md) - Any method with the `MethodTimerAttribute` will be timed using [Stopwatch](https://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch(v=vs.110).aspx) and logged to the console. 
+
+* [**Profile Sample**]() - Any method with the `ProfileSampleAtttirbute` will be have a profile sample injected into the method. The sample name will be the name of the method. 
 
 #### In Development
 * **Property Changed** : Invoke a callback whenever a property has changed in your class. 
