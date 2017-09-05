@@ -91,7 +91,7 @@ namespace Weaver
 
             EditorGUI.BeginChangeCheck();
             {
-                EditorGUI.PropertyField(rect, current);
+                EditorGUI.PropertyField(rect, current, GUIContent.none);
             }
             if (EditorGUI.EndChangeCheck())
             {
@@ -103,6 +103,7 @@ namespace Weaver
         private void OnExtensionsAddElement(ReorderableList list)
         {
             list.serializedProperty.arraySize++;
+            m_Extensions.GetArrayElementAtIndex(m_Extensions.arraySize - 1).objectReferenceValue = null;
             serializedObject.ApplyModifiedProperties();
         }
 
