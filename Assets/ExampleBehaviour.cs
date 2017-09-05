@@ -3,19 +3,17 @@ using Weaver;
 
 public class ExampleBehaviour : MonoBehaviour
 {
-    public GameObject hand;
+    private string m_PlayerName; 
+    private GameObject m_MainPlayer;
 
-    [MethodTimer]
-    private void Example()
+    [ProfileSample]
+    public GameObject GetPlayByName()
     {
-        hand = GameObject.Find("Hand");
-        hand = GameObject.Find("/Hand");
-        hand = GameObject.Find("/Monster/Arm/Hand");
-        hand = GameObject.Find("Monster/Arm/Hand");
-    }
+        if (m_PlayerName == "MainPlayer")
+        {
+            return m_MainPlayer;
+        }
 
-    private void EmptyMethod()
-    {
-        // Nothing Here
+        return null; 
     }
 }

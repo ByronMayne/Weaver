@@ -20,7 +20,7 @@ Weaver for now only uses IL Weaving which runs every time one of your project dy
 * Easy to extend using [ScriptableObjects](https://docs.unity3d.com/ScriptReference/ScriptableObject.html).
 
 ## Current Addins
-* [**Method Timer**](./Assets/Weaver/Addins/MethodTimer/) - Any method with the `MethodTimerAttribute` will be timed using [Stopwatch](https://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch(v=vs.110).aspx) and logged to the console. 
+* [**Method Timer**](./Assets/Weaver/Addins/MethodTimer/README.md) - Any method with the `MethodTimerAttribute` will be timed using [Stopwatch](https://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch(v=vs.110).aspx) and logged to the console. 
 
 #### In Development
 * **Property Changed** : Invoke a callback whenever a property has changed in your class. 
