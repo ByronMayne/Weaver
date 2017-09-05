@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Assets\ExampleBehaviour.cs" />
     <Compile Include="Assets\Weaver\Addins\MethodTimer\MethodTimerAttribute.cs" />
+    <Compile Include="Assets\Weaver\Addins\ProfileSample\ProfileSampleAttribute.cs" />
     <Compile Include="Assets\Weaver\Addins\PropertyChanged\PropertyChangedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

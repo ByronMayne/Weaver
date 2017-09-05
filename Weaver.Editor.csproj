@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Weaver\Addins\MethodTimer\Editor\MethodTimerAddin.cs" />
+    <Compile Include="Assets\Weaver\Addins\ProfileSample\Editor\ProfileSampleAddin.cs" />
     <Compile Include="Assets\Weaver\Addins\PropertyChanged\Editor\PropertyChangedAddin.cs" />
     <Compile Include="Assets\Weaver\Editor\AssemblyPosprocessor.cs" />
     <Compile Include="Assets\Weaver\Editor\AssemblyUtility.cs" />
