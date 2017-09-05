@@ -70,12 +70,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\ExampleBehaviour.cs" />
-    <Compile Include="Assets\Weaver\Addins\MethodTimer\MethodTimerAttribute.cs" />
-    <Compile Include="Assets\Weaver\Addins\ProfileSample\ProfileSampleAttribute.cs" />
-    <Compile Include="Assets\Weaver\Addins\PropertyChanged\PropertyChangedAttribute.cs" />
+    <Compile Include="Assets\Weaver\Extensions\MethodTimer\MethodTimerAttribute.cs" />
+    <Compile Include="Assets\Weaver\Extensions\ProfileSample\ProfileSampleAttribute.cs" />
+    <Compile Include="Assets\Weaver\Extensions\PropertyChanged\PropertyChangedAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Weaver\Addins\MethodTimer\README.md" />
+    <None Include="Assets\Weaver\Extensions\MethodTimer\README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
