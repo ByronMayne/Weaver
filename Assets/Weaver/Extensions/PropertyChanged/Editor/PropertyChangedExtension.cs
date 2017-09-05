@@ -4,8 +4,8 @@ using Mono.Cecil;
 
 namespace Weaver
 {
-    [CreateAssetMenu(menuName = "Weaver/Addins/Property Changed", fileName ="Property Changed Addin")]
-    public class PropertyChangedAddin : WeaverPlugin
+    [CreateAssetMenu(menuName = "Weaver/Extensions/Property Changed", fileName = "Property Changed Extension")]
+    public class PropertyChangedExtension : WeaverExtension
     {
         public override string addinName
         {

@@ -14,11 +14,11 @@ namespace Weaver
     {
         // Properties
         private SerializedProperty m_WeavedAssemblies;
-        private SerializedProperty m_Addins;
+        private SerializedProperty m_Extensions;
 
         // Lists
         private ReorderableList m_WeavedAssembliesList;
-        private ReorderableList m_AddinList;
+        private ReorderableList m_ExtensionsList;
 
         // Labels
         private GUIContent m_RefreshAssembliesLabel;
@@ -38,11 +38,11 @@ namespace Weaver
             m_WeavedAssembliesList.onAddCallback += OnWeavedAssemblyElementAdded;
             m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyHeader;
 
-            m_Addins = serializedObject.FindProperty("m_Addins");
-            m_AddinList = new ReorderableList(serializedObject, m_Addins);
-            m_AddinList.drawElementCallback += OnAddinsDrawElement;
-            m_AddinList.drawHeaderCallback += OnAddinsHeader;
-            m_AddinList.onAddCallback += OnAddinAdd;
+            m_Extensions = serializedObject.FindProperty("m_Extensions");
+            m_ExtensionsList = new ReorderableList(serializedObject, m_Extensions);
+            m_ExtensionsList.drawElementCallback += OnExtensionsDrawElement;
+            m_ExtensionsList.drawHeaderCallback += OnExtensionsHeader;
+            m_ExtensionsList.onAddCallback += OnExtensionsAddElement;
 
             // Labels 
             m_RefreshAssembliesLabel = new GUIContent("Refresh Assemblies");
@@ -60,7 +60,7 @@ namespace Weaver
 
             GUILayout.FlexibleSpace();
 
-            m_AddinList.DoLayoutList();
+            m_ExtensionsList.DoLayoutList();
             m_WeavedAssembliesList.DoLayoutList();
         }
 
@@ -80,14 +80,14 @@ namespace Weaver
         }
 
         #region -= Weaved Assemblies =-
-        private void OnAddinsHeader(Rect rect)
+        private void OnExtensionsHeader(Rect rect)
         {
             GUI.Label(rect, m_AddinsHeaderLabel);
         }
 
-        private void OnAddinsDrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        private void OnExtensionsDrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty current = m_Addins.GetArrayElementAtIndex(index);
+            SerializedProperty current = m_Extensions.GetArrayElementAtIndex(index);
 
             EditorGUI.BeginChangeCheck();
             {
@@ -100,7 +100,7 @@ namespace Weaver
         }
 
 
-        private void OnAddinAdd(ReorderableList list)
+        private void OnExtensionsAddElement(ReorderableList list)
         {
             list.serializedProperty.arraySize++;
             serializedObject.ApplyModifiedProperties();

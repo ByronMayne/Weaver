@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using Mono.Cecil;
-using Mono.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace Weaver
 {
@@ -14,8 +14,8 @@ namespace Weaver
         [SerializeField]
         private List<WeavedAssembly> m_WeavedAssemblies;
 
-        [SerializeField]
-        private List<WeaverPlugin> m_Addins;
+        [SerializeField, FormerlySerializedAs("m_Addins")]
+        private List<WeaverExtension> m_Extensions;
 
         // Watchers
         private List<FileSystemWatcher> m_AssemblyWatches;
@@ -60,15 +60,15 @@ namespace Weaver
             m_Resolver = new WeaverAssemblyResolver();
 
             // Clean up any missing addins so we don't have to null check all the time
-            for (int i = m_Addins.Count - 1; i >= 0; i--)
+            for (int i = m_Extensions.Count - 1; i >= 0; i--)
             {
-                if (m_Addins[i] == null)
+                if (m_Extensions[i] == null)
                 {
-                    m_Addins.RemoveAt(i);
+                    m_Extensions.RemoveAt(i);
                 }
                 else
                 {
-                    m_Addins[i].Initialize(this);
+                    m_Extensions[i].Initialize(this);
                 }
             }
             // Save our write times to disk.
@@ -79,32 +79,32 @@ namespace Weaver
             // Load our definition
             ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(filePath, readerParameters);
             // Call init on each of our addins
-            for (int i = 0; i < m_Addins.Count; i++)
+            for (int i = 0; i < m_Extensions.Count; i++)
             {
-                if (m_Addins[i].EffectsDefintion(DefinitionType.Module))
+                if (m_Extensions[i].EffectsDefintion(DefinitionType.Module))
                 {
-                    m_Addins[i].VisitModule(moduleDefinition);
+                    m_Extensions[i].VisitModule(moduleDefinition);
                 }
             }
             // TYPES
             foreach(TypeDefinition typeDefinition in moduleDefinition.Types)
             {
-                for (int i = 0; i < m_Addins.Count; i++)
+                for (int i = 0; i < m_Extensions.Count; i++)
                 {
-                    if (m_Addins[i].EffectsDefintion(DefinitionType.Type))
+                    if (m_Extensions[i].EffectsDefintion(DefinitionType.Type))
                     {
-                        m_Addins[i].VisitType(typeDefinition);
+                        m_Extensions[i].VisitType(typeDefinition);
                     }
                 }
 
                 // METHODS
                 foreach(MethodDefinition methodDefinition in typeDefinition.Methods)
                 {
-                    for (int i = 0; i < m_Addins.Count; i++)
+                    for (int i = 0; i < m_Extensions.Count; i++)
                     {
-                        if (m_Addins[i].EffectsDefintion(DefinitionType.Method))
+                        if (m_Extensions[i].EffectsDefintion(DefinitionType.Method))
                         {
-                            m_Addins[i].VisitMethod(methodDefinition);
+                            m_Extensions[i].VisitMethod(methodDefinition);
                         }
                     }
                 }
@@ -112,11 +112,11 @@ namespace Weaver
                 // PROPERTIES
                 foreach (PropertyDefinition propertyDefinition in typeDefinition.Properties)
                 {
-                    for (int i = 0; i < m_Addins.Count; i++)
+                    for (int i = 0; i < m_Extensions.Count; i++)
                     {
-                        if (m_Addins[i].EffectsDefintion(DefinitionType.Property))
+                        if (m_Extensions[i].EffectsDefintion(DefinitionType.Property))
                         {
-                            m_Addins[i].VisitProperty(propertyDefinition);
+                            m_Extensions[i].VisitProperty(propertyDefinition);
                         }
                     }
                 }
@@ -124,11 +124,11 @@ namespace Weaver
                 // FIELDS
                 foreach (FieldDefinition fieldDefinition in typeDefinition.Fields)
                 {
-                    for (int i = 0; i < m_Addins.Count; i++)
+                    for (int i = 0; i < m_Extensions.Count; i++)
                     {
-                        if (m_Addins[i].EffectsDefintion(DefinitionType.Field))
+                        if (m_Extensions[i].EffectsDefintion(DefinitionType.Field))
                         {
-                            m_Addins[i].VisitField(fieldDefinition);
+                            m_Extensions[i].VisitField(fieldDefinition);
                         }
                     }
                 }

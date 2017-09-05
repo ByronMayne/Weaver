@@ -1,16 +1,14 @@
-﻿using System;
-using Mono.Cecil;
+﻿using Mono.Cecil;
 using UnityEngine;
 using Mono.Cecil.Cil;
-using System.Linq;
 using System.Diagnostics;
 using Mono.Collections.Generic;
 using Debug = UnityEngine.Debug;
 
 namespace Weaver
 {
-    [CreateAssetMenu(menuName = "Weaver/Addins/Method Timer", fileName = "Method Timer Addin")]
-    public class MethodTimerAddin : WeaverPlugin
+    [CreateAssetMenu(menuName = "Weaver/Extensions/Method Timer", fileName = "Method Timer Extension")]
+    public class MethodTimerExtension : WeaverExtension
     {
         public struct StopwatchDefinition
         {
@@ -79,7 +77,6 @@ namespace Weaver
             }
 
             MethodBody body = methodDefinition.Body;
-            Collection<Instruction> instructions = new Collection<Instruction>();
             ILProcessor bodyProcessor = body.GetILProcessor();
 
             VariableDefinition stopwatchVariable = new VariableDefinition("stopwatch", m_StopwatchTypeReference);
@@ -149,6 +146,7 @@ namespace Weaver
                 bodyProcessor.InsertAfter(_09, _10);
                 bodyProcessor.InsertAfter(_10, _11);
                 bodyProcessor.InsertAfter(_11, _12);
+                bodyProcessor.InsertAfter(_12, _13);
             }
         }
     }

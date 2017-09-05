@@ -14,7 +14,7 @@ namespace Weaver
         Property = 1 << 5,
     }
 
-    public abstract class WeaverPlugin : ScriptableObject
+    public abstract class WeaverExtension : ScriptableObject
     {
         private WeaverSettings m_Settings; 
         public abstract string addinName { get; }
