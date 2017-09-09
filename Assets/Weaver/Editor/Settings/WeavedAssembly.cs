@@ -11,19 +11,16 @@ namespace Weaver
     [Serializable]
     public class WeavedAssembly
     {
-        public delegate void AssemblyChangedDelegate(string filePath); 
+        public delegate void WeavedAssemblyDelegate(WeavedAssembly weavedAssembly);
 
         [SerializeField]
         private string m_FilePath;
         [SerializeField]
         private bool m_Enabled;
         [SerializeField]
-        private int m_LastWriteTime; 
+        private int m_LastWriteTime;
 
-        private FileSystemWatcher m_Watcher;
         private bool m_IsValid;
-        private bool m_HasChanged = false;
-        private AssemblyChangedDelegate m_OnChanged; 
 
         /// <summary>
         /// Returns back true if the assembly is
@@ -34,40 +31,40 @@ namespace Weaver
             get { return m_IsValid; }
         }
 
+        /// <summary>
+        /// Returns back the file path to this assembly
+        /// </summary>
         public string filePath
         {
             get { return m_FilePath; }
             set { m_FilePath = value; }
         }
 
+        /// <summary>
+        /// Returns true if this assembly should be modified
+        /// by Weaver or not. 
+        /// </summary>
         public bool enabled
         {
             get { return m_Enabled; }
             set { m_Enabled = value; }
         }
 
-        public void Initialize()
+        /// <summary>
+        /// Initialize this instance and sets all relevant flags.
+        /// </summary>
+        public void CheckForChanges(WeavedAssemblyDelegate ifChanged)
         {
-            if (m_Watcher == null)
+            if (File.Exists(filePath))
             {
-                string directory = Path.GetDirectoryName(filePath);
-                string assemblyName = Path.GetFileName(filePath);
-                if (File.Exists(filePath))
+                m_IsValid = true;
+                int writeTime = File.GetLastWriteTime(filePath).Second;
+                if (m_LastWriteTime != writeTime)
                 {
-                    m_Watcher = new FileSystemWatcher(directory, assemblyName);
-                    m_Watcher.IncludeSubdirectories = false;
-                    m_Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-                    m_Watcher.Changed += OnAssemblyChanged; 
-                    m_IsValid = true;
-                    int writeTime = File.GetLastWriteTime(filePath).Second;
-                    if(m_LastWriteTime != writeTime)
+                    m_LastWriteTime = writeTime;
+                    if (ifChanged != null)
                     {
-                        m_HasChanged = true;
-                        m_LastWriteTime = writeTime;
-                    }
-                    else
-                    {
-                        m_HasChanged = false;
+                        ifChanged(this); 
                     }
                 }
             }
@@ -75,37 +72,6 @@ namespace Weaver
             {
                 m_IsValid = false;
             }
-        }
-
-        private void OnAssemblyChanged(object sender, FileSystemEventArgs e)
-        {
-            InvokeChangedEvent(); 
-        }
-
-        private void InvokeChangedEvent()
-        {
-            if (enabled)
-            {
-                if (m_OnChanged != null)
-                {
-                    m_OnChanged(m_FilePath);
-                }
-            }
-        }
-
-        public void AddListener(AssemblyChangedDelegate listener)
-        {
-            m_OnChanged += listener;
-
-            if (m_HasChanged && m_Enabled)
-            {
-                listener(m_FilePath); 
-            }
-        }
-
-        public void RemoveListener(AssemblyChangedDelegate listner)
-        {
-            m_OnChanged -= listner;
         }
     }
 }

@@ -31,30 +31,26 @@ namespace Weaver
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
+            // Makes sure we initialize our instance.
+            AssetDatabase.FindAssets("t:WeaverSettings");
         }
 
         private void OnEnable()
         {
+            Debug.Log("Enabled");
             for (int i = 0; i < m_WeavedAssemblies.Count; i++)
             {
-                m_WeavedAssemblies[i].Initialize();
-                m_WeavedAssemblies[i].AddListener(OnAssemblyChanged);
+                // Initialize our assembly
+                m_WeavedAssemblies[i].CheckForChanges(OnAssemblyChanged);
             }
         }
 
-        private void OnDisable()
-        {
-            for (int i = 0; i < m_WeavedAssemblies.Count; i++)
-            {
-                m_WeavedAssemblies[i].RemoveListener(OnAssemblyChanged);
-            }
-        }
 
         /// <summary>
         /// Invoked when ever one of the assemblies we are
         /// watching has changed. 
         /// </summary>
-        private void OnAssemblyChanged(string filePath)
+        private void OnAssemblyChanged(WeavedAssembly weavedAssembly)
         {
             // Create new resolver
             m_Resolver = new WeaverAssemblyResolver();
@@ -77,7 +73,7 @@ namespace Weaver
             ReaderParameters readerParameters = new ReaderParameters();
             readerParameters.AssemblyResolver = m_Resolver;
             // Load our definition
-            ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(filePath, readerParameters);
+            ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(weavedAssembly.filePath, readerParameters);
             // Call init on each of our addins
             for (int i = 0; i < m_Extensions.Count; i++)
             {
@@ -134,7 +130,7 @@ namespace Weaver
                 }
             }
             // Write the values to disk
-            moduleDefinition.Write(filePath);
+            moduleDefinition.Write(weavedAssembly.filePath);
         }
     }
 }
