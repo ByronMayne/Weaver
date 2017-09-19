@@ -55,6 +55,14 @@ namespace Weaver
             // Create new resolver
             m_Resolver = new WeaverAssemblyResolver();
 
+            // Save our write times to disk.
+            EditorUtility.SetDirty(this);
+            // Create reader settings
+            ReaderParameters readerParameters = new ReaderParameters();
+            readerParameters.AssemblyResolver = m_Resolver;
+            // Load our definition
+            ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(weavedAssembly.filePath, readerParameters);
+            // Create a debug
             // Clean up any missing addins so we don't have to null check all the time
             for (int i = m_Extensions.Count - 1; i >= 0; i--)
             {
@@ -67,13 +75,6 @@ namespace Weaver
                     m_Extensions[i].Initialize(this);
                 }
             }
-            // Save our write times to disk.
-            EditorUtility.SetDirty(this);
-            // Create reader settings
-            ReaderParameters readerParameters = new ReaderParameters();
-            readerParameters.AssemblyResolver = m_Resolver;
-            // Load our definition
-            ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(weavedAssembly.filePath, readerParameters);
             // Call init on each of our addins
             for (int i = 0; i < m_Extensions.Count; i++)
             {

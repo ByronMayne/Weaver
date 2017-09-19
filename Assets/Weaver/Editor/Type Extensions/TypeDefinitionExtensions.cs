@@ -40,7 +40,7 @@ namespace Weaver
 
         public static PropertyDefinition GetProperty(this TypeDefinition instance, string name)
         {
-            for (int i = 0; i < instance.Methods.Count; i++)
+            for (int i = 0; i < instance.Properties.Count; i++)
             {
                 PropertyDefinition preopertyDef = instance.Properties[i];
 
