@@ -12,7 +12,7 @@ Weaving refers to the process of injecting functionality into an existing progra
 
 A great example of this is the [Unity Project Updater](https://docs.unity3d.com/Manual/APIUpdater.html). It uses both versions of code weaving on your project. It uses text replacing for unsupported code in your source files and IL weaving for compiled dlls.
 
-Weaver for now only uses IL Weaving which runs every time one of your project dynamic link libraries are compiled. 
+Weaver for now only uses IL Weaving which runs once everytime an assembly is recompiled. 
 
 ### Features
 * Hooked into Unity callbacks to run automatically. 
@@ -25,6 +25,7 @@ Weaver is built using ScriptableObjects as their base so to start using Weaver w
 
 
 ![](./docs/Weaver_CreateSettings.png)
+
 *Right click in the Project Window* `Create/Weaver/Settings`
 
 
