@@ -5,8 +5,8 @@ using Mono.Cecil.Cil;
 
 namespace Weaver
 {
-    [CreateAssetMenu(menuName = "Weaver/Extensions/Profile Sample", fileName = "Profile Sample Extension")]
-    public class ProfileSampleExtension : WeaverExtension
+    [CreateAssetMenu(menuName = "Weaver/Components/Profile Sample", fileName = "Profile Sample Component")]
+    public class ProfileSampleComponent : WeaverComponent
     {
         private TypeSystem m_TypeSystem;
         private TypeReference m_ProfilerTypeReference;
