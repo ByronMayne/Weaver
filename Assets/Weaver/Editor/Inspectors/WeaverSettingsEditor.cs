@@ -14,16 +14,16 @@ namespace Weaver
     {
         // Properties
         private SerializedProperty m_WeavedAssemblies;
-        private SerializedProperty m_Extensions;
+        private SerializedProperty m_Components;
 
         // Lists
         private ReorderableList m_WeavedAssembliesList;
-        private ReorderableList m_ExtensionsList;
+        private ReorderableList m_ComponentsList;
 
         // Labels
         private GUIContent m_RefreshAssembliesLabel;
         private GUIContent m_WeavedAssemblyHeaderLabel;
-        private GUIContent m_AddinsHeaderLabel;
+        private GUIContent m_COmponentsHeader;
 
         // Assemblies
         private List<string> m_AssemblyCache;
@@ -38,29 +38,26 @@ namespace Weaver
             m_WeavedAssembliesList.onAddCallback += OnWeavedAssemblyElementAdded;
             m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyHeader;
 
-            m_Extensions = serializedObject.FindProperty("m_Extensions");
-            m_ExtensionsList = new ReorderableList(serializedObject, m_Extensions);
-            m_ExtensionsList.drawElementCallback += OnExtensionsDrawElement;
-            m_ExtensionsList.drawHeaderCallback += OnExtensionsHeader;
-            m_ExtensionsList.onAddCallback += OnExtensionsAddElement;
+            m_Components = serializedObject.FindProperty("m_Components");
+            m_ComponentsList = new ReorderableList(serializedObject, m_Components);
+            m_ComponentsList.drawElementCallback += OnDrawComponentElement;
+            m_ComponentsList.drawHeaderCallback += OnComponentHeader;
+            m_ComponentsList.onAddCallback += OnAddComponet;
 
             // Labels 
             m_RefreshAssembliesLabel = new GUIContent("Refresh Assemblies");
             m_WeavedAssemblyHeaderLabel = new GUIContent("Weaved Assemblies");
-            m_AddinsHeaderLabel = new GUIContent("Addins");
+            m_COmponentsHeader = new GUIContent("Components");
 
             PopulateAssembliesCache();
         }
-
-
-
         public override void OnInspectorGUI()
         {
             GUILayout.Label("Weaver", EditorStyles.boldLabel);
 
             GUILayout.FlexibleSpace();
 
-            m_ExtensionsList.DoLayoutList();
+            m_ComponentsList.DoLayoutList();
             m_WeavedAssembliesList.DoLayoutList();
         }
 
@@ -80,14 +77,14 @@ namespace Weaver
         }
 
         #region -= Weaved Assemblies =-
-        private void OnExtensionsHeader(Rect rect)
+        private void OnComponentHeader(Rect rect)
         {
-            GUI.Label(rect, m_AddinsHeaderLabel);
+            GUI.Label(rect, m_COmponentsHeader);
         }
 
-        private void OnExtensionsDrawElement(Rect rect, int index, bool isActive, bool isFocused)
+        private void OnDrawComponentElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty current = m_Extensions.GetArrayElementAtIndex(index);
+            SerializedProperty current = m_Components.GetArrayElementAtIndex(index);
 
             EditorGUI.BeginChangeCheck();
             {
@@ -100,10 +97,10 @@ namespace Weaver
         }
 
 
-        private void OnExtensionsAddElement(ReorderableList list)
+        private void OnAddComponet(ReorderableList list)
         {
             list.serializedProperty.arraySize++;
-            m_Extensions.GetArrayElementAtIndex(m_Extensions.arraySize - 1).objectReferenceValue = null;
+            m_Components.GetArrayElementAtIndex(m_Components.arraySize - 1).objectReferenceValue = null;
             serializedObject.ApplyModifiedProperties();
         }
 
