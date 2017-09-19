@@ -136,14 +136,14 @@ namespace Weaver
                     GUIContent content = new GUIContent(name);
                     menu.AddItem(content, false, OnWeavedAssemblyAdded, m_AssemblyCache[x]);
                 }
-
-                if(menu.GetItemCount() == 0)
-                {
-                    menu.AddDisabledItem(new GUIContent("[All Assemblies Added]"));
-                }
-
-                menu.ShowAsContext();
             }
+
+            if (menu.GetItemCount() == 0)
+            {
+                menu.AddDisabledItem(new GUIContent("[All Assemblies Added]"));
+            }
+
+            menu.ShowAsContext();
         }
 
         private void OnWeavedAssemblyHeader(Rect rect)
