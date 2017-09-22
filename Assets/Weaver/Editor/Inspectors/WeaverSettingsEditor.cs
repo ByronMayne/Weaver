@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -15,15 +12,13 @@ namespace Weaver.Editors
     {
         // Properties
         private SerializedProperty m_WeavedAssemblies;
-        private SerializedProperty m_Components; 
+        private SerializedProperty m_Components;
 
         // Lists
         private ReorderableList m_WeavedAssembliesList;
 
         // Labels
-        private GUIContent m_RefreshAssembliesLabel;
         private GUIContent m_WeavedAssemblyHeaderLabel;
-        private GUIContent m_COmponentsHeader;
 
         public void OnEnable()
         {
@@ -35,9 +30,7 @@ namespace Weaver.Editors
             m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyHeader;
 
             // Labels 
-            m_RefreshAssembliesLabel = new GUIContent("Refresh Assemblies");
             m_WeavedAssemblyHeaderLabel = new GUIContent("Weaved Assemblies");
-            m_COmponentsHeader = new GUIContent("Components");
         }
         public override void OnInspectorGUI()
         {

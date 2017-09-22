@@ -7,7 +7,6 @@ namespace Weaver
 {
     public class ProfileSampleComponent : WeaverComponent
     {
-        private TypeSystem m_TypeSystem;
         private TypeReference m_ProfilerTypeReference;
         private MethodReference m_BeginSampleWithGameObjectMethodRef;
         private MethodReference m_BeginSampleMethodRef;
@@ -32,8 +31,6 @@ namespace Weaver
 
         public override void VisitModule(ModuleDefinition moduleDefinition)
         {
-            // Get the type system 
-            m_TypeSystem = moduleDefinition.TypeSystem;
             // Get profiler type
             Type profilerType = typeof(UnityEngine.Profiling.Profiler);
             // Import the profiler type

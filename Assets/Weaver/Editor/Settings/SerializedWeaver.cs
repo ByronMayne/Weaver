@@ -81,12 +81,6 @@ namespace Weaver
             return m_Instance;
         }
 
-        [MenuItem("Window/Weaver Settings...")]
-        protected static void Select()
-        {
-            Selection.activeObject = GetInstance();
-        }
-
         /// <summary>
         /// Takes this instance and writes it to disk. 
         /// </summary>

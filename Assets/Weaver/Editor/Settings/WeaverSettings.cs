@@ -7,7 +7,7 @@ using Mono.Collections.Generic;
 namespace Weaver
 {
     [CreateAssetMenu(menuName = "Weaver/Settings", fileName = "Weaver Settings")]
-    public class WeaverSettings : ScriptableObject // SerializedWeaver<WeaverSettings>
+    public class WeaverSettings : ScriptableObject
     {
         [SerializeField]
         private List<WeavedAssembly> m_WeavedAssemblies;
@@ -16,7 +16,7 @@ namespace Weaver
         private ComponentController m_Components;
 
         // Resolver
-        private WeaverAssemblyResolver m_Resolver; 
+        private WeaverAssemblyResolver m_Resolver;
 
         public WeaverAssemblyResolver resolver
         {
@@ -42,14 +42,14 @@ namespace Weaver
             // Create a collection for all the assemblies that changed. 
             Collection<ModuleDefinition> changedModules = new Collection<ModuleDefinition>();
 
-            if(m_WeavedAssemblies == null)
+            if (m_WeavedAssemblies == null)
             {
                 m_WeavedAssemblies = new List<WeavedAssembly>();
             }
             // Loop over them all
-            for(int i = 0; i < m_WeavedAssemblies.Count; i++)
+            for (int i = 0; i < m_WeavedAssemblies.Count; i++)
             {
-                if(m_WeavedAssemblies[i].HasChanges())
+                if (m_WeavedAssemblies[i].HasChanges())
                 {
                     // We have a changed assembly so we need to get the defintion to modify. 
                     ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(m_WeavedAssemblies[i].filePath, readerParameters);

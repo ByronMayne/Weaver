@@ -54,9 +54,11 @@ public class SerializedMethod
             parameters[i] = arguments[i].GetType();
         }
 
+        object instance = null;
+
         for(int i = 0; i < m_SerializedObject.targetObjects.Length; i++)
         {
-            object instance = m_SerializedObject.targetObjects[i];
+            instance = m_SerializedObject.targetObjects[i];
             string[] members = m_MethodPath.Split('.');
 
             for(int memberIndex = 0; memberIndex < members.Length; memberIndex++)
@@ -81,13 +83,9 @@ public class SerializedMethod
                 // Only invoke static methods once. 
                 break;
             }
-
-            // Invoke
-            return m_MethodInfo.Invoke(instance, arguments);
         }
 
-    
-
-        return null;
+        // Invoke
+        return m_MethodInfo.Invoke(instance, arguments);
     }
 }
