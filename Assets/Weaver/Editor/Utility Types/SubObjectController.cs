@@ -47,14 +47,7 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
     /// </summary>
     public T Add()
     {
-        // Create a new instance
-        T newInstance = ScriptableObject.CreateInstance<T>();
-        // Add to our array
-        m_SubObjects.Add(newInstance);
-        // Add it as a sub object
-        AssetDatabase.AddObjectToAsset(newInstance, m_Owner);
-        // Return the result
-        return newInstance;
+        return Add(typeof(T));
     }
 
     /// <summary>
@@ -78,6 +71,8 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
         {
             // Create a new instance
             T newInstance = (T)ScriptableObject.CreateInstance(type);
+            // Set Name
+            newInstance.name = type.FullName;
             // Add to our array
             m_SubObjects.Add(newInstance);
             // Add it as a sub object

@@ -43,8 +43,9 @@ namespace Weaver.Editors
         private void OnDrawElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             rect.height = EditorGUIUtility.singleLineHeight;
-            rect.y += 4.0f;
-            EditorGUI.PropertyField(rect, m_SubObjects.GetArrayElementAtIndex(index), GUIContent.none);
+            rect.y += 2.0f;
+            SerializedProperty element = m_SubObjects.GetArrayElementAtIndex(index);
+            GUI.Label(rect, element.objectReferenceValue.name, EditorStyles.objectField);
         }
 
         private void OnDrawHeader(Rect rect)
