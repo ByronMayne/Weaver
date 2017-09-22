@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 2017
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weaver", "Weaver.csproj", "{D2712A70-2CBC-8BE1-8474-CF6BC0FEA562}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weaver.Editor", "Weaver.Editor.csproj", "{E0EB75E7-0E73-13EB-454C-418943AD7BE4}"

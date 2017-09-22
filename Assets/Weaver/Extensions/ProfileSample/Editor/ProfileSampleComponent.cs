@@ -5,7 +5,6 @@ using Mono.Cecil.Cil;
 
 namespace Weaver
 {
-    [CreateAssetMenu(menuName = "Weaver/Components/Profile Sample", fileName = "Profile Sample Component")]
     public class ProfileSampleComponent : WeaverComponent
     {
         private TypeSystem m_TypeSystem;
@@ -36,7 +35,7 @@ namespace Weaver
             // Get the type system 
             m_TypeSystem = moduleDefinition.TypeSystem;
             // Get profiler type
-            Type profilerType = typeof(Profiler);
+            Type profilerType = typeof(UnityEngine.Profiling.Profiler);
             // Import the profiler type
             m_ProfilerTypeReference = moduleDefinition.Import(profilerType);
             // Get the type def by resolving

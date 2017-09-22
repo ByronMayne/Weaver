@@ -51,9 +51,10 @@ namespace Weaver
         }
 
         /// <summary>
-        /// Initialize this instance and sets all relevant flags.
+        /// Sees if this file has been modified since the last time we checked.
         /// </summary>
-        public void CheckForChanges(WeavedAssemblyDelegate ifChanged)
+        /// <returns></returns>
+        public bool HasChanges()
         {
             if (File.Exists(filePath))
             {
@@ -62,16 +63,14 @@ namespace Weaver
                 if (m_LastWriteTime != writeTime)
                 {
                     m_LastWriteTime = writeTime;
-                    if (ifChanged != null)
-                    {
-                        ifChanged(this); 
-                    }
+                    return true; 
                 }
             }
             else
             {
                 m_IsValid = false;
             }
+            return false;
         }
     }
 }

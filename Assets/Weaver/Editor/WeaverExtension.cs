@@ -16,17 +16,26 @@ namespace Weaver
 
     public abstract class WeaverComponent : ScriptableObject
     {
-        private WeaverSettings m_Settings; 
+        private WeaverSettings m_Settings;
         public abstract string addinName { get; }
+        private bool m_Enabled;
 
-
-        public WeaverSettings settings
+        public bool enabled
         {
-            get { return m_Settings; }
-            protected set { m_Settings = value; }
+            get { return m_Enabled; }
+            set { m_Enabled = value; }
         }
 
-        public virtual DefinitionType effectedDefintions { get { return DefinitionType.None; } }
+        /// <summary>
+        /// Returns back the type of definitions this component modifies. 
+        /// </summary>
+        public virtual DefinitionType effectedDefintions
+        {
+            get
+            {
+                return DefinitionType.None;
+            }
+        }
 
         /// <summary>
         /// Returns true if this addin effects the definition
@@ -34,12 +43,7 @@ namespace Weaver
         /// </summary>
         public bool EffectsDefintion(DefinitionType type)
         {
-            return (type & effectedDefintions) == type; 
-        }
-
-        public virtual void Initialize(WeaverSettings settings)
-        {
-            m_Settings = settings;
+            return (type & effectedDefintions) == type;
         }
 
         public virtual void VisitModule(ModuleDefinition moduleDefinition) { }

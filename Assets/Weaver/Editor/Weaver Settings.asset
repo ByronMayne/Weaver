@@ -8,6 +8,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a77c5a7de32b0b94ca13abec70ce4b35, type: 3}
-  m_Name: Property Changed Addin
+  m_Script: {fileID: 11500000, guid: 07ccf61e689f3ae4bb1e5518c0e5814d, type: 3}
+  m_Name: Weaver Settings
   m_EditorClassIdentifier: 
+  m_WeavedAssemblies: []
+  m_Components:
+    m_SubObjects: []
+    m_Owner: {fileID: 11400000}

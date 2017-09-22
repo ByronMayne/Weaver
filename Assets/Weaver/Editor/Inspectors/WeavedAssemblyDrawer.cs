@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Weaver
+namespace Weaver.Editors
 {
     [CustomPropertyDrawer(typeof(WeavedAssembly))]
     public class WeavedAssemblyDrawer : PropertyDrawer

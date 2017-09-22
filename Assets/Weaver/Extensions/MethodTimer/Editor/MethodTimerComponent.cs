@@ -7,7 +7,6 @@ using Debug = UnityEngine.Debug;
 
 namespace Weaver
 {
-    [CreateAssetMenu(menuName = "Weaver/Components/Method Timer", fileName = "Method Timer Component")]
     public class MethodTimerComponent : WeaverComponent
     {
         public struct StopwatchDefinition
