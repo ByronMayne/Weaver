@@ -31,13 +31,22 @@ namespace Weaver
         /// </summary>
         public void VisitModules(Collection<ModuleDefinition> moduleCollection)
         {
-            if ((m_ActiveDefinitions & DefinitionType.Module) == DefinitionType.Module)
+            if (m_ActiveDefinitions != DefinitionType.None)
             {
                 for (int moduleIndex = moduleCollection.Count - 1; moduleIndex >= 0; moduleIndex--)
                 {
+                    // Grab the type system for the current moudle.
+                    TypeSystem typeSystem = moduleCollection[moduleIndex].TypeSystem;
+                    // Loop over all sub objects
                     for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
                     {
-                        m_SubObjects[componentIndex].VisitModule(moduleCollection[moduleIndex]);
+                        // Assign our type system
+                        m_SubObjects[componentIndex].typeSystem = typeSystem; 
+                        // Loop over modules if we are editing them 
+                        if ((m_ActiveDefinitions & DefinitionType.Module) != DefinitionType.Module)
+                        {
+                            m_SubObjects[componentIndex].VisitModule(moduleCollection[moduleIndex]);
+                        }
                     }
                     // Viste Types
                     VisitTypes(moduleCollection[moduleIndex].Types);
@@ -52,7 +61,7 @@ namespace Weaver
         protected void VisitTypes(Collection<TypeDefinition> typeCollection)
         {
             // We only don't have to visit types if nobody vistes properties, methods, or fields. 
-            if ((m_ActiveDefinitions & ~DefinitionType.Module) != DefinitionType.None )
+            if ((m_ActiveDefinitions & ~DefinitionType.Module) != DefinitionType.None)
             {
                 for (int typeIndex = typeCollection.Count - 1; typeIndex >= 0; typeIndex--)
                 {

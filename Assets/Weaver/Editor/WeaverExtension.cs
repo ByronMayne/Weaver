@@ -16,7 +16,7 @@ namespace Weaver
 
     public abstract class WeaverComponent : ScriptableObject
     {
-        private WeaverSettings m_Settings;
+        private TypeSystem m_TypeSystem;
         public abstract string addinName { get; }
         private bool m_Enabled;
 
@@ -24,6 +24,16 @@ namespace Weaver
         {
             get { return m_Enabled; }
             set { m_Enabled = value; }
+        }
+
+        /// <summary>
+        /// Returns back the type system for the module
+        /// currently being edited.
+        /// </summary>
+        public TypeSystem typeSystem 
+        {
+            get { return m_TypeSystem; }
+            set { m_TypeSystem = value; }
         }
 
         /// <summary>
