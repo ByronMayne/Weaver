@@ -35,13 +35,11 @@ namespace Weaver
             {
                 for (int moduleIndex = moduleCollection.Count - 1; moduleIndex >= 0; moduleIndex--)
                 {
-                    // Grab the type system for the current moudle.
-                    TypeSystem typeSystem = moduleCollection[moduleIndex].TypeSystem;
                     // Loop over all sub objects
                     for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
                     {
                         // Assign our type system
-                        m_SubObjects[componentIndex].typeSystem = typeSystem; 
+                        m_SubObjects[componentIndex].OnBeforeModuleEdited(moduleCollection[moduleIndex]);
                         // Loop over modules if we are editing them 
                         if ((m_ActiveDefinitions & DefinitionType.Module) != DefinitionType.Module)
                         {
@@ -50,6 +48,12 @@ namespace Weaver
                     }
                     // Viste Types
                     VisitTypes(moduleCollection[moduleIndex].Types);
+                    // Loop over all components and invoke our on complete event
+                    for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
+                    // Invoke that we have complete editing this moudle
+                    {
+                        m_SubObjects[componentIndex].OnModuleEditComplete(moduleCollection[moduleIndex]);
+                    }
                 }
             }
         }

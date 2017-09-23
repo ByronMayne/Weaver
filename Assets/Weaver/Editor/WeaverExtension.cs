@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Mono.Cecil;
+using System.Reflection;
 
 namespace Weaver
 {
@@ -16,7 +17,7 @@ namespace Weaver
 
     public abstract class WeaverComponent : ScriptableObject
     {
-        private TypeSystem m_TypeSystem;
+        private ModuleDefinition m_ActiveModule;
         public abstract string addinName { get; }
         private bool m_Enabled;
 
@@ -28,12 +29,12 @@ namespace Weaver
 
         /// <summary>
         /// Returns back the type system for the module
-        /// currently being edited.
+        /// currently being edited. If we are not editing a module this
+        /// returns null.
         /// </summary>
-        public TypeSystem typeSystem 
+        public TypeSystem typeSystem
         {
-            get { return m_TypeSystem; }
-            set { m_TypeSystem = value; }
+            get { return m_ActiveModule == null ? null : m_ActiveModule.TypeSystem; }
         }
 
         /// <summary>
@@ -56,10 +57,137 @@ namespace Weaver
             return (type & effectedDefintions) == type;
         }
 
+        /// <summary>
+        /// Invoked whenever we start editing a moudle. Used to populate our
+        /// helper functions 
+        /// </summary>
+        public virtual void OnBeforeModuleEdited(ModuleDefinition moduleDefinition)
+        {
+            m_ActiveModule = moduleDefinition;
+        }
+
+        /// <summary>
+        /// Invoked when we have finished editing a module
+        /// </summary>
+        public virtual void OnModuleEditComplete(ModuleDefinition moduleDefinition)
+        {
+            m_ActiveModule = null;
+        }
+
         public virtual void VisitModule(ModuleDefinition moduleDefinition) { }
         public virtual void VisitType(TypeDefinition typeDefinition) { }
         public virtual void VisitMethod(MethodDefinition methodDefinition) { }
         public virtual void VisitField(FieldDefinition fieldDefinition) { }
         public virtual void VisitProperty(PropertyDefinition propertyDefinition) { }
+
+        #region -= Import Methods =-
+        public TypeReference Import(TypeReference type)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(type);
+        }
+
+        public TypeReference Import(Type type, IGenericParameterProvider context)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(type);
+        }
+
+        public FieldReference Import(FieldInfo field)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(field);
+        }
+
+        public FieldReference Import(FieldInfo field, IGenericParameterProvider context)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(field);
+        }
+
+        public MethodReference Import(MethodBase method)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(method);
+        }
+
+        public MethodReference Import(MethodBase method, IGenericParameterProvider context)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(method, context);
+        }
+
+        public TypeReference Import(TypeReference type, IGenericParameterProvider context)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(type, context);
+        }
+
+        public TypeReference Import(Type type)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(type);
+        }
+
+        public FieldReference Import(FieldReference field)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(field);
+        }
+
+        public MethodReference Import(MethodReference method)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(method);
+        }
+
+        public MethodReference Import(MethodReference method, IGenericParameterProvider context)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(method, context);
+        }
+
+        public FieldReference Import(FieldReference field, IGenericParameterProvider context)
+        {
+            if (m_ActiveModule == null)
+            {
+                return null;
+            }
+            return m_ActiveModule.Import(field, context);
+        }
+        #endregion
     }
 }
