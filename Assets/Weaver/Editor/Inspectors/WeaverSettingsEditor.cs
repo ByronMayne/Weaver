@@ -59,8 +59,8 @@ namespace Weaver.Editors
                 for (int y = 0; y < m_WeavedAssemblies.arraySize; y++)
                 {
                     SerializedProperty current = m_WeavedAssemblies.GetArrayElementAtIndex(y);
-                    SerializedProperty assetPath = current.FindPropertyRelative("m_FilePath");
-                    if (string.Equals(cachedAssemblies[x].Location, assetPath.stringValue, StringComparison.Ordinal))
+                    SerializedProperty assetPath = current.FindPropertyRelative("m_RelativePath");
+                    if (cachedAssemblies[x].Location.IndexOf(assetPath.stringValue, StringComparison.Ordinal) > 0)
                     {
                         foundMatch = true;
                         break;
@@ -69,7 +69,8 @@ namespace Weaver.Editors
                 if (!foundMatch)
                 {
                     GUIContent content = new GUIContent(cachedAssemblies[x].GetName().Name);
-                    menu.AddItem(content, false, OnWeavedAssemblyAdded, cachedAssemblies[x].Location);
+                    string projectPath = FileUtility.SystemToProjectPath(cachedAssemblies[x].Location);
+                    menu.AddItem(content, false, OnWeavedAssemblyAdded, projectPath);
                 }
             }
 
@@ -90,7 +91,7 @@ namespace Weaver.Editors
         {
             m_WeavedAssemblies.arraySize++;
             SerializedProperty weaved = m_WeavedAssemblies.GetArrayElementAtIndex(m_WeavedAssemblies.arraySize - 1);
-            weaved.FindPropertyRelative("m_FilePath").stringValue = (string)path;
+            weaved.FindPropertyRelative("m_RelativePath").stringValue = (string)path;
             weaved.FindPropertyRelative("m_Enabled").boolValue = true;
             serializedObject.ApplyModifiedProperties();
         }

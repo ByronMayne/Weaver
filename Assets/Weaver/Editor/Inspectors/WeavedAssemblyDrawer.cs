@@ -12,10 +12,10 @@ namespace Weaver.Editors
             EditorGUI.BeginChangeCheck();
             {
                 const float BUTTON_WIDTH = 25;
-                SerializedProperty filePath = property.FindPropertyRelative("m_FilePath");
+                SerializedProperty relativePath = property.FindPropertyRelative("m_RelativePath");
                 SerializedProperty enabled = property.FindPropertyRelative("m_Enabled");
                 position.width -= BUTTON_WIDTH;
-                EditorGUI.SelectableLabel(position, filePath.stringValue, EditorStyles.textArea);
+                EditorGUI.SelectableLabel(position, relativePath.stringValue, EditorStyles.textArea);
                 position.x += position.width;
                 position.width = BUTTON_WIDTH;
                 enabled.boolValue = EditorGUI.Toggle(position, enabled.boolValue);

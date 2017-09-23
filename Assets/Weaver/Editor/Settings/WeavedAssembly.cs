@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using UnityEngine;
+using UnityEditor;
 
 namespace Weaver
 {
@@ -14,7 +15,7 @@ namespace Weaver
         public delegate void WeavedAssemblyDelegate(WeavedAssembly weavedAssembly);
 
         [SerializeField]
-        private string m_FilePath;
+        private string m_RelativePath;
         [SerializeField]
         private bool m_Enabled;
         [SerializeField]
@@ -34,10 +35,10 @@ namespace Weaver
         /// <summary>
         /// Returns back the file path to this assembly
         /// </summary>
-        public string filePath
+        public string relativePath
         {
-            get { return m_FilePath; }
-            set { m_FilePath = value; }
+            get { return m_RelativePath; }
+            set { m_RelativePath = value; }
         }
 
         /// <summary>
@@ -51,15 +52,33 @@ namespace Weaver
         }
 
         /// <summary>
+        /// Returns back the system path to this
+        /// assembly. 
+        /// </summary>
+        public string GetSystemPath()
+        {
+            // Get our path
+            string path = Application.dataPath;
+            // Get the length
+            int pathLength = path.Length;
+            // Split it
+            path = path.Substring(0, pathLength - /* Assets */ 6);
+            // Add our relative path
+            path = Path.Combine(path, relativePath);
+            // Return the result
+            return path;
+        }
+
+        /// <summary>
         /// Sees if this file has been modified since the last time we checked.
         /// </summary>
         /// <returns></returns>
         public bool HasChanges()
         {
-            if (File.Exists(filePath))
+            if (File.Exists(relativePath))
             {
                 m_IsValid = true;
-                int writeTime = File.GetLastWriteTime(filePath).Second;
+                int writeTime = File.GetLastWriteTime(relativePath).Second;
                 if (m_LastWriteTime != writeTime)
                 {
                     m_LastWriteTime = writeTime;

@@ -27,7 +27,7 @@ namespace Weaver
         /// </summary>
         public static void PopulateAssemblyCache()
         {
-            IList<string> assemblyPaths = GetUserAssemblies();
+            IList<string> assemblyPaths = GetUserAssemblyPaths();
             m_Assemblies = new Assembly[assemblyPaths.Count];
             for(int i = 0;  i < assemblyPaths.Count; i++)
             {
@@ -58,11 +58,11 @@ namespace Weaver
         /// <summary>
         /// Returns back true if the dll at the path is a managed dll.
         /// </summary>
-        /// <param name="path">The full system path to the dll.</param>
+        /// <param name="systemPath">The full system path to the dll.</param>
         /// <returns>True if a managed dll and false if not. </returns>
-        public static bool IsManagedAssembly(string path)
+        public static bool IsManagedAssembly(string systemPath)
         {
-            DllType dllType = InternalEditorUtility.DetectDotNetDll(path);
+            DllType dllType = InternalEditorUtility.DetectDotNetDll(systemPath);
             return dllType != DllType.Unknown && dllType != DllType.Native;
         }
 
@@ -70,11 +70,27 @@ namespace Weaver
         /// Returns back all the user assemblies define in the unity project. 
         /// </summary>
         /// <returns></returns>
-        public static IList<string> GetUserAssemblies()
+        public static IList<string> GetUserAssemblyPaths()
         {
             List<string> assemblies = new List<string>(20);
-            FindAssemblies(Application.dataPath, 1000, assemblies);
-            FindAssemblies(Application.dataPath + "/../Library/ScriptAssemblies/", 1000, assemblies);
+            FindAssemblies(Application.dataPath, 120, assemblies);
+            FindAssemblies(Application.dataPath + "/../Library/ScriptAssemblies/", 2, assemblies);
+            return assemblies;
+        }
+
+        /// <summary>
+        /// Gets a list of all the user assmblies and returns their
+        /// project path. 
+        /// </summary>
+        /// <returns></returns>
+        public static IList<string> GetRelativeUserAssemblyPaths()
+        {
+            IList<string> assemblies = GetUserAssemblyPaths();
+            // Loop over them all
+            for(int i = 0; i < assemblies.Count; i++)
+            {
+                assemblies[i] = FileUtility.SystemToProjectPath(assemblies[i]);
+            }
             return assemblies;
         }
 
@@ -82,18 +98,18 @@ namespace Weaver
         /// Finds all the managed assemblies at the give path. It will look into sub folders
         /// up until the max depth. 
         /// </summary>
-        /// <param name="basePath">The path of the directory you want to start looking in.</param>
+        /// <param name="systemPath">The path of the directory you want to start looking in.</param>
         /// <param name="maxDepth">The max number of sub directories you want to go into.</param>
         /// <returns></returns>
-        public static void FindAssemblies(string basePath, int maxDepth, List<string> result)
+        public static void FindAssemblies(string systemPath, int maxDepth, List<string> result)
         {
             if (maxDepth > 0)
             {
                 try
                 {
-                    if (Directory.Exists(basePath))
+                    if (Directory.Exists(systemPath))
                     {
-                        DirectoryInfo directroyInfo = new DirectoryInfo(basePath);
+                        DirectoryInfo directroyInfo = new DirectoryInfo(systemPath);
                         // Find all assemblies that are managed 
                         result.AddRange(from file in directroyInfo.GetFiles()
                                         where IsManagedAssembly(file.FullName)

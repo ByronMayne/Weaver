@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Editor:5</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.1.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -156,6 +154,7 @@
     <Compile Include="Assets\Weaver\Editor\Settings\WeaverSettings.cs" />
     <Compile Include="Assets\Weaver\Editor\Type Extensions\ICustomAttributeProviderExtensions.cs" />
     <Compile Include="Assets\Weaver\Editor\Type Extensions\TypeDefinitionExtensions.cs" />
+    <Compile Include="Assets\Weaver\Editor\Utility Types\FileUtility.cs" />
     <Compile Include="Assets\Weaver\Editor\Utility Types\SerializedMethod.cs" />
     <Compile Include="Assets\Weaver\Editor\Utility Types\SubObjectController.cs" />
     <Compile Include="Assets\Weaver\Editor\WeaverExtension.cs" />

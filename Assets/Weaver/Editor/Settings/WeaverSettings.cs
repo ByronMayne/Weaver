@@ -52,7 +52,7 @@ namespace Weaver
                 if (m_WeavedAssemblies[i].HasChanges())
                 {
                     // We have a changed assembly so we need to get the defintion to modify. 
-                    ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(m_WeavedAssemblies[i].filePath, readerParameters);
+                    ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(m_WeavedAssemblies[i].relativePath, readerParameters);
                     // Add it to our list
                     changedModules.Add(moduleDefinition);
                 }
