@@ -41,7 +41,7 @@ namespace Weaver
                         // Assign our type system
                         m_SubObjects[componentIndex].OnBeforeModuleEdited(moduleCollection[moduleIndex]);
                         // Loop over modules if we are editing them 
-                        if ((m_ActiveDefinitions & DefinitionType.Module) != DefinitionType.Module)
+                        if ((m_ActiveDefinitions & DefinitionType.Module) == DefinitionType.Module)
                         {
                             m_SubObjects[componentIndex].VisitModule(moduleCollection[moduleIndex]);
                         }
