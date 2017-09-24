@@ -79,6 +79,17 @@ namespace Weaver
         }
 
         /// <summary>
+        /// Returns back all the assemblies that are genereted in the ScriptAssemblies
+        /// folder.
+        /// </summary>
+        public static IList<string> GetUnityUserGeneratedAssemblyPaths()
+        {
+            List<string> assemblies = new List<string>(20);
+            FindAssemblies(Application.dataPath + "/../Library/ScriptAssemblies/", 2, assemblies);
+            return assemblies;
+        }
+
+        /// <summary>
         /// Gets a list of all the user assmblies and returns their
         /// project path. 
         /// </summary>
