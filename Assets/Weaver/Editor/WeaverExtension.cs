@@ -13,6 +13,7 @@ namespace Weaver
         Method = 1 << 3,
         Field = 1 << 4,
         Property = 1 << 5,
+        All = Module | Type | Method | Field | Property
     }
 
     public abstract class WeaverComponent : ScriptableObject
