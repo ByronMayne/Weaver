@@ -22,5 +22,22 @@ namespace Weaver
             }
             return false;
         }
+
+        public static CustomAttribute GetCustomAttribute<T>(this ICustomAttributeProvider instance)
+        {
+            if (instance.HasCustomAttributes)
+            {
+                Collection<CustomAttribute> attributes = instance.CustomAttributes;
+
+                for (int i = 0; i < attributes.Count; i++)
+                {
+                    if (attributes[i].AttributeType.FullName.Equals(typeof(T).FullName, StringComparison.Ordinal))
+                    {
+                        return attributes[i];
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
