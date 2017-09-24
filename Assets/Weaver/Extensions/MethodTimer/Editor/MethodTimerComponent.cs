@@ -25,7 +25,6 @@ namespace Weaver
             }
         }
 
-        private TypeSystem m_TypeSystem;
         private StopwatchDefinition m_StopWatchTypeDef;
         private MethodReference m_StringConcatMethodRef;
         private MethodReference m_DebugLogMethodRef;
@@ -50,8 +49,6 @@ namespace Weaver
 
         public override void VisitModule(ModuleDefinition moduleDefinition)
         {
-            // Get the type system
-            m_TypeSystem = moduleDefinition.TypeSystem;
             // Import our stopwatch type reference 
             m_StopwatchTypeReference = moduleDefinition.Import(typeof(Stopwatch));
             // Resolve it so we can get the type definition
@@ -59,7 +56,7 @@ namespace Weaver
             // Create our value holder
             m_StopWatchTypeDef = new StopwatchDefinition(stopwatchTypeDef, moduleDefinition);
             // String
-            TypeDefinition stringTypeDef = m_TypeSystem.String.Resolve();
+            TypeDefinition stringTypeDef = typeSystem.String.Resolve();
             m_StringConcatMethodRef = moduleDefinition.Import(stringTypeDef.GetMethod("Concat", 2));
 
             TypeReference debugTypeRef = moduleDefinition.Import(typeof(Debug));
@@ -79,7 +76,7 @@ namespace Weaver
             ILProcessor bodyProcessor = body.GetILProcessor();
 
             VariableDefinition stopwatchVariable = new VariableDefinition("stopwatch", m_StopwatchTypeReference);
-            VariableDefinition elapsedMilliseconds = new VariableDefinition("elapsedMilliseconds", m_TypeSystem.Int64);
+            VariableDefinition elapsedMilliseconds = new VariableDefinition("elapsedMilliseconds", typeSystem.Int64);
             body.Variables.Add(stopwatchVariable);
             body.Variables.Add(elapsedMilliseconds);
             // Inject at the start of the function 
@@ -124,7 +121,7 @@ namespace Weaver
                 // Loads the local variable at index 1 onto the evaluation stack.
                 Instruction _09 = Instruction.Create(OpCodes.Ldloc, elapsedMilliseconds);
                 // Converts a value type to an object reference (type O).
-                Instruction _10 = Instruction.Create(OpCodes.Box, m_TypeSystem.Int64);
+                Instruction _10 = Instruction.Create(OpCodes.Box, typeSystem.Int64);
                 // Calls the method indicated by the passed method descriptor.
                 Instruction _11 = Instruction.Create(OpCodes.Call, m_StringConcatMethodRef);
                 // Calls the method indicated by the passed method descriptor.
