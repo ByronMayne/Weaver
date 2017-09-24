@@ -16,6 +16,16 @@ namespace Weaver
             definition = reference.Resolve();
         }
 
+        public MethodImplementation GetConstructor()
+        {
+            return GetMethod(".ctor");
+        }
+
+        public MethodImplementation GetConstructor(params Type[] parameterTypes)
+        {
+            return GetMethod(".ctor", parameterTypes);
+        }
+
         public MethodImplementation GetMethod(string methodName)
         {
             MethodDefinition methodDefinition = definition.GetMethod(methodName);
