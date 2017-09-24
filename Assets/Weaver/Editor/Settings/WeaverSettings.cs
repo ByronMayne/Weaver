@@ -46,6 +46,8 @@ namespace Weaver
             {
                 m_WeavedAssemblies = new List<WeavedAssembly>();
             }
+
+            List<WeavedAssembly> assembliesToWrite = new List<WeavedAssembly>();
             // Loop over them all
             for (int i = 0; i < m_WeavedAssemblies.Count; i++)
             {
@@ -55,12 +57,19 @@ namespace Weaver
                     ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(m_WeavedAssemblies[i].relativePath, readerParameters);
                     // Add it to our list
                     changedModules.Add(moduleDefinition);
+                    assembliesToWrite.Add(m_WeavedAssemblies[i]);
                 }
             }
             // Initialize our component manager
             m_Components.Initialize(this);
             // Visit Modules
             m_Components.VisitModules(changedModules);
+            // Save
+            for(int i = 0; i < assembliesToWrite.Count; i++)
+            {
+                changedModules[i].Write(assembliesToWrite[i].GetSystemPath());
+            }
+            assembliesToWrite.Clear();
         }
     }
 }
