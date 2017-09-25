@@ -1,8 +1,6 @@
 ﻿using Mono.Cecil;
-using UnityEngine;
 using Mono.Cecil.Cil;
 using System.Diagnostics;
-using Mono.Collections.Generic;
 using Debug = UnityEngine.Debug;
 
 namespace Weaver
