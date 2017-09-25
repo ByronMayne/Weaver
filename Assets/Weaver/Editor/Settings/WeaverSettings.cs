@@ -72,6 +72,7 @@ namespace Weaver
         /// </summary>
         private void OnEnable()
         {
+            AssemblyUtility.PopulateAssemblyCache();
             // Subscribe to the before reload event so we can modify the assemblies!
             AssemblyReloadEvents.beforeAssemblyReload += WeaveUpdatedAssemblies;
         }
