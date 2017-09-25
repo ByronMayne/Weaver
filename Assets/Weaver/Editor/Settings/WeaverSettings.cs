@@ -40,7 +40,7 @@ namespace Weaver
             }
         }
 
-        [PostProcessScene()]
+        [PostProcessScene]
         public static void PostprocessScene()
         {
             // Only run this code if we are building the player 
@@ -61,13 +61,25 @@ namespace Weaver
                         // Load it
                         WeaverSettings settings = AssetDatabase.LoadAssetAtPath<WeaverSettings>(assetPath);
                         // Invoke
-                        settings.WeaveBuild();
+                        settings.WeaveUpdatedAssemblies();
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Inovked when our module is first created and turned on
+        /// </summary>
         private void OnEnable()
+        {
+            // Subscribe to the before reload event so we can modify the assemblies!
+            AssemblyReloadEvents.beforeAssemblyReload += WeaveUpdatedAssemblies;
+        }
+
+        /// <summary>
+        /// Used to modifiy all existing assemblies on disk. 
+        /// </summary>
+        private void WeaveUpdatedAssemblies()
         {
             // Create a collection for all the assemblies that changed. 
             Collection<ModuleDefinition> changedModules = new Collection<ModuleDefinition>();
@@ -91,20 +103,10 @@ namespace Weaver
             WeaveAssemblies(assembliesToWrite);
         }
 
-        private void WeaveBuild()
-        {
-            IList<WeavedAssembly> assemblyToWeave = new List<WeavedAssembly>();
-            // loop over them all
-            for (int i = 0; i < m_WeavedAssemblies.Count; i++)
-            {
-                if (m_WeavedAssemblies[i].IsUnityGenerated() && m_WeavedAssemblies[i].Exists())
-                {
-                    assemblyToWeave.Add(m_WeavedAssemblies[i]);
-                }
-            }
-            WeaveAssemblies(assemblyToWeave);
-        }
-
+        /// <summary>
+        /// Takes in a collection of assemblies and starts the weaving process for
+        /// all of them. 
+        /// </summary>
         private void WeaveAssemblies(IList<WeavedAssembly> assemblies)
         {
             AssemblyUtility.PopulateAssemblyCache();
