@@ -11,7 +11,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07ccf61e689f3ae4bb1e5518c0e5814d, type: 3}
   m_Name: Weaver Settings
   m_EditorClassIdentifier: 
-  m_WeavedAssemblies: []
+  m_WeavedAssemblies:
+  - m_RelativePath: Library\ScriptAssemblies\Assembly-CSharp-Editor.dll
+    m_Enabled: 1
+    m_LastWriteTime: 40
+  - m_RelativePath: Assets\Weaver\Editor\Lib\Mono.Cecil.dll
+    m_Enabled: 1
+    m_LastWriteTime: 46
+  - m_RelativePath: Assets\Weaver\Editor\Lib\Mono.Cecil.Mdb.dll
+    m_Enabled: 1
+    m_LastWriteTime: 46
+  - m_RelativePath: Assets\Weaver\Editor\Lib\Mono.Cecil.Pdb.dll
+    m_Enabled: 1
+    m_LastWriteTime: 46
+  - m_RelativePath: Assets\Weaver\Editor\Lib\Mono.Cecil.Rocks.dll
+    m_Enabled: 1
+    m_LastWriteTime: 46
+  - m_RelativePath: Assets\Weaver\Editor\Lib\Unity.CecilTools.dll
+    m_Enabled: 1
+    m_LastWriteTime: 46
+  - m_RelativePath: Library\ScriptAssemblies\Assembly-CSharp.dll
+    m_Enabled: 1
+    m_LastWriteTime: 40
   m_Components:
-    m_SubObjects: []
+    m_SubObjects:
+    - {fileID: 114006548918131062}
+    - {fileID: 114140929486273130}
+    - {fileID: 114772020375415010}
+    - {fileID: 114114317261377362}
     m_Owner: {fileID: 11400000}
+--- !u!114 &114006548918131062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a14f24f5f79ba499364dfa634b0243, type: 3}
+  m_Name: Weaver.ProfileSampleComponent
+  m_EditorClassIdentifier: 
+--- !u!114 &114114317261377362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a490955dde94664db735f08c1bc3b54, type: 3}
+  m_Name: Weaver.Development.GUIDrawerComponent
+  m_EditorClassIdentifier: 
+--- !u!114 &114140929486273130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15da2ce92a1b2a34d84f72d5dd9f7e52, type: 3}
+  m_Name: Weaver.MethodTimerComponent
+  m_EditorClassIdentifier: 
+--- !u!114 &114772020375415010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77c5a7de32b0b94ca13abec70ce4b35, type: 3}
+  m_Name: Weaver.PropertyChangedComponent
+  m_EditorClassIdentifier: 
