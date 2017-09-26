@@ -117,6 +117,8 @@ namespace Weaver
             ReaderParameters readerParameters = new ReaderParameters();
             // Pass the reader our resolver 
             readerParameters.AssemblyResolver = m_Resolver;
+            // Tell the reader to look at symbols so we can get line numbers for errors, warnings, and logs.
+            readerParameters.ReadSymbols = true;
             // Create a list of definitions
             Collection<ModuleDefinition> editingModules = new Collection<ModuleDefinition>();
             for (int i = 0; i < assemblies.Count; i++)
