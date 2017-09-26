@@ -24,3 +24,5 @@ proj.unity/**/*.sln
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 Weaver\.Editor\.csproj
+
+Weaver\.csproj
