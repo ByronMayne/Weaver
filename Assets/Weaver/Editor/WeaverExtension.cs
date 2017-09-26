@@ -81,6 +81,56 @@ namespace Weaver
         public virtual void VisitField(FieldDefinition fieldDefinition) { }
         public virtual void VisitProperty(PropertyDefinition propertyDefinition) { }
 
+        #region -= Logging =-
+        /// <summary>
+        /// Logs a message to the console 
+        /// </summary>
+        protected void Log(string message)
+        {
+            Debug.Log(message, this);
+        }
+
+        /// <summary>
+        /// Logs a message to the console with a member for context
+        /// </summary>
+        public void Log(string message, MemberLocation context)
+        {
+            Log(context + message);
+        }
+
+        /// <summary>
+        /// Logs a warning to the console with a member for context
+        /// </summary>
+        public void Warning(string message)
+        {
+            Debug.LogWarning(message, this);
+        }
+
+        /// <summary>
+        /// Logs a warning to the console with a member for context
+        /// </summary>
+        public void Warning(string message, MemberLocation context)
+        {
+            Warning(context + message);
+        }
+
+        /// <summary>
+        /// Logs a error to the console with a member for context
+        /// </summary>
+        public void Error(string message)
+        {
+            Debug.LogError(message, this);
+        }
+
+        /// <summary>
+        /// Logs a error to the console with a member for context
+        /// </summary>
+        public void Error(string message, MemberLocation context)
+        {
+            Error(context + message);
+        }
+        #endregion
+
         #region -= Import Methods =-
         public TypeReference Import(TypeReference type)
         {
