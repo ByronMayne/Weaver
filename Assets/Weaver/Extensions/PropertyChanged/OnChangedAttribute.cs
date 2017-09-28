@@ -9,6 +9,8 @@ namespace Weaver
     {
         public string callbackMethod { get; set; }
 
+        public bool isValidated { get; set; }
+
         public OnChangedAttribute(string callbackMethod)
         {
             this.callbackMethod = callbackMethod;
