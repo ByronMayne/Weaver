@@ -61,8 +61,10 @@ namespace Weaver
 
         public override void VisitMethod(MethodDefinition methodDefinition)
         {
+            CustomAttribute profileSample = methodDefinition.GetCustomAttribute<ProfileSampleAttribute>();
+
             // Check if we have our attribute
-            if (!methodDefinition.HasCustomAttribute<ProfileSampleAttribute>())
+            if (profileSample == null)
             {
                 return;
             }
@@ -92,6 +94,8 @@ namespace Weaver
                     i++;
                 }
             }
+
+            methodDefinition.CustomAttributes.Remove(profileSample);
         }
     }
 }
