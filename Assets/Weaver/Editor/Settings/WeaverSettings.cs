@@ -5,6 +5,7 @@ using Mono.Cecil;
 using Mono.Collections.Generic;
 using UnityEditor.Callbacks;
 using UnityEngine.SceneManagement;
+using System.Reflection;
 
 namespace Weaver
 {
@@ -28,6 +29,15 @@ namespace Weaver
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
+            Instance();
+        }
+        
+        /// <summary>
+        /// Gets the instance of our Settings if it exists. Returns null
+        /// if no instance was created. 
+        /// </summary>
+        public static WeaverSettings Instance()
+        {
             // Find all settings
             string[] guids = AssetDatabase.FindAssets("t:WeaverSettings");
             // Load them all
@@ -36,8 +46,9 @@ namespace Weaver
                 // Convert our path
                 string assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
                 // Load it
-                AssetDatabase.LoadAssetAtPath<WeaverSettings>(assetPath);
+               return AssetDatabase.LoadAssetAtPath<WeaverSettings>(assetPath);
             }
+            return null;
         }
 
         [PostProcessScene]
@@ -108,7 +119,7 @@ namespace Weaver
         /// Takes in a collection of assemblies and starts the weaving process for
         /// all of them. 
         /// </summary>
-        private void WeaveAssemblies(IList<WeavedAssembly> assemblies)
+        public void WeaveAssemblies(IList<WeavedAssembly> assemblies)
         {
             AssemblyUtility.PopulateAssemblyCache();
             // Create new resolver
@@ -124,7 +135,7 @@ namespace Weaver
             for (int i = 0; i < assemblies.Count; i++)
             {
                 // We have a changed assembly so we need to get the defintion to modify. 
-                ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(assemblies[i].relativePath, readerParameters);
+                ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(assemblies[i].GetSystemPath(), readerParameters);
                 // Add it to our list
                 editingModules.Add(moduleDefinition);
             }
