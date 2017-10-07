@@ -14,7 +14,7 @@ MonoBehaviour:
   m_WeavedAssemblies:
   - m_RelativePath: Library\ScriptAssemblies\Assembly-CSharp-Editor.dll
     m_Enabled: 1
-    m_LastWriteTime: 40
+    m_LastWriteTime: 20
   - m_RelativePath: Assets\Weaver\Editor\Lib\Mono.Cecil.dll
     m_Enabled: 1
     m_LastWriteTime: 46
@@ -32,15 +32,12 @@ MonoBehaviour:
     m_LastWriteTime: 46
   - m_RelativePath: Library\ScriptAssemblies\Assembly-CSharp.dll
     m_Enabled: 1
-    m_LastWriteTime: 40
+    m_LastWriteTime: 18
   m_Components:
     m_SubObjects:
-    - {fileID: 114006548918131062}
-    - {fileID: 114140929486273130}
-    - {fileID: 114772020375415010}
-    - {fileID: 114114317261377362}
+    - {fileID: 114805662069318014}
     m_Owner: {fileID: 11400000}
---- !u!114 &114006548918131062
+--- !u!114 &114134185966084410
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -48,32 +45,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6a14f24f5f79ba499364dfa634b0243, type: 3}
-  m_Name: Weaver.ProfileSampleComponent
+  m_Script: {fileID: 11500000, guid: f12c0ef0fd1366941aac37bc90ad4397, type: 3}
+  m_Name: Weaver.ObsoleteCaseComponent
   m_EditorClassIdentifier: 
---- !u!114 &114114317261377362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a490955dde94664db735f08c1bc3b54, type: 3}
-  m_Name: Weaver.Development.GUIDrawerComponent
-  m_EditorClassIdentifier: 
---- !u!114 &114140929486273130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15da2ce92a1b2a34d84f72d5dd9f7e52, type: 3}
-  m_Name: Weaver.MethodTimerComponent
-  m_EditorClassIdentifier: 
---- !u!114 &114772020375415010
+--- !u!114 &114805662069318014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
