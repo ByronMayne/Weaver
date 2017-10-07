@@ -2,7 +2,6 @@
 using System.IO;
 using UnityEngine;
 using UnityEditor;
-using System.Reflection;
 
 namespace Weaver
 {
@@ -16,66 +15,13 @@ namespace Weaver
         public delegate void WeavedAssemblyDelegate(WeavedAssembly weavedAssembly);
 
         [SerializeField]
-        private string m_FilePath;
+        private string m_RelativePath;
         [SerializeField]
         private bool m_Enabled;
         [SerializeField]
         private int m_LastWriteTime;
-        private bool m_IsRelativePath;
+
         private bool m_IsValid;
-
-        /// <summary>
-        /// Creates a new empty instance of a Weaved Assembly. Should
-        /// really only be used by Unity. 
-        /// </summary>
-        public WeavedAssembly()
-        {
-            m_Enabled = true;
-            m_IsRelativePath = true;
-        }
-
-        /// <summary>
-        /// Creates a new instance of a Weaved Assembly from a file path
-        /// </summary>
-        /// <param name="filePath">The relative path or system path of the assembly you want to weave</param>
-        public WeavedAssembly(string filePath)
-        {
-            if (File.Exists(filePath))
-            {
-                m_IsRelativePath = false;
-            }
-            else if (File.Exists(RelativeToSystemPath(filePath)))
-            {
-                m_IsRelativePath = true;
-            }
-            else
-            {
-                throw new FileNotFoundException("The assembly could not be found at path '" + filePath + "'.");
-            }
-
-            m_FilePath = filePath;
-            m_Enabled = true;
-            m_IsValid = true;
-            m_IsRelativePath = true;
-            m_LastWriteTime = File.GetLastWriteTime(filePath).Second;
-        }
-
-        /// <summary>
-        /// Creates a new instance of a Weaved Assembly from an
-        /// Assembly instance. 
-        /// </summary>
-        /// <param name="assembly">The assembly you want to weave</param>
-        public WeavedAssembly(Assembly assembly)
-        {
-            if (assembly == null)
-            {
-                throw new ArgumentNullException("We can't weave an assembly that is null.");
-            }
-
-            m_FilePath = assembly.Location;
-            m_IsRelativePath = false;
-            m_IsValid = true;
-        }
 
         /// <summary>
         /// Returns back true if the assembly is
@@ -91,8 +37,8 @@ namespace Weaver
         /// </summary>
         public string relativePath
         {
-            get { return m_FilePath; }
-            set { m_FilePath = value; }
+            get { return m_RelativePath; }
+            set { m_RelativePath = value; }
         }
 
         /// <summary>
@@ -110,7 +56,7 @@ namespace Weaver
         /// </summary>
         public bool IsUnityGenerated()
         {
-            return m_FilePath.StartsWith("Library/ScriptAssemblies/");
+            return m_RelativePath.StartsWith("Library/ScriptAssemblies/");
         }
 
         /// <summary>
@@ -128,16 +74,17 @@ namespace Weaver
         /// </summary>
         public string GetSystemPath()
         {
-            if (m_IsRelativePath)
-            {
-                return RelativeToSystemPath(relativePath);
-            }
-            else
-            {
-                return m_FilePath;
-            }
+            // Get our path
+            string path = Application.dataPath;
+            // Get the length
+            int pathLength = path.Length;
+            // Split it
+            path = path.Substring(0, pathLength - /* Assets */ 6);
+            // Add our relative path
+            path = Path.Combine(path, relativePath);
+            // Return the result
+            return path;
         }
-
 
         /// <summary>
         /// Sees if this file has been modified since the last time we checked.
@@ -152,7 +99,7 @@ namespace Weaver
                 if (m_LastWriteTime != writeTime)
                 {
                     m_LastWriteTime = writeTime;
-                    return true;
+                    return true; 
                 }
             }
             else
@@ -160,32 +107,6 @@ namespace Weaver
                 m_IsValid = false;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Converts a relative path to a system path. 
-        /// </summary>
-        private static string RelativeToSystemPath(string relativePath)
-        {
-            // Get our path
-            string path = Application.dataPath;
-            // Get the length
-            int pathLength = path.Length;
-            // Split it
-            path = path.Substring(0, pathLength - /* Assets */ 6);
-            // Add our relative path
-            path = Path.Combine(path, relativePath);
-            // Return the result
-            return path;
-        }
-
-        /// <summary>
-        /// Returns back the relative path to the Unity project based off a
-        /// system path.
-        /// </summary>
-        private static string SystemPathToRelativePath(string systemPath)
-        {
-            return FileUtil.GetProjectRelativePath(systemPath);
         }
     }
 }
