@@ -26,6 +26,11 @@ namespace Weaver
             get { return m_Resolver; }
         }
 
+        public ComponentController componentController
+        {
+            get { return m_Components; }
+        }
+
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
@@ -119,7 +124,7 @@ namespace Weaver
         /// Takes in a collection of assemblies and starts the weaving process for
         /// all of them. 
         /// </summary>
-        public void WeaveAssemblies(IList<WeavedAssembly> assemblies)
+        private void WeaveAssemblies(IList<WeavedAssembly> assemblies)
         {
             AssemblyUtility.PopulateAssemblyCache();
             // Create new resolver
