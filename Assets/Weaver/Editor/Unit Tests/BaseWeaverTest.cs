@@ -12,24 +12,25 @@ using System.IO;
 
 public abstract class BaseWeaverTest
 {
+    /// <summary>
+    /// The delegate used to provide source code for our test.
+    /// </summary>
+    /// <returns></returns>
+    public delegate string SourceProviderDelegate();
+
     public struct AssemblyTestResult
     {
         public Assembly baseAssembly;
-        public Assembly weavedAssembly; 
+        public Assembly weavedAssembly;
     }
 
     private WeaverSettings m_Settings;
-    private AppDomain m_TestDomain; 
 
     [SetUp]
     public virtual void Setup()
     {
-        string domainName = "Weaver.Tests." + GetType().FullName;
-        // Create a domain for our test
-        Log("Setup", "Creating App Domain " + domainName); 
-        m_TestDomain = AppDomain.CreateDomain(domainName);
         // Try to get our instance
-        Log("Setup", "Gettings Settings Instnace" + domainName);
+        Log("Setup", "Gettings Settings Instance");
         m_Settings = WeaverSettings.Instance();
         // Assume it's not null otherwise our tests can't be run
         Assume.That(m_Settings != null, "We can't run tests if we don't have a Weaver Settings instance in the project.");
@@ -39,29 +40,26 @@ public abstract class BaseWeaverTest
     public virtual void TearDown()
     {
         // Cleanup our testing domain
-        Log("Teardown", "Unloading App Domain" + m_TestDomain.FriendlyName);
-        AppDomain.Unload(m_TestDomain);
+        Log("Teardown", "Test Complete");
     }
-
-
-
+    
     /// <summary>
     /// Used to populate the list of types from each assembly.
     /// </summary>
     public virtual void PopulateAssemblies(IList<Type> assemblyTypes)
     {
-        assemblyTypes.Add(typeof(System.Object));
-        assemblyTypes.Add(typeof(UnityEngine.Object));
-        assemblyTypes.Add(typeof(UnityEditor.Editor));
-        assemblyTypes.Add(typeof(Weaver.WeaverSettings));
-        assemblyTypes.Add(typeof(Weaver.OnChangedAttribute));
+        //assemblyTypes.Add(typeof(System.Object));
+        //assemblyTypes.Add(typeof(UnityEngine.Object));
+        //assemblyTypes.Add(typeof(UnityEditor.Editor));
+        //assemblyTypes.Add(typeof(Weaver.OnChangedAttribute));
+        //assemblyTypes.Add(typeof(Weaver.WeaverSettings));
     }
 
     /// <summary>
     /// Compiles a set of source files for a test. This handles failing the test if it
     /// does not compile
     /// </summary>
-    public AssemblyTestResult CompileTest(params string[] sourceFiles)
+    public AssemblyTestResult CompileTest(SourceProviderDelegate sourceProvider)
     {
         Log("Compiling", "Creating Compiler");
         CSharpCodeProvider compiler = new CSharpCodeProvider();
@@ -84,19 +82,22 @@ public abstract class BaseWeaverTest
             paramaters.ReferencedAssemblies.Add(assemblyPath);
             Log("Compiling", "Added Assembly Refernece " + assembly.FullName);
         }
-        // Compile the code
-        CompilerResults results = compiler.CompileAssemblyFromFile(paramaters, sourceFiles);
+
+        // Invoke our soure provider
+        string sourceCode = sourceProvider();
+
+        // Check if we have source
+        if(string.IsNullOrEmpty(sourceCode))
+        {
+            throw new InvalidOperationException("The source provider function did not return any source to compile");
+        }
+
+        CompilerResults results = compiler.CompileAssemblyFromSource(paramaters, sourceCode);
         // Check for errors and if we have any fail the test
         if (results.Errors.Count != 0)
         {
             StringBuilder logBuilder = new StringBuilder();
             logBuilder.AppendLine("Unable to compile the test assembly.");
-            logBuilder.AppendLine("=== Source Files ===");
-            for (int i = 0; i < sourceFiles.Length; i++)
-            {
-                logBuilder.AppendLine(string.Format("{0}: {1}", i + 1, sourceFiles[i]));
-            }
-
             logBuilder.AppendLine("=== Errors ===");
             for (int i = 0; i < results.Errors.Count; i++)
             {
@@ -113,16 +114,27 @@ public abstract class BaseWeaverTest
         Log("Compiling", "Visiting Modules");
         m_Settings.componentController.VisitModules(editedModules);
         // Save it back to disk
-        string modifiedModulePath = results.PathToAssembly + "__weaved";
+        string modifiedModulePath = results.PathToAssembly;
+        int extensionIndex = modifiedModulePath.LastIndexOf('.');
+        modifiedModulePath = modifiedModulePath.Insert(extensionIndex, "__weaved");
+        // Set it's assembly name
+        AssemblyNameDefinition assemblyName = moduleDefinition.Assembly.Name;
+        assemblyName.Name += "__weaved";
         // Save the modified one to disk
         Log("Compiling", "Writing Weaved Assembly to disk at " + modifiedModulePath);
-        moduleDefinition.Write(modifiedModulePath);
+        WriterParameters writerParameters = new WriterParameters();
+        writerParameters.WriteSymbols = true;
+        writerParameters.SymbolWriterProvider = new Mono.Cecil.Mdb.MdbWriterProvider();
+        moduleDefinition.Runtime = TargetRuntime.Net_2_0;
+        moduleDefinition.Write(modifiedModulePath, writerParameters);
 
-        // Create our result
+        Log("Loading", "Loading Assemblies into Test Domain");
         AssemblyTestResult result = new AssemblyTestResult();
-        result.baseAssembly = m_TestDomain.Load(results.PathToAssembly); 
-        result.weavedAssembly = m_TestDomain.Load(modifiedModulePath);
+        result.baseAssembly = results.CompiledAssembly;
+        Log("Assembly", Assembly.GetCallingAssembly().FullName);
 
+        result.weavedAssembly = AppDomain.CurrentDomain.Load(modifiedModulePath);
+        Log("Loading", "Return result for test");
         // Return the result.
         return result;
     }
