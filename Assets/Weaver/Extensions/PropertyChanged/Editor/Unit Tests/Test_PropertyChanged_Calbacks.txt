@@ -1,0 +1,56 @@
+﻿//using Weaver;
+using System;
+
+[Serializable]
+public class Test_PropertyChanged_Calbacks
+{
+    public delegate void Delegate<T>(T value);
+
+    public Delegate<float> onHeightChanged;
+    public Delegate<int> onAgeChanged;
+    public Delegate<string> onNameChanged;
+
+    private float m_Height;
+    protected string m_Name;
+
+    //[OnChanged("OnHeightChanged")]
+    public float height
+    {
+        get { return m_Height; }
+        set { m_Height = value; }
+    }
+
+    //[OnChanged("OnNameChanged")]
+    public string name
+    {
+        get { return m_Name; }
+        set { m_Name = value; }
+    }
+
+    //[OnChanged("OnAgeChanged")]
+    public int age { get; set; }
+
+    private void OnNameChanged(string newName)
+    {
+        if (onNameChanged != null)
+        {
+            onNameChanged(newName);
+        }
+    }
+
+    public void OnHeightChanged(float newHeight)
+    {
+        if (onHeightChanged != null)
+        {
+            onHeightChanged(newHeight);
+        }
+    }
+
+    protected void OnAgeChanged(int newAge)
+    {
+        if (onAgeChanged != null)
+        {
+            onAgeChanged(newAge);
+        }
+    }
+}
