@@ -46,11 +46,11 @@ To use Extensions you first need to create a new instance of the scriptable obje
 **Tip:** Try to only have one instance of each extension. If you have more then one it's effect will be applied twice which is most likely not what you want. 
 
 ## Current Extensions
-* [**Method Timer**](./Assets/Weaver/Addins/MethodTimer/README.md) - Any method with the `MethodTimerAttribute` will be timed using [Stopwatch](https://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch(v=vs.110).aspx) and logged to the console. 
+* [**Method Timer**](.//Assets//Weaver//Extensions//MethodTimer//README.md) - Any method with the `MethodTimerAttribute` will be timed using [Stopwatch](https://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch(v=vs.110).aspx) and logged to the console. 
 
 * [**Profile Sample**]() - Any method with the `ProfileSample` attribute will be have a profile sample injected into the method. The sample name will be the name of the method. 
 
-* [**Property Changed**](".\Assets\Weaver\Extensions\PropertyChanged\docs\README.md) : Invoke a callback whenever a property is marked with the `[OnChanged(string callback)]` attribute.. 
+* [**Property Changed**](".//Assets//Weaver//Extensions//PropertyChanged//docs//README.md) : Invoke a callback whenever a property is marked with the `[OnChanged(string callback)]` attribute.. 
 
 
 ## Meta
