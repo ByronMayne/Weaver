@@ -32,14 +32,13 @@ namespace Weaver
         /// </summary>
         public static string SystemToProjectPath(string systemPath)
         {
-            // Get our path
-            string path = projectPath;
-            // Get the length
-            int dataPathLength = path.Length;
-            // Split it
-            path = systemPath.Substring(dataPathLength, m_ProjectPathLength - dataPathLength);
-            // Return the result
-            return path;
+            int systemPathLength = systemPath.Length;
+            int assetPathLength = systemPathLength - m_ProjectPathLength;
+            if(assetPathLength <= 0)
+            {
+                throw new System.InvalidOperationException("Unable to convert system path to asset path");
+            }
+            return systemPath.Substring(m_ProjectPathLength, assetPathLength);
         }
     }
 }
