@@ -12,7 +12,7 @@ Weaving refers to the process of injecting functionality into an existing progra
 
 A great example of this is the [Unity Project Updater](https://docs.unity3d.com/Manual/APIUpdater.html). It uses both versions of code weaving on your project. It uses text replacing for unsupported code in your source files and IL weaving for compiled dlls.
 
-Weaver for now only uses IL Weaving which runs once everytime an assembly is recompiled. 
+Weaver for now only uses IL Weaving which runs once every time an assembly is recompiled. 
 
 ### Features
 * Hooked into Unity callbacks to run automatically. 
@@ -43,15 +43,14 @@ To use Extensions you first need to create a new instance of the scriptable obje
 
 ![](./docs/Weaver_Extensions.png)
 
-**Tip:** Try to only have one instance of of each extension. If you have more then one it's effect will be applied twice which is most likely not what you want. 
+**Tip:** Try to only have one instance of each extension. If you have more then one it's effect will be applied twice which is most likely not what you want. 
 
 ## Current Extensions
 * [**Method Timer**](./Assets/Weaver/Addins/MethodTimer/README.md) - Any method with the `MethodTimerAttribute` will be timed using [Stopwatch](https://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch(v=vs.110).aspx) and logged to the console. 
 
-* [**Profile Sample**]() - Any method with the `ProfileSampleAtttirbute` will be have a profile sample injected into the method. The sample name will be the name of the method. 
+* [**Profile Sample**]() - Any method with the `ProfileSample` attribute will be have a profile sample injected into the method. The sample name will be the name of the method. 
 
-#### In Development
-* **Property Changed** : Invoke a callback whenever a property has changed in your class. 
+* [**Property Changed**](".\Assets\Weaver\Extensions\PropertyChanged\docs\README.md) : Invoke a callback whenever a property is marked with the `[OnChanged(string callback)]` attribute.. 
 
 
 ## Meta
