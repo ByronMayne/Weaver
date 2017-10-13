@@ -43,6 +43,7 @@ namespace Weaver
         /// </summary>
         public static WeaverSettings Instance()
         {
+            WeaverSettings settings = null;
             // Find all settings
             string[] guids = AssetDatabase.FindAssets("t:WeaverSettings");
             // Load them all
@@ -50,10 +51,10 @@ namespace Weaver
             {
                 // Convert our path
                 string assetPath = AssetDatabase.GUIDToAssetPath(guids[i]);
-                // Load it
-               return AssetDatabase.LoadAssetAtPath<WeaverSettings>(assetPath);
+                // Load it 
+                settings = AssetDatabase.LoadAssetAtPath<WeaverSettings>(assetPath);
             }
-            return null;
+            return settings;
         }
 
         [PostProcessScene]
@@ -84,7 +85,7 @@ namespace Weaver
         }
 
         /// <summary>
-        /// Inovked when our module is first created and turned on
+        /// Invoked when our module is first created and turned on
         /// </summary>
         private void OnEnable()
         {
@@ -94,13 +95,10 @@ namespace Weaver
         }
 
         /// <summary>
-        /// Used to modifiy all existing assemblies on disk. 
+        /// Used to modify all existing assemblies on disk. 
         /// </summary>
         private void WeaveUpdatedAssemblies()
         {
-            // Create a collection for all the assemblies that changed. 
-            Collection<ModuleDefinition> changedModules = new Collection<ModuleDefinition>();
-
             if (m_WeavedAssemblies == null)
             {
                 m_WeavedAssemblies = new List<WeavedAssembly>();

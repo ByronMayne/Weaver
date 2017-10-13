@@ -7,7 +7,7 @@ namespace Weaver
     public static class FileUtility
     {
         private readonly static string m_ProjectPath;
-        private readonly static int m_ProjectPathLength; 
+        private readonly static int m_ProjectPathLength;
 
         static FileUtility()
         {
@@ -15,7 +15,7 @@ namespace Weaver
             m_ProjectPath = Application.dataPath;
             // Remove 'Assets'
             m_ProjectPath = m_ProjectPath.Substring(0, m_ProjectPath.Length - /* Assets */ 6);
-            // Store our lenth
+            // Store our length
             m_ProjectPathLength = m_ProjectPath.Length;
         }
 
@@ -34,7 +34,7 @@ namespace Weaver
         {
             int systemPathLength = systemPath.Length;
             int assetPathLength = systemPathLength - m_ProjectPathLength;
-            if(assetPathLength <= 0)
+            if (assetPathLength <= 0)
             {
                 throw new System.InvalidOperationException("Unable to convert system path to asset path");
             }
