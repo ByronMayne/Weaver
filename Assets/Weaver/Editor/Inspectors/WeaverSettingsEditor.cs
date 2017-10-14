@@ -10,20 +10,56 @@ namespace Weaver.Editors
     [CustomEditor(typeof(WeaverSettings))]
     public class WeaverSettingsEditor : Editor
     {
+        public class Styles
+        {
+            public GUIStyle zebraStyle;
+            public GUIContent cachedContent;
+
+            public Styles()
+            {
+                GUIStyle altStyle = "LODSliderRange";
+                GUIStyle selectedStyle = "MeTransitionSelect";
+                cachedContent = new GUIContent();
+                zebraStyle = new GUIStyle(GUI.skin.label);
+                zebraStyle.onHover.background = altStyle.normal.background;
+                zebraStyle.onFocused.background = selectedStyle.normal.background;
+                zebraStyle.onFocused.textColor = zebraStyle.normal.textColor;
+                zebraStyle.border = selectedStyle.border;
+                zebraStyle.richText = true;
+            }
+
+            public GUIContent Content(string message)
+            {
+                cachedContent.text = message;
+                return cachedContent;
+            }
+        }
+
         // Properties
         private SerializedProperty m_WeavedAssemblies;
         private SerializedProperty m_Components;
+        private SerializedProperty m_RunAutomatically;
+        private SerializedProperty m_Log;
+        private SerializedProperty m_Entries;
 
         // Lists
         private ReorderableList m_WeavedAssembliesList;
 
+        // Layouts
+        private Vector2 m_LogScrollPosition;
+        private int m_SelectedLogIndex;
+
         // Labels
         private GUIContent m_WeavedAssemblyHeaderLabel;
+        private static Styles m_Styles;
 
         public void OnEnable()
         {
             m_WeavedAssemblies = serializedObject.FindProperty("m_WeavedAssemblies");
             m_Components = serializedObject.FindProperty("m_Components");
+            m_RunAutomatically = serializedObject.FindProperty("m_RunAutomatically");
+            m_Log = serializedObject.FindProperty("m_Log");
+            m_Entries = m_Log.FindPropertyRelative("m_Entries");
             m_WeavedAssembliesList = new ReorderableList(serializedObject, m_WeavedAssemblies);
             m_WeavedAssembliesList.drawElementCallback += OnWeavedAssemblyDrawElement;
             m_WeavedAssembliesList.onAddCallback += OnWeavedAssemblyElementAdded;
@@ -34,10 +70,86 @@ namespace Weaver.Editors
         }
         public override void OnInspectorGUI()
         {
-            GUILayout.Label("Weaver", EditorStyles.boldLabel);
-            GUILayout.FlexibleSpace();
+            if(m_Styles == null)
+            {
+                m_Styles = new Styles();
+            }
+
+            GUILayout.Label("Settings", EditorStyles.boldLabel);
+            EditorGUI.BeginChangeCheck();
+            {
+                EditorGUILayout.PropertyField(m_RunAutomatically);
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedObject.ApplyModifiedProperties();
+            }
+
             EditorGUILayout.PropertyField(m_Components);
             m_WeavedAssembliesList.DoLayoutList();
+            GUILayout.Label("Log", EditorStyles.boldLabel);
+            DrawLogs();
+        }
+
+
+        private void DrawLogs()
+        {
+            m_LogScrollPosition = EditorGUILayout.BeginScrollView(m_LogScrollPosition, EditorStyles.textArea);
+            {
+                for (int i = 0; i < m_Entries.arraySize; i++)
+                {
+                    SerializedProperty entry = m_Entries.GetArrayElementAtIndex(i);
+                    if (m_Styles == null)
+                    {
+                        m_Styles = new Styles();
+                    }
+
+                    SerializedProperty message = entry.FindPropertyRelative("message");
+                    SerializedProperty logType = entry.FindPropertyRelative("type");
+                    SerializedProperty id = entry.FindPropertyRelative("id");
+                    Rect position = GUILayoutUtility.GetRect(m_Styles.Content(message.stringValue), m_Styles.zebraStyle);
+                    // Input
+                    int controlID = GUIUtility.GetControlID(321324, FocusType.Keyboard, position);
+                    Event current = Event.current;
+                    EventType eventType = current.GetTypeForControl(controlID);
+                    if (eventType == EventType.MouseDown && position.Contains(current.mousePosition))
+                    {
+                        if(current.clickCount == 2)
+                        {
+                            SerializedProperty fileName = entry.FindPropertyRelative("fileName");
+                            SerializedProperty lineNumber = entry.FindPropertyRelative("lineNumber");
+                            InternalEditorUtility.OpenFileAtLineExternal(fileName.stringValue, lineNumber.intValue);
+                        }
+                        GUIUtility.keyboardControl = controlID;
+                        m_SelectedLogIndex = i;
+                        current.Use();
+                        GUI.changed = true;
+                    }
+
+
+                    if (eventType == EventType.Repaint)
+                    {
+                        bool isHover = id.intValue % 2 == 0;
+                        bool isActive = false;
+                        bool isOn = true;
+                        bool hasKeyboardFocus = m_SelectedLogIndex == i;
+                        m_Styles.zebraStyle.Draw(position, m_Styles.Content(message.stringValue), isHover, isActive, isOn, hasKeyboardFocus);
+                    }
+                }
+                GUILayout.FlexibleSpace();
+
+                if (m_SelectedLogIndex < 0 || m_SelectedLogIndex >= m_Entries.arraySize) 
+                {
+                    // If we go out of bounds we zero out our selection
+                    m_SelectedLogIndex = -1;
+                }
+
+                if(m_SelectedLogIndex >= 0)
+                {
+                    GUILayout.Label("Selected: " + m_SelectedLogIndex);
+                }
+            }
+            EditorGUILayout.EndScrollView();
         }
 
         #region -= Weaved Assemblies =-
