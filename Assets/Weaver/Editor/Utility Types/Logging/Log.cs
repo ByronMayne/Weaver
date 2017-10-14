@@ -57,11 +57,10 @@ namespace Weaver
         /// <param name="logToConsole">If true will also log to the Unity console</param>
         public void Info(string message, bool logToConsole)
         {
-            string output = FormatLabel(message, MessageType.Info);
             AddEntry(message, MessageType.Info);
             if (logToConsole)
             {
-                Debug.Log(output);
+                Debug.Log(message);
             }
         }
 
@@ -73,11 +72,10 @@ namespace Weaver
         /// <param name="logToConsole">If true will also log to the Unity console</param>
         public void Warning(string warning, bool logToConsole)
         {
-            string output = FormatLabel(warning, MessageType.Warning);
             AddEntry(warning, MessageType.Warning);
             if (logToConsole)
             {
-                Debug.LogWarning(output);
+                Debug.LogWarning(warning);
             }
         }
 
@@ -89,11 +87,10 @@ namespace Weaver
         /// <param name="logToConsole">If true will also log to the Unity console</param>
         public void Error(string error, bool logToConsole)
         {
-            string output = FormatLabel(error, MessageType.Error);
             AddEntry(error, MessageType.Error);
             if (logToConsole)
             {
-                Debug.LogError(output);
+                Debug.LogError(error);
             }
         }
 
@@ -102,16 +99,16 @@ namespace Weaver
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private string FormatLabel(string text, MessageType logType)
+        private string FormatLabel(string message, string fileName, int lineNumber, MessageType logType)
         {
             switch (logType)
             {
                 case MessageType.Warning:
-                    return string.Format("<color=yellow>[{0}]: {1}</color>", m_Context.label, text);
+                    return string.Format("<color=yellow>[{0}:{1}]: {2}</color>", fileName, lineNumber, message);
                 case MessageType.Error:
-                    return string.Format("<color=red>[{0}]: {1}</color>", m_Context.label, text);
+                    return string.Format("<color=red>[{0}:{1}]: {2}</color>", fileName, lineNumber, message);
             }
-            return string.Format("[{0}]: {1}", m_Context.label, text);
+            return string.Format("[{0}:{1}]: {2}", fileName, lineNumber, message);
         }
 
         private void AddEntry(string message, MessageType logType)
@@ -119,10 +116,13 @@ namespace Weaver
             // Get our stack frame
             StackFrame frame = new StackFrame(2, true);
             // Create our entry
+            string prettyFileName = System.IO.Path.GetFileNameWithoutExtension(frame.GetFileName());
+            int lineNumber = frame.GetFileLineNumber();
+            message = FormatLabel(message, prettyFileName, frame.GetFileLineNumber(), logType);
             Entry entry = new Entry()
             {
                 fileName = frame.GetFileName(),
-                lineNumber = frame.GetFileLineNumber(),
+                lineNumber = lineNumber,
                 message = message,
                 type = logType,
                 id = m_Entries.Count + 1

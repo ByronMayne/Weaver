@@ -2,6 +2,7 @@
 using UnityEngine;
 using Mono.Cecil;
 using System.Reflection;
+using Object = UnityEngine.Object;
 
 namespace Weaver
 {
@@ -16,11 +17,12 @@ namespace Weaver
         All = Module | Type | Method | Field | Property
     }
 
-    public abstract class WeaverComponent : ScriptableObject
+    public abstract class WeaverComponent : ScriptableObject, ILogable
     {
         private ModuleDefinition m_ActiveModule;
         public abstract string addinName { get; }
         private bool m_Enabled;
+        private Log m_Log;
 
         public bool enabled
         {
@@ -50,6 +52,25 @@ namespace Weaver
         }
 
         /// <summary>
+        /// The contect object for our logging. 
+        /// </summary>
+        public Object context
+        {
+            get
+            {
+                return this;
+            }
+        }
+
+        /// <summary>
+        /// Returns back the label we use for our logs.
+        /// </summary>
+        public string label
+        {
+            get { return GetType().Name; }
+        }
+
+        /// <summary>
         /// Returns true if this addin effects the definition
         /// of a type. 
         /// </summary>
@@ -62,8 +83,10 @@ namespace Weaver
         /// Invoked whenever we start editing a moudle. Used to populate our
         /// helper functions 
         /// </summary>
-        public virtual void OnBeforeModuleEdited(ModuleDefinition moduleDefinition)
+        public virtual void OnBeforeModuleEdited(ModuleDefinition moduleDefinition, Log log)
         {
+            m_Log = log;
+            Log("Visiting module");
             m_ActiveModule = moduleDefinition;
         }
 
@@ -73,6 +96,7 @@ namespace Weaver
         public virtual void OnModuleEditComplete(ModuleDefinition moduleDefinition)
         {
             m_ActiveModule = null;
+            Log("Module visitation complete");
         }
 
         public virtual void VisitModule(ModuleDefinition moduleDefinition) { }
@@ -87,15 +111,15 @@ namespace Weaver
         /// </summary>
         protected void Log(string message)
         {
-            Debug.Log(message, this);
+            m_Log.Info(message, false);
         }
 
         /// <summary>
         /// Logs a message to the console with a member for context
         /// </summary>
-        public void Log(string message, MemberLocation context)
+        public void Log(string message, MemberLocation memberContext)
         {
-            Log(context + message);
+            m_Log.Info(memberContext + message, false);
         }
 
         /// <summary>
@@ -103,15 +127,15 @@ namespace Weaver
         /// </summary>
         public void Warning(string message)
         {
-            Debug.LogWarning(message, this);
+            m_Log.Warning(message, false);
         }
 
         /// <summary>
         /// Logs a warning to the console with a member for context
         /// </summary>
-        public void Warning(string message, MemberLocation context)
+        public void Warning(string message, MemberLocation memberContext)
         {
-            Warning(context + message);
+            m_Log.Warning(memberContext + message, false);
         }
 
         /// <summary>
@@ -119,15 +143,15 @@ namespace Weaver
         /// </summary>
         public void Error(string message)
         {
-            Debug.LogError(message, this);
+            m_Log.Error(message, true);
         }
 
         /// <summary>
         /// Logs a error to the console with a member for context
         /// </summary>
-        public void Error(string message, MemberLocation context)
+        public void Error(string message, MemberLocation memberContext)
         {
-            Error(context + message);
+            m_Log.Error(memberContext + message, false);
         }
         #endregion
 

@@ -114,10 +114,9 @@ namespace Weaver
         {
             m_Log.context = this;
             // Subscribe to the before reload event so we can modify the assemblies!
-            m_Log.Info("Subscribing to Assembly Reload", true);
+            m_Log.Info("Subscribing to next assembly reload.", true);
             AssemblyReloadEvents.beforeAssemblyReload += CheckForAssemblyModifications;
         }
-
 
         /// <summary>
         /// Used to modify all existing assemblies on disk. 
@@ -201,7 +200,7 @@ namespace Weaver
             m_Components.Initialize(this);
             // Visit Modules
             m_Log.Info("Visiting Modules.", false);
-            m_Components.VisitModules(editingModules);
+            m_Components.VisitModules(editingModules, m_Log);
             // Save
             for (int i = 0; i < assemblies.Count; i++)
             {

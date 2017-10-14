@@ -29,7 +29,7 @@ namespace Weaver
         /// Takes in a module and invokes <see cref="WeaverComponent.VisitModule(ModuleDefinition)"/> 
         /// on all components. 
         /// </summary>
-        public void VisitModules(Collection<ModuleDefinition> moduleCollection)
+        public void VisitModules(Collection<ModuleDefinition> moduleCollection, Log log)
         {
             if (m_ActiveDefinitions != DefinitionType.None)
             {
@@ -39,7 +39,7 @@ namespace Weaver
                     for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
                     {
                         // Assign our type system
-                        m_SubObjects[componentIndex].OnBeforeModuleEdited(moduleCollection[moduleIndex]);
+                        m_SubObjects[componentIndex].OnBeforeModuleEdited(moduleCollection[moduleIndex], log);
                         // Loop over modules if we are editing them 
                         if ((m_ActiveDefinitions & DefinitionType.Module) == DefinitionType.Module)
                         {

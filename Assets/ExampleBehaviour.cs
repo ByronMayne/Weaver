@@ -3,17 +3,48 @@ using Weaver;
 
 public class ExampleBehaviour : MonoBehaviour
 {
-    private string m_PlayerName; 
-    private GameObject m_MainPlayer;
+    private float m_Height = 0f;
 
-    [ProfileSample]
-    public GameObject GetPlayByName()
+    [OnChanged("OnHeightChanged")]
+    public float height
     {
-        if (m_PlayerName == "MainPlayer")
-        {
-            return m_MainPlayer;
-        }
+        get { return m_Height; }
+        set { m_Height = value; }
+    }
 
-        return null; 
+    [OnChanged("OnAgeChanged", isValidated = true)]
+    public int age { get; set; }
+
+    public int otherAge
+    {
+        get { return age; }
+        set
+        {
+            if(age != value)
+            {
+                OnAgeChanged(value);
+            }
+        }
+    }
+
+    public void Start()
+    {
+        age = 23;
+        height = 6.1f;
+    }
+
+    private void OnHeightChanged(float newHeight)
+    {
+        Debug.Log("Height changed from " + m_Height + " to " + newHeight);
+    }
+
+    private void OnAgeChanged(int newAge)
+    {
+        Debug.Log("Age changed from " + age + " to " + newAge);
+    }
+
+    private void OnValidate()
+    {
+
     }
 }

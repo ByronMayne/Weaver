@@ -112,7 +112,7 @@ public abstract class BaseWeaverTest
         Collection<ModuleDefinition> editedModules = new Collection<ModuleDefinition>() { moduleDefinition };
         // Invoke the visite
         Log("Compiling", "Visiting Modules");
-        m_Settings.componentController.VisitModules(editedModules);
+        m_Settings.componentController.VisitModules(editedModules, null);
         // Save it back to disk
         string modifiedModulePath = results.PathToAssembly;
         int extensionIndex = modifiedModulePath.LastIndexOf('.');
