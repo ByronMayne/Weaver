@@ -70,7 +70,7 @@ namespace Weaver.Editors
         }
         public override void OnInspectorGUI()
         {
-            if(m_Styles == null)
+            if (m_Styles == null)
             {
                 m_Styles = new Styles();
             }
@@ -114,7 +114,7 @@ namespace Weaver.Editors
                     EventType eventType = current.GetTypeForControl(controlID);
                     if (eventType == EventType.MouseDown && position.Contains(current.mousePosition))
                     {
-                        if(current.clickCount == 2)
+                        if (current.clickCount == 2)
                         {
                             SerializedProperty fileName = entry.FindPropertyRelative("fileName");
                             SerializedProperty lineNumber = entry.FindPropertyRelative("lineNumber");
@@ -124,6 +124,21 @@ namespace Weaver.Editors
                         m_SelectedLogIndex = i;
                         current.Use();
                         GUI.changed = true;
+                    }
+
+                    if (current.type == EventType.KeyDown)
+                    {
+                        if (current.keyCode == KeyCode.UpArrow && m_SelectedLogIndex > 0)
+                        {
+                            m_SelectedLogIndex--;
+                            current.Use();
+                        }
+
+                        if (current.keyCode == KeyCode.DownArrow && m_SelectedLogIndex < m_Entries.arraySize - 1)
+                        {
+                            m_SelectedLogIndex++;
+                            current.Use();
+                        }
                     }
 
 
@@ -138,13 +153,13 @@ namespace Weaver.Editors
                 }
                 GUILayout.FlexibleSpace();
 
-                if (m_SelectedLogIndex < 0 || m_SelectedLogIndex >= m_Entries.arraySize) 
+                if (m_SelectedLogIndex < 0 || m_SelectedLogIndex >= m_Entries.arraySize)
                 {
                     // If we go out of bounds we zero out our selection
                     m_SelectedLogIndex = -1;
                 }
 
-                if(m_SelectedLogIndex >= 0)
+                if (m_SelectedLogIndex >= 0)
                 {
                     GUILayout.Label("Selected: " + m_SelectedLogIndex);
                 }
