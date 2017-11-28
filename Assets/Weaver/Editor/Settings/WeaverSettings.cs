@@ -115,6 +115,7 @@ namespace Weaver
             m_Log.context = this;
             // Subscribe to the before reload event so we can modify the assemblies!
             m_Log.Info("Subscribing to next assembly reload.", true);
+            AssemblyUtility.PopulateAssemblyCache();
             AssemblyReloadEvents.beforeAssemblyReload += CheckForAssemblyModifications;
         }
 
