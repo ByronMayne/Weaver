@@ -10,7 +10,7 @@ namespace Weaver.Editors
     [CustomPropertyDrawer(typeof(ComponentController))]
     public class ComponentControllerEditor : PropertyDrawer
     {
-        private GUIContent m_HeaderLabel = new GUIContent("Components");
+        private readonly GUIContent m_HeaderLabel = new GUIContent("Components");
         private SerializedProperty m_SubObjects;
         private SerializedMethod m_AddItemMethod;
         private SerializedMethod m_RemoveItemMethod;
@@ -31,8 +31,7 @@ namespace Weaver.Editors
                 m_HasInstanceOfTypeMethod = property.FindMethodRelative("HasInstanceOfType", typeof(Type));
 
 
-                m_ReoderableList = new ReorderableList(m_SubObjects.serializedObject, m_SubObjects);
-                m_ReoderableList.draggable = true;
+                m_ReoderableList = new ReorderableList(m_SubObjects.serializedObject, m_SubObjects) {draggable = true};
                 m_ReoderableList.onAddCallback += OnComponentAdded;
                 m_ReoderableList.onRemoveCallback += OnComponentRemoved;
                 m_ReoderableList.drawHeaderCallback += OnDrawHeader;
@@ -63,7 +62,7 @@ namespace Weaver.Editors
         {
             // Create the generic menu
             GenericMenu componentMenu = new GenericMenu();
-            // Get all the types that inheirt from Weaver Component 
+            // Get all the types that inherit from Weaver Component 
             IList<Type> componentTypes = AssemblyUtility.GetInheirtingTypesFromUserAssemblies<WeaverComponent>();
             // Loop over them all
             for(int i = 0; i < componentTypes.Count; i++)

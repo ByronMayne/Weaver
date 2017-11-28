@@ -20,9 +20,11 @@ namespace Weaver.Editors
                 GUIStyle altStyle = "LODSliderRange";
                 GUIStyle selectedStyle = "MeTransitionSelect";
                 cachedContent = new GUIContent();
-                zebraStyle = new GUIStyle(GUI.skin.label);
-                zebraStyle.onHover.background = altStyle.normal.background;
-                zebraStyle.onFocused.background = selectedStyle.normal.background;
+                zebraStyle = new GUIStyle(GUI.skin.label)
+                {
+                    onHover = {background = altStyle.normal.background},
+                    onFocused = {background = selectedStyle.normal.background}
+                };
                 zebraStyle.onFocused.textColor = zebraStyle.normal.textColor;
                 zebraStyle.border = selectedStyle.border;
                 zebraStyle.richText = true;

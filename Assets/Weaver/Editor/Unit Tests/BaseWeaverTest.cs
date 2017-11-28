@@ -30,7 +30,7 @@ public abstract class BaseWeaverTest
     public virtual void Setup()
     {
         // Try to get our instance
-        Log("Setup", "Gettings Settings Instance");
+        Log("Setup", "Settings Settings Instance");
         m_Settings = WeaverSettings.Instance();
         // Assume it's not null otherwise our tests can't be run
         Assume.That(m_Settings != null, "We can't run tests if we don't have a Weaver Settings instance in the project.");
@@ -80,10 +80,10 @@ public abstract class BaseWeaverTest
             string assemblyPath = assembly.Location;
             // Add it as a reference 
             paramaters.ReferencedAssemblies.Add(assemblyPath);
-            Log("Compiling", "Added Assembly Refernece " + assembly.FullName);
+            Log("Compiling", "Added Assembly Reference " + assembly.FullName);
         }
 
-        // Invoke our soure provider
+        // Invoke our source provider
         string sourceCode = sourceProvider();
 
         // Check if we have source

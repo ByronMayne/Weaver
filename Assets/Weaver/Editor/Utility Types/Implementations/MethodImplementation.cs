@@ -6,7 +6,7 @@ namespace Weaver
     {
         public MethodReference reference;
         public MethodDefinition definition;
-        private ModuleDefinition m_Module;
+        private readonly ModuleDefinition m_Module;
 
         public MethodImplementation(ModuleDefinition module, MethodDefinition methodDefinition)
         {

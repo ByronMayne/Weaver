@@ -52,7 +52,7 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
 
     /// <summary>
     /// Adds a new instance of the type or a class that
-    /// inheirts from type T. Returns back the new
+    /// inherits from type T. Returns back the new
     /// instance.
     /// </summary>
     public I Add<I>() where I : T
@@ -62,7 +62,7 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
 
     /// <summary>
     /// Adds a new instance of the type sent in. If the type
-    /// does not match or does not inheirt from the base T
+    /// does not match or does not inherit from the base T
     /// and exception will be thrown. 
     /// </summary>
     public T Add(Type type)
@@ -80,7 +80,7 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
             // Return the result
             return newInstance;
         }
-        throw new System.Exception("The type " + type.FullName + " does not inheirt from " + typeof(T).FullName);
+        throw new System.Exception("The type " + type.FullName + " does not inherit from " + typeof(T).FullName);
     }
 
     /// <summary>
@@ -100,10 +100,11 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
     {
         for (int i = 0; i < m_SubObjects.Count; i++)
         {
-            if (type.IsAssignableFrom(m_SubObjects[i].GetType()))
+            if (!type.IsInstanceOfType(m_SubObjects[i]))
             {
-                return true;
+                continue;
             }
+            return true;
         }
         return false;
     }
@@ -126,7 +127,7 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
     }
 
     /// <summary>
-    /// Removes the element from our list of subobjects and removes it from our
+    /// Removes the element from our list of sub objects and removes it from our
     /// owner. 
     /// </summary>
     /// <param name="element">The element you want to remove</param>
@@ -150,7 +151,7 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
     }
 
     /// <summary>
-    /// Removes all our subobjects. 
+    /// Removes all our sub objects. 
     /// </summary>
     public void RemoveAll()
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using JetBrains.Annotations;
 using Debug = UnityEngine.Debug;
 using UnityEngine;
 using UnityEditor;
@@ -23,6 +24,7 @@ namespace Weaver
 
         private ILogable m_Context;
         [SerializeField]
+        [UsedImplicitly]
         private List<Entry> m_Entries;
 
         public List<Entry> entries

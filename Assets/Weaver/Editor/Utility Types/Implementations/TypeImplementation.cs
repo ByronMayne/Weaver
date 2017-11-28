@@ -7,7 +7,7 @@ namespace Weaver
     {
         public TypeReference reference;
         public TypeDefinition definition;
-        private ModuleDefinition m_Module;
+        private readonly ModuleDefinition m_Module;
 
         public TypeImplementation(ModuleDefinition module, Type type)
         {

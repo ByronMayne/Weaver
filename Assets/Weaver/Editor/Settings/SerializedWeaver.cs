@@ -61,10 +61,11 @@ namespace Weaver
                         if (loadedObjects.Length > 0)
                         {
                             // Check the first objects type
-                            if (loadedObjects[0] is T)
+                            T instance = loadedObjects[0] as T;
+                            if (instance != null)
                             {
                                 // We are good
-                                m_Instance = (T)loadedObjects[0];
+                                m_Instance = instance;
                             }
                         }
 

@@ -8,16 +8,15 @@ namespace Weaver
     {
         public static bool HasCustomAttribute<T>(this ICustomAttributeProvider instance)
         {
-            if(instance.HasCustomAttributes)
-            {
-               Collection<CustomAttribute> attributes = instance.CustomAttributes;
+            if (!instance.HasCustomAttributes) return false;
 
-                for(int i = 0;  i < attributes.Count; i++)
+            Collection<CustomAttribute> attributes = instance.CustomAttributes;
+
+            for(int i = 0;  i < attributes.Count; i++)
+            {
+                if(attributes[i].AttributeType.FullName.Equals(typeof(T).FullName, StringComparison.Ordinal))
                 {
-                    if(attributes[i].AttributeType.FullName.Equals(typeof(T).FullName, StringComparison.Ordinal))
-                    {
-                        return true; 
-                    }
+                    return true; 
                 }
             }
             return false;
@@ -25,16 +24,15 @@ namespace Weaver
 
         public static CustomAttribute GetCustomAttribute<T>(this ICustomAttributeProvider instance)
         {
-            if (instance.HasCustomAttributes)
-            {
-                Collection<CustomAttribute> attributes = instance.CustomAttributes;
+            if (!instance.HasCustomAttributes) return null;
 
-                for (int i = 0; i < attributes.Count; i++)
+            Collection<CustomAttribute> attributes = instance.CustomAttributes;
+
+            for (int i = 0; i < attributes.Count; i++)
+            {
+                if (attributes[i].AttributeType.FullName.Equals(typeof(T).FullName, StringComparison.Ordinal))
                 {
-                    if (attributes[i].AttributeType.FullName.Equals(typeof(T).FullName, StringComparison.Ordinal))
-                    {
-                        return attributes[i];
-                    }
+                    return attributes[i];
                 }
             }
             return null;

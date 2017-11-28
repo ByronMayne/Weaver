@@ -6,6 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace Weaver
 {
+    [Flags]
     public enum DefinitionType
     {
         None = 0,
@@ -52,7 +53,7 @@ namespace Weaver
         }
 
         /// <summary>
-        /// The contect object for our logging. 
+        /// The context object for our logging. 
         /// </summary>
         public Object context
         {
@@ -80,7 +81,7 @@ namespace Weaver
         }
 
         /// <summary>
-        /// Invoked whenever we start editing a moudle. Used to populate our
+        /// Invoked whenever we start editing a module. Used to populate our
         /// helper functions 
         /// </summary>
         public virtual void OnBeforeModuleEdited(ModuleDefinition moduleDefinition, Log log)

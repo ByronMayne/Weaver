@@ -7,7 +7,7 @@ namespace Weaver
     {
         public FieldReference reference;
         public FieldDefinition definition;
-        private ModuleDefinition m_Module;
+        private readonly ModuleDefinition m_Module;
 
         public FieldImplementation(ModuleDefinition module, FieldDefinition fieldDefinition)
         {

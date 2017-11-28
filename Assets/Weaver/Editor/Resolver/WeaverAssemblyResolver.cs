@@ -16,12 +16,7 @@ namespace Weaver
                 return GetUnityEngineAssemblyDef();
             }
 
-            if(IsUnityEditorAssembly(fullName))
-            {
-                return GetUnityEditorAssemblyDef(); 
-            }
-
-            return base.Resolve(fullName);
+            return IsUnityEditorAssembly(fullName) ? GetUnityEditorAssemblyDef() : base.Resolve(fullName);
         }
 
         public override AssemblyDefinition Resolve(AssemblyNameReference name)

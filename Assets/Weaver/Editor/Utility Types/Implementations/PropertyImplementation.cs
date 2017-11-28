@@ -5,7 +5,7 @@ namespace Weaver
     public struct PropertyImplementation
     {
         public PropertyDefinition definition;
-        private ModuleDefinition m_Module;
+        private readonly ModuleDefinition m_Module;
 
         public PropertyImplementation(ModuleDefinition module, PropertyDefinition propertyDefinition)
         {

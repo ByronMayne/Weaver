@@ -9,6 +9,7 @@ using Object = UnityEngine.Object;
 using System;
 using System.Diagnostics;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace Weaver
 {
@@ -19,13 +20,16 @@ namespace Weaver
         private List<WeavedAssembly> m_WeavedAssemblies;
 
         [SerializeField]
+        [UsedImplicitly]
         private ComponentController m_Components;
 
         [SerializeField]
+        [UsedImplicitly]
         [Tooltip("If true whenever one of our weaved assemblies changes will run the weaving process.")]
         private bool m_RunAutomatically;
 
         [SerializeField]
+        [UsedImplicitly]
         private Log m_Log;
 
         [SerializeField]
@@ -54,6 +58,7 @@ namespace Weaver
             get { return "WeaverSettings"; }
         }
 
+        [UsedImplicitly]
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
@@ -110,6 +115,7 @@ namespace Weaver
         /// <summary>
         /// Invoked when our module is first created and turned on
         /// </summary>
+        [UsedImplicitly]
         private void OnEnable()
         {
             m_Log.context = this;

@@ -13,7 +13,7 @@ namespace Weaver
         private static IList<Assembly> m_Assemblies;
         
         /// <summary>
-        /// Retuns the cached array of user assemblies. If you wan to refresh
+        /// Returns the cached array of user assemblies. If you wan to refresh
         /// call <see cref="PopulateAssemblyCache"/>
         /// </summary>
         /// <returns></returns>
@@ -36,7 +36,7 @@ namespace Weaver
         }
         
         /// <summary>
-        /// Looks over all cached user assemblies for all types that inheirt from
+        /// Looks over all cached user assemblies for all types that inherit from
         /// the sent in generic. 
         /// </summary>
         public static IList<Type> GetInheirtingTypesFromUserAssemblies<T>()
@@ -79,7 +79,7 @@ namespace Weaver
         }
 
         /// <summary>
-        /// Returns back all the assemblies that are genereted in the ScriptAssemblies
+        /// Returns back all the assemblies that are generated in the ScriptAssemblies
         /// folder.
         /// </summary>
         public static IList<string> GetUnityUserGeneratedAssemblyPaths()
@@ -90,7 +90,7 @@ namespace Weaver
         }
 
         /// <summary>
-        /// Gets a list of all the user assmblies and returns their
+        /// Gets a list of all the user Assemblies and returns their
         /// project path. 
         /// </summary>
         /// <returns></returns>

@@ -46,11 +46,11 @@ namespace Weaver
                             m_SubObjects[componentIndex].VisitModule(moduleCollection[moduleIndex]);
                         }
                     }
-                    // Viste Types
+                    // Visit Types
                     VisitTypes(moduleCollection[moduleIndex].Types);
                     // Loop over all components and invoke our on complete event
                     for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
-                    // Invoke that we have complete editing this moudle
+                    // Invoke that we have complete editing this module
                     {
                         m_SubObjects[componentIndex].OnModuleEditComplete(moduleCollection[moduleIndex]);
                     }
@@ -64,7 +64,7 @@ namespace Weaver
         /// </summary>
         protected void VisitTypes(Collection<TypeDefinition> typeCollection)
         {
-            // We only don't have to visit types if nobody vistes properties, methods, or fields. 
+            // We only don't have to visit types if nobody visits properties, methods, or fields. 
             if ((m_ActiveDefinitions & ~DefinitionType.Module) != DefinitionType.None)
             {
                 for (int typeIndex = typeCollection.Count - 1; typeIndex >= 0; typeIndex--)
@@ -73,11 +73,11 @@ namespace Weaver
                     {
                         m_SubObjects[componentIndex].VisitType(typeCollection[typeIndex]);
                     }
-                    // Viste Methods
+                    // visit Methods
                     VisitMethods(typeCollection[typeIndex].Methods);
-                    // Viste Fields
+                    // visit Fields
                     VisitFields(typeCollection[typeIndex].Fields);
-                    // Viste Properties
+                    // visit Properties
                     VisitProperties(typeCollection[typeIndex].Properties);
                 }
             }
@@ -89,7 +89,7 @@ namespace Weaver
         /// </summary>
         protected void VisitMethods(Collection<MethodDefinition> methodCollection)
         {
-            // Only vist methods if we have any components that modify them.
+            // Only visit methods if we have any components that modify them.
             if ((m_ActiveDefinitions & DefinitionType.Method) == DefinitionType.Method)
             {
                 for (int methodIndex = methodCollection.Count - 1; methodIndex >= 0; methodIndex--)
@@ -108,7 +108,7 @@ namespace Weaver
         /// </summary>
         protected void VisitFields(Collection<FieldDefinition> fieldCollection)
         {
-            // Only vist fields if we have any components that modify them.
+            // Only visit fields if we have any components that modify them.
             if ((m_ActiveDefinitions & DefinitionType.Field) == DefinitionType.Field)
             {
                 for (int fieldIndex = fieldCollection.Count - 1; fieldIndex >= 0; fieldIndex--)
@@ -127,7 +127,7 @@ namespace Weaver
         /// </summary>
         protected void VisitProperties(Collection<PropertyDefinition> propertyCollection)
         {
-            // Only vist properties if we have any components that modify them.
+            // Only visit properties if we have any components that modify them.
             if ((m_ActiveDefinitions & DefinitionType.Property) == DefinitionType.Property)
             {
                 for (int propertyIndex = propertyCollection.Count - 1; propertyIndex >= 0; propertyIndex--)
