@@ -1,3 +1,7 @@
+### TODO: Update Docs
+Weaver is the last few updates has becomes quite a bit easier to use but these screenshots and comments are out of date.
+
+
 # Weaver
 A a code weaver built for use in [Unity Engine](https://unity3d.com/). Based very heavily off of [Fody](https://github.com/Fody/Fody). Implmented using [Mono.Cecil](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/).
 
