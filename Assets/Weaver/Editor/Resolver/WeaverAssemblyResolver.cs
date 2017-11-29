@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using System;
+using System.IO;
 using UnityEditorInternal;
 
 namespace Weaver
@@ -9,26 +10,33 @@ namespace Weaver
     /// </summary>
     public class WeaverAssemblyResolver : DefaultAssemblyResolver
     {
+        private const string UNITY_PREFIX = "Unity";
+
+        private readonly string _unityAssembliesDirectory;
+
+        public WeaverAssemblyResolver()
+        {
+            // Get the location of the core dll ([ProjectRoot]/Library/UnityAssemblies) 
+            string coreAssemblyPath = InternalEditorUtility.GetEngineCoreModuleAssemblyPath();
+            // Get the directory name
+            _unityAssembliesDirectory = Path.GetDirectoryName(coreAssemblyPath);
+        }
+
         public override AssemblyDefinition Resolve(string fullName)
         {
-            if(IsUnityEngineAssembly(fullName))
+            if (fullName.StartsWith(UNITY_PREFIX))
             {
-                return GetUnityEngineAssemblyDef();
+                return GetUnityAssemblyDefintion(fullName);
             }
 
-            return IsUnityEditorAssembly(fullName) ? GetUnityEditorAssemblyDef() : base.Resolve(fullName);
+            return base.Resolve(fullName);
         }
 
         public override AssemblyDefinition Resolve(AssemblyNameReference name)
         {
-            if (IsUnityEngineAssembly(name.FullName))
+            if (name.FullName.StartsWith(UNITY_PREFIX))
             {
-                return GetUnityEngineAssemblyDef();
-            }
-
-            if (IsUnityEditorAssembly(name.FullName))
-            {
-                return GetUnityEditorAssemblyDef();
+                return GetUnityAssemblyDefintion(name.FullName);
             }
 
             return base.Resolve(name);
@@ -36,14 +44,9 @@ namespace Weaver
 
         public override AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
         {
-            if (IsUnityEngineAssembly(name.FullName))
+            if (name.FullName.StartsWith(UNITY_PREFIX))
             {
-                return GetUnityEngineAssemblyDef();
-            }
-
-            if (IsUnityEditorAssembly(name.FullName))
-            {
-                return GetUnityEditorAssemblyDef();
+                return GetUnityAssemblyDefintion(name.FullName);
             }
 
             return base.Resolve(name, parameters);
@@ -51,39 +54,31 @@ namespace Weaver
 
         public override AssemblyDefinition Resolve(string fullName, ReaderParameters parameters)
         {
-            if (IsUnityEngineAssembly(fullName))
+            if (fullName.StartsWith(UNITY_PREFIX))
             {
-                return GetUnityEngineAssemblyDef();
-            }
-
-            if (IsUnityEditorAssembly(fullName))
-            {
-                return GetUnityEditorAssemblyDef();
+                return GetUnityAssemblyDefintion(fullName);
             }
 
             return base.Resolve(fullName, parameters);
         }
 
-        private static bool IsUnityEditorAssembly(string name)
+        private AssemblyDefinition GetUnityAssemblyDefintion(string strongName)
         {
-            return name.Equals("UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null", StringComparison.Ordinal);
-        }
-
-        private static bool IsUnityEngineAssembly(string name)
-        {
-            return name.Equals("UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null", StringComparison.Ordinal);
-        }
-
-        private static AssemblyDefinition GetUnityEngineAssemblyDef()
-        {
-            string engineAssemblyPath = InternalEditorUtility.GetEngineAssemblyPath();
-            return AssemblyDefinition.ReadAssembly(engineAssemblyPath);
-        }
-
-        private static AssemblyDefinition GetUnityEditorAssemblyDef()
-        {
-            string editorAssemblyPath = InternalEditorUtility.GetEditorAssemblyPath();
-            return AssemblyDefinition.ReadAssembly(editorAssemblyPath);
+            // Example input: "UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")
+            // Get the starting index 
+            int index = strongName.IndexOf(',');
+            // Split the start
+            strongName = strongName.Substring(0, index);
+            // Guess the path (it's always UnityEngine.UI.dll or something) 
+            string path = Path.Combine(_unityAssembliesDirectory, strongName + ".dll");
+            // If it does not exist 
+            if (!File.Exists(path))
+            {
+                // Quite
+                return null;
+            }
+            // Load it
+            return AssemblyDefinition.ReadAssembly(path); 
         }
     }
 }
