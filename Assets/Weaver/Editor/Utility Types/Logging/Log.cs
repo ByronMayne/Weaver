@@ -25,7 +25,7 @@ namespace Weaver
         private ILogable m_Context;
         [SerializeField]
         [UsedImplicitly]
-        private List<Entry> m_Entries;
+        private List<Entry> m_Entries = new List<Entry>();
 
         public List<Entry> entries
         {
