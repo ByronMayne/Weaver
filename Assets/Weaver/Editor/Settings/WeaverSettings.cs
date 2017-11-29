@@ -122,6 +122,7 @@ namespace Weaver
             // Subscribe to the before reload event so we can modify the assemblies!
             m_Log.Info("Subscribing to next assembly reload.", true);
             AssemblyUtility.PopulateAssemblyCache();
+            m_Components.SetOwner(this);
 #if UNITY_2017_1_OR_NEWER
             AssemblyReloadEvents.beforeAssemblyReload += CheckForAssemblyModifications;
 #else

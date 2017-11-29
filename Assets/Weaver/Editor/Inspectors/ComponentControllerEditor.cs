@@ -10,6 +10,12 @@ namespace Weaver.Editors
     [CustomPropertyDrawer(typeof(ComponentController))]
     public class ComponentControllerEditor : PropertyDrawer
     {
+        private struct AddTypeCommand
+        {
+            public Type type;
+            public SerializedObject target;
+        }
+
         private readonly GUIContent m_HeaderLabel = new GUIContent("Components");
         private SerializedProperty m_SubObjects;
         private SerializedMethod m_AddItemMethod;
@@ -55,7 +61,7 @@ namespace Weaver.Editors
         private void OnComponentRemoved(ReorderableList list)
         {
             m_RemoveItemMethod.Invoke(list.index);
-            m_SubObjects.serializedObject.Update();
+            OnComponentAddedOrRemoved(); 
         }
 
         private void OnComponentAdded(ReorderableList list)
@@ -72,12 +78,7 @@ namespace Weaver.Editors
                 if(!(bool)m_HasInstanceOfTypeMethod.Invoke(type))
                 {
                     GUIContent menuLabel = new GUIContent(type.Assembly.GetName().Name + "/" + type.Name);
-                    GenericMenu.MenuFunction menuFunction = () => 
-                        {
-                            m_AddItemMethod.Invoke(type);
-                            m_SubObjects.serializedObject.Update();
-                        };
-                    componentMenu.AddItem(menuLabel, false, menuFunction);
+                    componentMenu.AddItem(menuLabel, false, OnTypeAdded, type);
                 }
             }
             
@@ -92,6 +93,19 @@ namespace Weaver.Editors
             menuDisplayRect.y += m_Position.height - EditorGUIUtility.singleLineHeight;
             menuDisplayRect.x += EditorGUIUtility.currentViewWidth - 100;
             componentMenu.DropDown(menuDisplayRect);
+        }
+
+        private void OnTypeAdded(object argument)
+        {
+            m_AddItemMethod.Invoke(argument);
+            OnComponentAddedOrRemoved();
+        }
+
+        private void OnComponentAddedOrRemoved()
+        {
+            SerializedObject serializedObject = m_SubObjects.serializedObject;
+            serializedObject.ApplyModifiedProperties();
+            serializedObject.Update();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

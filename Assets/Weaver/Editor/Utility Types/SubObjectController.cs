@@ -20,11 +20,6 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
     public SubObjectController()
     { }
 
-    public SubObjectController(Object owner)
-    {
-        m_Owner = owner; 
-    }
-
     /// <summary>
     /// Gets the sub object at the index sent in.
     /// </summary>
@@ -58,6 +53,14 @@ public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
     public I Add<I>() where I : T
     {
         return (I)Add(typeof(I));
+    }
+
+    /// <summary>
+    /// Sets the owner of this instance used for adding sub objects. 
+    /// </summary>
+    public void SetOwner(Object owner)
+    {
+        m_Owner = owner;
     }
 
     /// <summary>
