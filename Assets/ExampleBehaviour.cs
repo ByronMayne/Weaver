@@ -20,7 +20,7 @@ public class ExampleBehaviour : MonoBehaviour
         get { return age; }
         set
         {
-            if(age != value)
+            if (age != value)
             {
                 OnAgeChanged(value);
             }

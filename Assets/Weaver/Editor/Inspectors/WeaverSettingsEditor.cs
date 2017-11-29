@@ -22,8 +22,8 @@ namespace Weaver.Editors
                 cachedContent = new GUIContent();
                 zebraStyle = new GUIStyle(GUI.skin.label)
                 {
-                    onHover = {background = altStyle.normal.background},
-                    onFocused = {background = selectedStyle.normal.background}
+                    onHover = { background = altStyle.normal.background },
+                    onFocused = { background = selectedStyle.normal.background }
                 };
                 zebraStyle.onFocused.textColor = zebraStyle.normal.textColor;
                 zebraStyle.border = selectedStyle.border;
@@ -108,7 +108,6 @@ namespace Weaver.Editors
                     }
 
                     SerializedProperty message = entry.FindPropertyRelative("message");
-                    SerializedProperty logType = entry.FindPropertyRelative("type");
                     SerializedProperty id = entry.FindPropertyRelative("id");
                     Rect position = GUILayoutUtility.GetRect(m_Styles.Content(message.stringValue), m_Styles.zebraStyle);
                     // Input

@@ -12,14 +12,35 @@ MonoBehaviour:
   m_Name: Weaver Settings
   m_EditorClassIdentifier: 
   m_WeavedAssemblies:
+  - m_RelativePath: 
+    m_Enabled: 1
+    m_LastWriteTime: 34
   - m_RelativePath: Library\ScriptAssemblies\Assembly-CSharp.dll
     m_Enabled: 1
     m_LastWriteTime: 34
   m_Components:
-    m_SubObjects:
-    - {fileID: 114805662069318014}
-    m_Owner: {fileID: 11400000}
+    m_SubObjects: []
+    m_Owner: {fileID: 0}
   m_RunAutomatically: 0
+  m_Log:
+    m_Entries:
+    - id: 1
+      lineNumber: 123
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:123]: Subscribing to next assembly reload.'
+      type: 1
+    - id: 2
+      lineNumber: 123
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:123]: Subscribing to next assembly reload.'
+      type: 1
+    - id: 3
+      lineNumber: 129
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '<color=yellow>[WeaverSettings:129]: Dynamic Assembly Reload not support
+        until Unity 2017. Enter play mode to reload assemblies to see the effects
+        of Weaving.</color>'
+      type: 2
 --- !u!114 &114134185966084410
 MonoBehaviour:
   m_ObjectHideFlags: 0
