@@ -2,6 +2,9 @@
 using Mono.Cecil;
 using UnityEngine;
 using Mono.Cecil.Cil;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Profiling; 
+#endif
 
 namespace Weaver
 {
@@ -32,7 +35,7 @@ namespace Weaver
         public override void VisitModule(ModuleDefinition moduleDefinition)
         {
             // Get profiler type
-            Type profilerType = typeof(UnityEngine.Profiling.Profiler);
+            Type profilerType = typeof(Profiler);
             // Import the profiler type
             m_ProfilerTypeReference = moduleDefinition.Import(profilerType);
             // Get the type def by resolving

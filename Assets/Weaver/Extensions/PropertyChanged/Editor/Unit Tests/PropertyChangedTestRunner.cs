@@ -24,9 +24,7 @@ namespace Weaver.Tests
         }
 
         [Test]
-        [Author("Byron Mayne")]
-        [TestOf(typeof(OnChangedAttribute))]
-        [Description("Varifies that the OnChanged callback happens when we have a valid target.")]
+        [Description("Verifies that the OnChanged callback happens when we have a valid target.")]
         public void TestCallbacks()
         {
             // Get our test type

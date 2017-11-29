@@ -57,6 +57,7 @@ namespace Weaver.Editors
 
         public void OnEnable()
         {
+            AssemblyUtility.PopulateAssemblyCache();
             m_WeavedAssemblies = serializedObject.FindProperty("m_WeavedAssemblies");
             m_Components = serializedObject.FindProperty("m_Components");
             m_RunAutomatically = serializedObject.FindProperty("m_RunAutomatically");

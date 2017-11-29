@@ -122,7 +122,11 @@ namespace Weaver
             // Subscribe to the before reload event so we can modify the assemblies!
             m_Log.Info("Subscribing to next assembly reload.", true);
             AssemblyUtility.PopulateAssemblyCache();
+#if UNITY_2017_1_OR_NEWER
             AssemblyReloadEvents.beforeAssemblyReload += CheckForAssemblyModifications;
+#else
+            m_Log.Warning("Dynamic Assembly Reload not support until Unity 2017. Enter play mode to reload assemblies to see the effects of Weaving.", false);
+#endif
         }
 
         /// <summary>
