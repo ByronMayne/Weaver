@@ -18,9 +18,9 @@ namespace Weaver.Editors
 
         private readonly GUIContent m_HeaderLabel = new GUIContent("Components");
         private SerializedProperty m_SubObjects;
-        private SerializedMethod m_AddItemMethod;
-        private SerializedMethod m_RemoveItemMethod;
-        private SerializedMethod m_HasInstanceOfTypeMethod;
+        private ReflectedMethod m_AddItemMethod;
+        private ReflectedMethod m_RemoveItemMethod;
+        private ReflectedMethod m_HasInstanceOfTypeMethod;
         private ReorderableList m_ReoderableList;
         private bool m_Initialized = false;
         private Rect m_Position;
