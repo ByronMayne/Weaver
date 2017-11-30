@@ -60,6 +60,14 @@ namespace Weaver
         }
 
         /// <summary>
+        /// Invoked when the inspector for this assembly is turned on.
+        /// </summary>
+        public void OnEnable()
+        {
+            m_IsValid = File.Exists(relativePath);
+        }
+
+        /// <summary>
         /// Returns back if this assembly exists on disk.
         /// </summary>
         /// <returns></returns>
@@ -99,7 +107,7 @@ namespace Weaver
                 if (m_LastWriteTime != writeTime)
                 {
                     m_LastWriteTime = writeTime;
-                    return true; 
+                    return true;
                 }
             }
             else
@@ -107,6 +115,11 @@ namespace Weaver
                 m_IsValid = false;
             }
             return false;
+        }
+
+        private void OnValidate()
+        {
+            m_IsValid = File.Exists(relativePath);
         }
     }
 }

@@ -128,6 +128,12 @@ namespace Weaver
                 m_Components = new ComponentController();
             }
 
+            // Enable all our components 
+            for(int i = 0; i < m_WeavedAssemblies.Count; i++)
+            {
+                m_WeavedAssemblies[i].OnEnable();
+            }
+
             // Wipe the log
             m_Log.Clear();
 
