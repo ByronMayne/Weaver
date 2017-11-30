@@ -36,4 +36,23 @@ public static class ReflectedMembers
         string methodPath = serializedProperty.propertyPath + "." + methodName;
         return new ReflectedField<T>(serializedProperty.serializedObject, methodPath);
     }
+
+    public static int GetArrayIndexFromPropertyPath(string propertyPath)
+    {
+        int pathLength = propertyPath.Length - 2;
+        int i = pathLength;
+
+        while (i >= 0)
+        {
+            i--;
+            if (!char.IsDigit(propertyPath[i]))
+            {
+                break;
+            }
+        }
+        int length = pathLength - i;
+        int startIndex = propertyPath.Length - (propertyPath.Length - i) + 1;
+        string digits = propertyPath.Substring(startIndex, length);
+        return int.Parse(digits);
+    }
 }

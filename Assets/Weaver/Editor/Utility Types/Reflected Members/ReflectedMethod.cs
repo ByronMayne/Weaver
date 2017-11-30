@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Reflection;
 using UnityEditor;
 
@@ -37,7 +38,20 @@ public class ReflectedMethod
                 string memberName = members[memberIndex];
                 Type instanceType = instance.GetType();
 
-                if(memberIndex == members.Length - 1)
+                if (string.CompareOrdinal("Array", memberName) == 0)
+                {
+                    // Skip to the next index
+                    memberIndex++;
+                    // Array.data[0] // Example of what we are trying to parse 
+                    string arrayPath = members[memberIndex];
+                    // grab our index
+                    int arrayIndex = ReflectedMembers.GetArrayIndexFromPropertyPath(arrayPath);
+                    // Cast our instance as a IList
+                    IList asList = (IList)instance;
+                    // Grab the element
+                    instance = asList[arrayIndex];
+                }
+                else if(memberIndex == members.Length - 1)
                 {
                     m_MethodInfo = instanceType.GetMethod(memberName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic, null, parameters, null);
                 }

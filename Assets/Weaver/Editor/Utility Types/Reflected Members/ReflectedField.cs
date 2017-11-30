@@ -51,7 +51,7 @@ public class ReflectedField<T>
                     // Array.data[0] // Example of what we are trying to parse 
                     string arrayPath = members[memberIndex];
                     // grab our index
-                    int arrayIndex = GetArrayIndexFromPropertyPath(arrayPath);
+                    int arrayIndex = ReflectedMembers.GetArrayIndexFromPropertyPath(arrayPath);
                     // Cast our instance as a IList
                     IList asList = (IList)m_TargetInstance;
                     // Grab the element
@@ -79,22 +79,5 @@ public class ReflectedField<T>
         m_Value = (T)m_FieldInfo.GetValue(m_TargetInstance);
     }
 
-    private static int GetArrayIndexFromPropertyPath(string propertyPath)
-    {
-        int pathLength = propertyPath.Length - 2;
-        int i = pathLength;
 
-        while (i >= 0)
-        {
-            i--;
-            if (!char.IsDigit(propertyPath[i]))
-            {
-                break;
-            }
-        }
-        int length = pathLength - i;
-        int startIndex = propertyPath.Length - (propertyPath.Length - i) + 1;
-        string digits = propertyPath.Substring(startIndex, length);
-        return int.Parse(digits);
-    }
 }
