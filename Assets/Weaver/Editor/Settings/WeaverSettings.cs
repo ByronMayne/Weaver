@@ -133,10 +133,6 @@ namespace Weaver
             {
                 m_WeavedAssemblies[i].OnEnable();
             }
-
-            // Wipe the log
-            m_Log.Clear();
-
             m_Log.context = this;
             // Subscribe to the before reload event so we can modify the assemblies!
             m_Log.Info("Subscribing to next assembly reload.", false);
