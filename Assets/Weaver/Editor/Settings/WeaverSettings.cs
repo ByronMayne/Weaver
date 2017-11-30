@@ -235,7 +235,7 @@ namespace Weaver
                 editingModules[i].Write(assemblies[i].GetSystemPath());
             }
             assemblies.Clear();
-            m_Log.Info("Weaving Completed Successful. Total elapsed milliseconds : " + m_Timer.ElapsedMilliseconds.ToString(), false);
+            m_Log.Info("Weaving Successfully Completed. Total elapsed milliseconds : " + m_Timer.ElapsedMilliseconds.ToString(), false);
         }
     }
 }
