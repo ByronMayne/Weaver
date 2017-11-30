@@ -118,6 +118,16 @@ namespace Weaver
         [UsedImplicitly]
         private void OnEnable()
         {
+            if(m_Log == null)
+            {
+                m_Log = new Log(this);
+            }
+
+            if(m_Components == null)
+            {
+                m_Components = new ComponentController();
+            }
+
             m_Log.context = this;
             // Subscribe to the before reload event so we can modify the assemblies!
             m_Log.Info("Subscribing to next assembly reload.", false);

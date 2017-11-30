@@ -13,7 +13,7 @@ using Type = System.Type;
 public class SubObjectController<T> : IEnumerable<T>  where T : ScriptableObject
 {
     [SerializeField]
-    protected List<T> m_SubObjects;
+    protected List<T> m_SubObjects = new List<T>();
     [SerializeField]
     protected Object m_Owner; 
 
