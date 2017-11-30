@@ -33,13 +33,12 @@ namespace Weaver.Editors
                 const float BUTTON_WIDTH = 25;
                 SerializedProperty relativePath = property.FindPropertyRelative("m_RelativePath");
                 SerializedProperty enabled = property.FindPropertyRelative("m_Enabled");
-
+                position.width -= BUTTON_WIDTH;
                 if (!isValid.value)
                 {
                     GUI.Box(position, m_MissingAssemblyLabel);
                 }
 
-                position.width -= BUTTON_WIDTH;
                 EditorGUI.SelectableLabel(position, relativePath.stringValue, EditorStyles.textArea);
                 position.x += position.width;
                 position.width = BUTTON_WIDTH;
