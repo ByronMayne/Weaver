@@ -117,18 +117,18 @@ namespace Weaver
         [UsedImplicitly]
         private void OnEnable()
         {
-            if(m_Log == null)
+            if (m_Log == null)
             {
                 m_Log = new Log(this);
             }
 
-            if(m_Components == null)
+            if (m_Components == null)
             {
                 m_Components = new ComponentController();
             }
 
             // Enable all our components 
-            for(int i = 0; i < m_WeavedAssemblies.Count; i++)
+            for (int i = 0; i < m_WeavedAssemblies.Count; i++)
             {
                 m_WeavedAssemblies[i].OnEnable();
             }
@@ -211,6 +211,10 @@ namespace Weaver
             readerParameters.AssemblyResolver = m_Resolver;
             // Tell the reader to look at symbols so we can get line numbers for errors, warnings, and logs.
             readerParameters.ReadSymbols = true;
+            // Create our writer
+            WriterParameters writerParameters = new WriterParameters();
+            // We do want to write our symbols
+            writerParameters.WriteSymbols = true;
             // Create a list of definitions
             Collection<ModuleDefinition> editingModules = new Collection<ModuleDefinition>();
             for (int i = 0; i < assemblies.Count; i++)
@@ -231,7 +235,7 @@ namespace Weaver
             for (int i = 0; i < assemblies.Count; i++)
             {
                 m_Log.Info("Writing Module <i>" + assemblies[i].relativePath + "</i> to disk.", false);
-                editingModules[i].Write(assemblies[i].GetSystemPath());
+                editingModules[i].Write(assemblies[i].GetSystemPath(), writerParameters);
             }
             assemblies.Clear();
             m_Log.Info("Weaving Successfully Completed. Total elapsed milliseconds : " + m_Timer.ElapsedMilliseconds.ToString(), false);

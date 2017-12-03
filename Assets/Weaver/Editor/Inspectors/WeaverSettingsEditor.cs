@@ -87,31 +87,39 @@ namespace Weaver.Editors
 
         public override void OnInspectorGUI()
         {
-            if (m_Styles == null)
+            if(GUILayout.Button("Capture"))
             {
-                m_Styles = new Styles();
+                CaptureGroup.StartCapture(this);
             }
+            CaptureGroup.StartCaptureBlock();
+            {
 
-            GUILayout.Label("Settings", EditorStyles.boldLabel);
-            EditorGUI.BeginChangeCheck();
-            {
-                EditorGUILayout.PropertyField(m_Enabled);
-            }
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.ApplyModifiedProperties();
-            }
+                if (m_Styles == null)
+                {
+                    m_Styles = new Styles();
+                }
 
-            EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
-            {
-                EditorGUILayout.PropertyField(m_Components);
-                m_WeavedAssembliesList.DoLayoutList();
-                GUILayout.Label("Log", EditorStyles.boldLabel);
-                DrawLogs();
+                GUILayout.Label("Settings", EditorStyles.boldLabel);
+                EditorGUI.BeginChangeCheck();
+                {
+                    EditorGUILayout.PropertyField(m_Enabled);
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    serializedObject.ApplyModifiedProperties();
+                }
+
+                EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
+                {
+                    EditorGUILayout.PropertyField(m_Components);
+                    m_WeavedAssembliesList.DoLayoutList();
+                    GUILayout.Label("Log", EditorStyles.boldLabel);
+                    DrawLogs();
+                }
+                EditorGUI.EndDisabledGroup();
             }
-            EditorGUI.EndDisabledGroup();
+            CaptureGroup.StopCapture();
         }
-
 
         private void DrawLogs()
         {
@@ -245,3 +253,28 @@ namespace Weaver.Editors
         #endregion
     }
 }
+
+        {
+                if (m_Styles == null)
+                {
+                    m_Styles = new Styles();
+                }
+
+                GUILayout.Label("Settings", EditorStyles.boldLabel);
+                EditorGUI.BeginChangeCheck();
+                {
+                    EditorGUILayout.PropertyField(m_Enabled);
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    serializedObject.ApplyModifiedProperties();
+                }
+
+                EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
+                {
+                    EditorGUILayout.PropertyField(m_Components);
+                    m_WeavedAssembliesList.DoLayoutList();
+                    GUILayout.Label("Log", EditorStyles.boldLabel);
+                    DrawLogs();
+                }
+                EditorGUI.EndDisabledGroup();
