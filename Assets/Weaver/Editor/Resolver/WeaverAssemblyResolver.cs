@@ -17,7 +17,7 @@ namespace Weaver
         public WeaverAssemblyResolver()
         {
             // Get the location of the core dll ([ProjectRoot]/Library/UnityAssemblies) 
-            string coreAssemblyPath = InternalEditorUtility.GetEngineCoreModuleAssemblyPath();
+            string coreAssemblyPath = InternalEditorUtility.GetEngineAssemblyPath();
             // Get the directory name
             _unityAssembliesDirectory = Path.GetDirectoryName(coreAssemblyPath);
         }

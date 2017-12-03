@@ -87,13 +87,6 @@ namespace Weaver.Editors
 
         public override void OnInspectorGUI()
         {
-            if(GUILayout.Button("Capture"))
-            {
-                CaptureGroup.StartCapture(this);
-            }
-            CaptureGroup.StartCaptureBlock();
-            {
-
                 if (m_Styles == null)
                 {
                     m_Styles = new Styles();
@@ -117,10 +110,7 @@ namespace Weaver.Editors
                     DrawLogs();
                 }
                 EditorGUI.EndDisabledGroup();
-            }
-            CaptureGroup.StopCapture();
         }
-
 
         private void DrawLogs()
         {
