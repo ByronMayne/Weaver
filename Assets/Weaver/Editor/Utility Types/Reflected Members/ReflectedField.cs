@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
 public class ReflectedField<T> 
 {
-    private string m_PropertyPath;
     private T m_Value; 
     private object m_TargetInstance;
     private FieldInfo m_FieldInfo;
@@ -26,7 +24,6 @@ public class ReflectedField<T>
 
     public ReflectedField(SerializedObject serializedObject, string propertyPath)
     {
-        m_PropertyPath = propertyPath;
         FindTarget(serializedObject, propertyPath);
     }
 
