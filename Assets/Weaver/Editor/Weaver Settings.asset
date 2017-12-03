@@ -12,36 +12,83 @@ MonoBehaviour:
   m_Name: Weaver Settings
   m_EditorClassIdentifier: 
   m_WeavedAssemblies:
-  - m_RelativePath: 
-    m_Enabled: 1
-    m_LastWriteTime: 34
   - m_RelativePath: Library\ScriptAssemblies\Assembly-CSharp.dll
     m_Enabled: 1
-    m_LastWriteTime: 34
+    m_LastWriteTime: 50
+  - m_RelativePath: Assets\Weaver\Editor\Lib\
+    m_Enabled: 1
+    m_LastWriteTime: 49
   m_Components:
-    m_SubObjects: []
-    m_Owner: {fileID: 0}
-  m_RunAutomatically: 0
+    m_SubObjects:
+    - {fileID: 114447817798137136}
+    m_Owner: {fileID: 11400000}
+  m_RunAutomatically: 1
   m_Log:
     m_Entries:
     - id: 1
-      lineNumber: 123
+      lineNumber: 159
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:123]: Subscribing to next assembly reload.'
+      message: '[WeaverSettings:159]: Checking for assembly modifications.'
       type: 1
     - id: 2
-      lineNumber: 123
+      lineNumber: 179
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:123]: Subscribing to next assembly reload.'
+      message: '[WeaverSettings:179]: Assembly at path <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>
+        had modifications.'
       type: 1
     - id: 3
-      lineNumber: 129
+      lineNumber: 204
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '<color=yellow>[WeaverSettings:129]: Dynamic Assembly Reload not support
-        until Unity 2017. Enter play mode to reload assemblies to see the effects
-        of Weaving.</color>'
-      type: 2
---- !u!114 &114134185966084410
+      message: '[WeaverSettings:204]: Populating Assembly Cache'
+      type: 1
+    - id: 4
+      lineNumber: 209
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:209]: Creating Reader Parameters'
+      type: 1
+    - id: 5
+      lineNumber: 220
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:220]: Creating ModuleDefinition for <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>.'
+      type: 1
+    - id: 6
+      lineNumber: 225
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:225]: Initializing Components.'
+      type: 1
+    - id: 7
+      lineNumber: 229
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:229]: Visiting Modules.'
+      type: 1
+    - id: 8
+      lineNumber: 115
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
+      message: '[WeaverExtension:115]: Visiting module'
+      type: 1
+    - id: 9
+      lineNumber: 115
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
+      message: '[WeaverExtension:115]: Module visitation complete'
+      type: 1
+    - id: 10
+      lineNumber: 234
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:234]: Writing Module <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>
+        to disk.'
+      type: 1
+    - id: 11
+      lineNumber: 238
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:238]: Weaving Successfully Completed. Total elapsed
+        milliseconds : 226'
+      type: 1
+    - id: 12
+      lineNumber: 138
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[WeaverSettings:138]: Subscribing to next assembly reload.'
+      type: 1
+--- !u!114 &114447817798137136
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -49,17 +96,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f12c0ef0fd1366941aac37bc90ad4397, type: 3}
-  m_Name: Weaver.ObsoleteCaseComponent
-  m_EditorClassIdentifier: 
---- !u!114 &114805662069318014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a77c5a7de32b0b94ca13abec70ce4b35, type: 3}
-  m_Name: Weaver.PropertyChangedComponent
+  m_Script: {fileID: 11500000, guid: 15da2ce92a1b2a34d84f72d5dd9f7e52, type: 3}
+  m_Name: Weaver.MethodTimerComponent
   m_EditorClassIdentifier: 
