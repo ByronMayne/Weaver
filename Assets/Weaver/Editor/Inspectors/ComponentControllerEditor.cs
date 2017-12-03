@@ -16,7 +16,6 @@ namespace Weaver.Editors
             public SerializedObject target;
         }
 
-        private readonly GUIContent m_HeaderLabel = new GUIContent("Components");
         private SerializedProperty m_SubObjects;
         private ReflectedMethod m_AddItemMethod;
         private ReflectedMethod m_RemoveItemMethod;
@@ -55,7 +54,7 @@ namespace Weaver.Editors
 
         private void OnDrawHeader(Rect rect)
         {
-            GUI.Label(rect, m_HeaderLabel);
+            GUI.Label(rect, WeaverContent.settingsComponentsTitle);
         }
 
         private void OnComponentRemoved(ReorderableList list)

@@ -40,7 +40,7 @@ namespace Weaver.Editors
         // Properties
         private SerializedProperty m_WeavedAssemblies;
         private SerializedProperty m_Components;
-        private SerializedProperty m_RunAutomatically;
+        private SerializedProperty m_Enabled;
         private SerializedProperty m_Log;
         private SerializedProperty m_Entries;
 
@@ -60,10 +60,11 @@ namespace Weaver.Editors
             AssemblyUtility.PopulateAssemblyCache();
             m_WeavedAssemblies = serializedObject.FindProperty("m_WeavedAssemblies");
             m_Components = serializedObject.FindProperty("m_Components");
-            m_RunAutomatically = serializedObject.FindProperty("m_RunAutomatically");
+            m_Enabled = serializedObject.FindProperty("m_IsEnabled");
             m_Log = serializedObject.FindProperty("m_Log");
             m_Entries = m_Log.FindPropertyRelative("m_Entries");
             m_WeavedAssembliesList = new ReorderableList(serializedObject, m_WeavedAssemblies);
+            m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyDrawHeader;
             m_WeavedAssembliesList.drawElementCallback += OnWeavedAssemblyDrawElement;
             m_WeavedAssembliesList.onAddCallback += OnWeavedAssemblyElementAdded;
             m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyHeader;
@@ -71,6 +72,11 @@ namespace Weaver.Editors
 
             // Labels 
             m_WeavedAssemblyHeaderLabel = new GUIContent("Weaved Assemblies");
+        }
+
+        private void OnWeavedAssemblyDrawHeader(Rect rect)
+        {
+            GUI.Label(rect, WeaverContent.settingsWeavedAsesmbliesTitle);
         }
 
         private void OnWeavedAssemblyRemoved(ReorderableList list)
@@ -81,25 +87,38 @@ namespace Weaver.Editors
 
         public override void OnInspectorGUI()
         {
-            if (m_Styles == null)
+            if(GUILayout.Button("Capture"))
             {
-                m_Styles = new Styles();
+                CaptureGroup.StartCapture(this);
             }
+            CaptureGroup.StartCaptureBlock();
+            {
 
-            GUILayout.Label("Settings", EditorStyles.boldLabel);
-            EditorGUI.BeginChangeCheck();
-            {
-                EditorGUILayout.PropertyField(m_RunAutomatically);
-            }
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.ApplyModifiedProperties();
-            }
+                if (m_Styles == null)
+                {
+                    m_Styles = new Styles();
+                }
 
-            EditorGUILayout.PropertyField(m_Components);
-            m_WeavedAssembliesList.DoLayoutList();
-            GUILayout.Label("Log", EditorStyles.boldLabel);
-            DrawLogs();
+                GUILayout.Label("Settings", EditorStyles.boldLabel);
+                EditorGUI.BeginChangeCheck();
+                {
+                    EditorGUILayout.PropertyField(m_Enabled);
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    serializedObject.ApplyModifiedProperties();
+                }
+
+                EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
+                {
+                    EditorGUILayout.PropertyField(m_Components);
+                    m_WeavedAssembliesList.DoLayoutList();
+                    GUILayout.Label("Log", EditorStyles.boldLabel);
+                    DrawLogs();
+                }
+                EditorGUI.EndDisabledGroup();
+            }
+            CaptureGroup.StopCapture();
         }
 
 

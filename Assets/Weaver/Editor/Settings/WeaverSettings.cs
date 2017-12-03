@@ -25,8 +25,7 @@ namespace Weaver
 
         [SerializeField]
         [UsedImplicitly]
-        [Tooltip("If true whenever one of our weaved assemblies changes will run the weaving process.")]
-        private bool m_RunAutomatically;
+        private bool m_IsEnabled = true; // m_Enabled is used by Unity and throws errors (even if scriptable objects don't have that field) 
 
         [SerializeField]
         [UsedImplicitly]
@@ -162,7 +161,7 @@ namespace Weaver
                     m_WeavedAssemblies = new List<WeavedAssembly>();
                 }
 
-                if (!m_RunAutomatically)
+                if (!m_IsEnabled)
                 {
                     m_Log.Info("Automatic weaving aborted due to RunAutomaticlly being turned off.", false);
                     // We don't want to run if the users said not too.
