@@ -67,10 +67,18 @@ namespace Weaver.Editors
             m_WeavedAssembliesList.drawElementCallback += OnWeavedAssemblyDrawElement;
             m_WeavedAssembliesList.onAddCallback += OnWeavedAssemblyElementAdded;
             m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyHeader;
+            m_WeavedAssembliesList.onRemoveCallback += OnWeavedAssemblyRemoved;
 
             // Labels 
             m_WeavedAssemblyHeaderLabel = new GUIContent("Weaved Assemblies");
         }
+
+        private void OnWeavedAssemblyRemoved(ReorderableList list)
+        {
+            m_WeavedAssemblies.DeleteArrayElementAtIndex(list.index);
+            serializedObject.ApplyModifiedProperties();
+        }
+
         public override void OnInspectorGUI()
         {
             if (m_Styles == null)
