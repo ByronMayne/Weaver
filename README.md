@@ -1,10 +1,8 @@
-### TODO: Update Docs
-Weaver is the last few updates has becomes quite a bit easier to use but these screenshots and comments are out of date.
-
 
 # Weaver
 A a code weaver built for use in [Unity Engine](https://unity3d.com/). Based very heavily off of [Fody](https://github.com/Fody/Fody). Implmented using [Mono.Cecil](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/).
 
+![](./docs/WeaverFull.png)
 
 
 ### What is Code Weaving?
@@ -25,29 +23,39 @@ Weaver for now only uses IL Weaving which runs once every time an assembly is re
 
 
 ## How To Use
-Weaver is built using ScriptableObjects as their base so to start using Weaver we need to create a few. First step is to create a Waver Settings. In Unity use the create menu to create a new instance. 
-
-
-![](./docs/Weaver_CreateSettings.png)
+Weaver is run using a single ScriptableObjects you will need to create a new instance for your project. Int Unity use the create menu to create a new instance. 
 
 *Right click in the Project Window* `Create/Weaver/Settings`
 
 
-**Tip:** Try to only have one instance of Weaver Settings in your project as every one will subscribe and execute when assemblies are recompiled. 
+> **You Only Need One:** Only one instance should exist in your project since every operation only needs to happen once. 
 
 
-#### Target Assmblies
-When you create a new instance by default Weaver will not edit any assemblies. It is up to you to define which assemblies you want to be modified. Click on the + icon on the bottom right and a context menu will pop up with all the valid assemblies you can target. You can also disable the assemblies in this list by unchecking the check box beside it's name. 
+#### Weaved Assmblies
 
-![](./docs/Weaver_Assemblies.png)
+When you create a new instance by default Weaver will not edit any assemblies. It is up to you to define which assemblies you want to be modified. Click on the + icon on the bottom right and a context menu will pop up with all the valid assemblies you can target. You can also disable the assemblies in this list by unchecking the check box beside it's name. This will stop them from being edited.
+
+![](./docs/WeavedAssemblies.png)
+
+> **Menu Content:** The assemblies in the menu are populated with reflection and will be found if they they are anywhere ein the Unity Project.
+
+#### Components
+Weaver is built around it's components as they are what do the weaving of the assemblies. Weaver itself is just a provider of information for the components. They get notified when they should run and on which assemblies they should run against.
+
+To add a new component use the `(+)` button to open the menu and pick any option. 
 
 
-#### Adding Extensions
-To use Extensions you first need to create a new instance of the scriptable object extension you want to use. Then hit the + button and drag that extension index into the list. 
+![](./docs/WeaverComponents.png)
 
-![](./docs/Weaver_Extensions.png)
+> **There Can Only Be One:** You can only have one instance of each component as having more would be useless.
 
-**Tip:** Try to only have one instance of each extension. If you have more then one it's effect will be applied twice which is most likely not what you want. 
+> **Adding New Componet Types:** The component menu uses reflection to find all types that inherit from `WeaverComponent` and are not abstract and are part of the EditorAssembly. Any new calsses that match thoese rules will populate inside the menu.
+### Logs
+
+To make the process a bit more clear but also not spam to your console Weaver logs all it's contents to it's own console on the ScriptableObject. Errors are also logged to the Unity console because that is important.
+
+![](./docs/Logs.png)
+
 
 ## Current Extensions
 * [**Method Timer**](.//Assets//Weaver//Extensions//MethodTimer//README.md) - Any method with the `MethodTimerAttribute` will be timed using [Stopwatch](https://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch(v=vs.110).aspx) and logged to the console. 
@@ -56,6 +64,10 @@ To use Extensions you first need to create a new instance of the scriptable obje
 
 * [**Property Changed**](.//Assets//Weaver//Extensions//PropertyChanged//docs//README.md) : Invoke a callback whenever a property is marked with the `[OnChanged(string callback)]` attribute.. 
 
+
+
+### Submoudles
+* [Capture Groups](https://github.com/ByronMayne/CaptureGroups): Used to generate the screen shots because I am too lazy to do that by hand. All code is under the preproc `CAPTURE_GROUPS` so feel free to remove this if you copy over the code.
 
 ## Meta
 
