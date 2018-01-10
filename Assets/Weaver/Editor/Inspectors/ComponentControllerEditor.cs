@@ -23,7 +23,7 @@ namespace Weaver.Editors
         private ReorderableList m_ReoderableList;
         private bool m_Initialized = false;
         private Rect m_Position;
-        private float m_Height; 
+        private float m_Height;
 
         private void Initialize(SerializedProperty property)
         {
@@ -36,7 +36,7 @@ namespace Weaver.Editors
                 m_HasInstanceOfTypeMethod = property.FindMethodRelative("HasInstanceOfType", typeof(Type));
 
 
-                m_ReoderableList = new ReorderableList(m_SubObjects.serializedObject, m_SubObjects) {draggable = true};
+                m_ReoderableList = new ReorderableList(m_SubObjects.serializedObject, m_SubObjects) { draggable = true };
                 m_ReoderableList.onAddCallback += OnComponentAdded;
                 m_ReoderableList.onRemoveCallback += OnComponentRemoved;
                 m_ReoderableList.drawHeaderCallback += OnDrawHeader;
@@ -49,7 +49,14 @@ namespace Weaver.Editors
             rect.height = EditorGUIUtility.singleLineHeight;
             rect.y += 2.0f;
             SerializedProperty element = m_SubObjects.GetArrayElementAtIndex(index);
-            GUI.Label(rect, element.objectReferenceValue.name, EditorStyles.objectField);
+            SerializedObject serializedObject = new SerializedObject(element.objectReferenceValue);
+            rect.width -= 20f;
+            GUI.Label(rect, element.objectReferenceValue.name, EditorStyles.textArea);
+            rect.x += rect.width;
+            rect.width = 20f;
+            SerializedProperty isEnabled = serializedObject.FindProperty("m_Enabled");
+            isEnabled.boolValue = EditorGUI.Toggle(rect, isEnabled.boolValue);
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void OnDrawHeader(Rect rect)
@@ -60,7 +67,7 @@ namespace Weaver.Editors
         private void OnComponentRemoved(ReorderableList list)
         {
             m_RemoveItemMethod.Invoke(list.index);
-            OnComponentAddedOrRemoved(); 
+            OnComponentAddedOrRemoved();
         }
 
         private void OnComponentAdded(ReorderableList list)
@@ -70,18 +77,18 @@ namespace Weaver.Editors
             // Get all the types that inherit from Weaver Component 
             IList<Type> componentTypes = AssemblyUtility.GetInheirtingTypesFromUserAssemblies<WeaverComponent>();
             // Loop over them all
-            for(int i = 0; i < componentTypes.Count; i++)
+            for (int i = 0; i < componentTypes.Count; i++)
             {
                 Type type = componentTypes[i];
                 // Check if we already have that type
-                if(!(bool)m_HasInstanceOfTypeMethod.Invoke(type))
+                if (!(bool)m_HasInstanceOfTypeMethod.Invoke(type))
                 {
                     GUIContent menuLabel = new GUIContent(type.Assembly.GetName().Name + "/" + type.Name);
                     componentMenu.AddItem(menuLabel, false, OnTypeAdded, type);
                 }
             }
-            
-            if(componentMenu.GetItemCount() == 0)
+
+            if (componentMenu.GetItemCount() == 0)
             {
                 componentMenu.AddDisabledItem(new GUIContent("[All Components Added]"));
             }
