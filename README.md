@@ -19,7 +19,9 @@ Weaver for now only uses IL Weaving which runs once every time an assembly is re
 ### Features
 * Hooked into Unity callbacks to run automatically. 
 * Filter only the assemblies you want to weave. 
-* Easy to extend using [ScriptableObjects](https://docs.unity3d.com/ScriptReference/ScriptableObject.html).
+* Validation for end user.
+* Custom logger.
+* Utility functions to write MSIL.
 
 
 ## How To Use
@@ -66,7 +68,7 @@ To make the process a bit more clear but also not spam to your console Weaver lo
 
 
 
-### Submoudles
+### Git Sub Modules
 * [Capture Groups](https://github.com/ByronMayne/CaptureGroups): Used to generate the screen shots because I am too lazy to do that by hand. All code is under the preproc `CAPTURE_GROUPS` so feel free to remove this if you copy over the code.
 
 ## Meta
