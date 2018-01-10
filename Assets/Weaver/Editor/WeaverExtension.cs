@@ -112,7 +112,7 @@ namespace Weaver
         /// </summary>
         protected void Log(string message)
         {
-            m_Log.Info(message, false);
+            m_Log.Info(addinName, message, false, 3);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Weaver
         /// </summary>
         public void Log(string message, MemberLocation memberContext)
         {
-            m_Log.Info(memberContext + message, false);
+            m_Log.Info(addinName, memberContext + message, false, 3);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Weaver
         /// </summary>
         public void Warning(string message)
         {
-            m_Log.Warning(message, false);
+            m_Log.Warning(addinName, message, false, 3);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Weaver
         /// </summary>
         public void Warning(string message, MemberLocation memberContext)
         {
-            m_Log.Warning(memberContext + message, false);
+            m_Log.Warning(addinName, memberContext + message, false, 3);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Weaver
         /// </summary>
         public void Error(string message)
         {
-            m_Log.Error(message, true);
+            m_Log.Error(addinName, message, true, 3);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Weaver
         /// </summary>
         public void Error(string message, MemberLocation memberContext)
         {
-            m_Log.Error(memberContext + message, false);
+            m_Log.Error(addinName, memberContext + message, false, 3);
         }
         #endregion
 

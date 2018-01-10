@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Debug = UnityEngine.Debug;
 using UnityEngine;
 using UnityEditor;
+using Object = UnityEngine.Object;
 
 namespace Weaver
 {
@@ -57,9 +58,9 @@ namespace Weaver
         /// </summary>
         /// <param name="message">The message you want to write</param>
         /// <param name="logToConsole">If true will also log to the Unity console</param>
-        public void Info(string message, bool logToConsole)
+        public void Info(string context, string message, bool logToConsole, int stackFrameDiscard = 2)
         {
-            AddEntry(message, MessageType.Info);
+            AddEntry(context, message, MessageType.Info, stackFrameDiscard);
             if (logToConsole)
             {
                 Debug.Log(message);
@@ -72,9 +73,9 @@ namespace Weaver
         /// </summary>
         /// <param name="warning">The message you want to write</param>
         /// <param name="logToConsole">If true will also log to the Unity console</param>
-        public void Warning(string warning, bool logToConsole)
+        public void Warning(string context, string warning, bool logToConsole, int stackFrameDiscard = 2)
         {
-            AddEntry(warning, MessageType.Warning);
+            AddEntry(context, warning, MessageType.Warning, stackFrameDiscard);
             if (logToConsole)
             {
                 Debug.LogWarning(warning);
@@ -87,9 +88,9 @@ namespace Weaver
         /// </summary>
         /// <param name="message">The message you want to write</param>
         /// <param name="logToConsole">If true will also log to the Unity console</param>
-        public void Error(string error, bool logToConsole)
+        public void Error(string context, string error, bool logToConsole, int stackFrameDiscard = 2)
         {
-            AddEntry(error, MessageType.Error);
+            AddEntry(context, error, MessageType.Error, stackFrameDiscard);
             if (logToConsole)
             {
                 Debug.LogError(error);
@@ -113,14 +114,17 @@ namespace Weaver
             return string.Format("[{0}:{1}]: {2}", fileName, lineNumber, message);
         }
 
-        private void AddEntry(string message, MessageType logType)
+        private void AddEntry(string context, string message, MessageType logType, int stackFrameDiscard)
         {
             // Get our stack frame
-            StackFrame frame = new StackFrame(2, true);
+            StackFrame frame = new StackFrame(stackFrameDiscard, true);
             // Create our entry
-            string prettyFileName = System.IO.Path.GetFileNameWithoutExtension(frame.GetFileName());
+            if (string.IsNullOrEmpty(context))
+            {
+                context = System.IO.Path.GetFileNameWithoutExtension(frame.GetFileName());
+            }
             int lineNumber = frame.GetFileLineNumber();
-            message = FormatLabel(message, prettyFileName, frame.GetFileLineNumber(), logType);
+            message = FormatLabel(message, context, frame.GetFileLineNumber(), logType);
             Entry entry = new Entry()
             {
                 fileName = frame.GetFileName(),

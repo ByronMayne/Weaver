@@ -134,7 +134,7 @@ namespace Weaver
             }
             m_Log.context = this;
             // Subscribe to the before reload event so we can modify the assemblies!
-            m_Log.Info("Subscribing to next assembly reload.", false);
+            m_Log.Info("Weaver Settings", "Subscribing to next assembly reload.", false);
             AssemblyUtility.PopulateAssemblyCache();
             m_Components.SetOwner(this);
 #if UNITY_2017_1_OR_NEWER
@@ -155,7 +155,7 @@ namespace Weaver
             {
 
                 m_Log.Clear();
-                m_Log.Info("Checking for assembly modifications.", false);
+                m_Log.Info("Weaver Settings", "Checking for assembly modifications.", false);
                 if (m_WeavedAssemblies == null)
                 {
                     m_WeavedAssemblies = new List<WeavedAssembly>();
@@ -163,7 +163,7 @@ namespace Weaver
 
                 if (!m_IsEnabled)
                 {
-                    m_Log.Info("Automatic weaving aborted due to RunAutomaticlly being turned off.", false);
+                    m_Log.Info("Weaver Settings", "Automatic weaving aborted due to RunAutomaticlly being turned off.", false);
                     // We don't want to run if the users said not too.
                     return;
                 }
@@ -175,7 +175,7 @@ namespace Weaver
                 {
                     if (m_WeavedAssemblies[i].HasChanges())
                     {
-                        m_Log.Info("Assembly at path <i>" + m_WeavedAssemblies[i].relativePath + "</i> had modifications.", false);
+                        m_Log.Info("Weaver Settings", "Assembly at path <i>" + m_WeavedAssemblies[i].relativePath + "</i> had modifications.", false);
                         assembliesToWrite.Add(m_WeavedAssemblies[i]);
                     }
                 }
@@ -190,7 +190,7 @@ namespace Weaver
                 log.AppendLine(e.ToString());
                 log.Append("Total elapsed milliseconds :");
                 log.AppendLine(m_Timer.ElapsedMilliseconds.ToString());
-                m_Log.Error("Exception was thrown while weaving assemblies. " + e.ToString(), true);
+                m_Log.Error("Weaver Settings", "Exception was thrown while weaving assemblies. " + e.ToString(), true);
             }
         }
 
@@ -200,12 +200,12 @@ namespace Weaver
         /// </summary>
         private void WeaveAssemblies(IList<WeavedAssembly> assemblies)
         {
-            m_Log.Info("Populating Assembly Cache", false);
+            m_Log.Info("Weaver Settings", "Populating Assembly Cache", false);
             AssemblyUtility.PopulateAssemblyCache();
             // Create new resolver
             m_Resolver = new WeaverAssemblyResolver();
             // Create a new reader
-            m_Log.Info("Creating Reader Parameters", false);
+            m_Log.Info("Weaver Settings", "Creating Reader Parameters", false);
             ReaderParameters readerParameters = new ReaderParameters();
             // Pass the reader our resolver 
             readerParameters.AssemblyResolver = m_Resolver;
@@ -220,25 +220,25 @@ namespace Weaver
             for (int i = 0; i < assemblies.Count; i++)
             {
                 // We have a changed assembly so we need to get the definition to modify. 
-                m_Log.Info("Creating ModuleDefinition for <i>" + assemblies[i].relativePath + "</i>.", false);
+                m_Log.Info("Weaver Settings", "Creating ModuleDefinition for <i>" + assemblies[i].relativePath + "</i>.", false);
                 ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(assemblies[i].GetSystemPath(), readerParameters);
                 // Add it to our list
                 editingModules.Add(moduleDefinition);
             }
-            m_Log.Info("Initializing Components.", false);
+            m_Log.Info("Weaver Settings", "Initializing Components.", false);
             // Initialize our component manager
             m_Components.Initialize(this);
             // Visit Modules
-            m_Log.Info("Visiting Modules.", false);
+            m_Log.Info("Weaver Settings", "Visiting Modules.", false);
             m_Components.VisitModules(editingModules, m_Log);
             // Save
             for (int i = 0; i < assemblies.Count; i++)
             {
-                m_Log.Info("Writing Module <i>" + assemblies[i].relativePath + "</i> to disk.", false);
+                m_Log.Info("Weaver Settings", "Writing Module <i>" + assemblies[i].relativePath + "</i> to disk.", false);
                 editingModules[i].Write(assemblies[i].GetSystemPath(), writerParameters);
             }
             assemblies.Clear();
-            m_Log.Info("Weaving Successfully Completed. Total elapsed milliseconds : " + m_Timer.ElapsedMilliseconds.ToString(), false);
+            m_Log.Info("Weaver Settings", "Weaving Successfully Completed. Total elapsed milliseconds : " + m_Timer.ElapsedMilliseconds.ToString(), false);
         }
     }
 }
