@@ -51,7 +51,7 @@ To add a new component use the `(+)` button to open the menu and pick any option
 
 > **There Can Only Be One:** You can only have one instance of each component as having more would be useless.
 
-> **Adding New Componet Types:** The component menu uses reflection to find all types that inherit from `WeaverComponent` and are not abstract and are part of the EditorAssembly. Any new calsses that match thoese rules will populate inside the menu.
+> **Adding New Componet Types:** The component menu uses reflection to find all types that inherit from `WeaverComponent` and are not abstract and are part of the EditorAssembly. Any new classes that match thoese rules will populate inside the menu.
 ### Logs
 
 To make the process a bit more clear but also not spam to your console Weaver logs all it's contents to it's own console on the ScriptableObject. Errors are also logged to the Unity console because that is important.
