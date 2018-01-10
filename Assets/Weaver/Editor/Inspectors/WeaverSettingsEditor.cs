@@ -87,29 +87,45 @@ namespace Weaver.Editors
 
         public override void OnInspectorGUI()
         {
-            if (m_Styles == null)
+            CGWrapper.Begin("Docs/WeaverFull.png");
             {
-                m_Styles = new Styles();
-            }
+                if (m_Styles == null)
+                {
+                    m_Styles = new Styles();
+                }
 
-            GUILayout.Label("Settings", EditorStyles.boldLabel);
-            EditorGUI.BeginChangeCheck();
-            {
-                EditorGUILayout.PropertyField(m_Enabled);
-            }
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.ApplyModifiedProperties();
-            }
+                GUILayout.Label("Settings", EditorStyles.boldLabel);
+                EditorGUI.BeginChangeCheck();
+                {
+                    EditorGUILayout.PropertyField(m_Enabled);
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    serializedObject.ApplyModifiedProperties();
+                }
 
-            EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
-            {
-                EditorGUILayout.PropertyField(m_Components);
-                m_WeavedAssembliesList.DoLayoutList();
-                GUILayout.Label("Log", EditorStyles.boldLabel);
-                DrawLogs();
+                EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
+                {
+                    CGWrapper.Begin("Docs/WeaverComponents.png");
+                    {
+                        EditorGUILayout.PropertyField(m_Components);
+                    }
+                    CGWrapper.End();
+                    CGWrapper.Begin("Docs/WeavedAssemblies.png");
+                    {
+                        m_WeavedAssembliesList.DoLayoutList();
+                    }
+                    CGWrapper.End();
+                    CGWrapper.Begin("Docs/Logs.png");
+                    {
+                        GUILayout.Label("Log", EditorStyles.boldLabel);
+                        DrawLogs();
+                    }
+                    CGWrapper.End();
+                }
+                EditorGUI.EndDisabledGroup();
             }
-            EditorGUI.EndDisabledGroup();
+            CGWrapper.End();
         }
 
         private void DrawLogs()
@@ -242,5 +258,24 @@ namespace Weaver.Editors
             serializedObject.ApplyModifiedProperties();
         }
         #endregion
+
+#if CAPTURE_GROUPS
+        [MenuItem("CONTEXT/WeaverSettings/Toggle Debug Capture Groups")]
+        public static void CaptureGroupsToggleDebugMenu(MenuCommand command)
+        {
+            CaptureGroup.ShowDebug = !CaptureGroup.ShowDebug;
+        }
+
+        [MenuItem("CONTEXT/WeaverSettings/Preform Capture")]
+        public static void CaptureGroupPreformCapture(MenuCommand command)
+        {
+            WeaverSettingsEditor[] inspectors = Resources.FindObjectsOfTypeAll<WeaverSettingsEditor>();
+            CaptureGroup.CapturePadding = new RectOffset(4, 4, 4, 4);
+            if (inspectors.Length > 0)
+            {
+                CaptureGroup.PreformCapture(inspectors[0]);
+            }
+        }
+#endif
     }
 }
