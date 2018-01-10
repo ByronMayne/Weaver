@@ -1,0 +1,3 @@
+[submodule "Assets/Editor/CaptureGroups"]
+	path = Assets/Editor/CaptureGroups
+	url = https://github.com/ByronMayne/CaptureGroups.git
