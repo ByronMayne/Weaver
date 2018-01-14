@@ -67,7 +67,7 @@ To make the process a bit more clear but also not spam to your console Weaver lo
 * [**Property Changed**](.//Assets//Weaver//Extensions//PropertyChanged//docs//README.md) : Invoke a callback whenever a property is marked with the `[OnChanged(string callback)]` attribute.. 
 
 ### Analytics
-I have had some basic analytics to the project to get an idea of what components are being used and any exceptions are being thrown. I only capture the following:
+I have added some basic analytics to the project to get an idea of what components are being used and any exceptions are being thrown. I only capture the following:
 * Computer Name (md5 encoded)
 * Product Name + Company Name (md5 encoded)
 * Script Count
