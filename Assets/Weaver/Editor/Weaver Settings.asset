@@ -14,80 +14,164 @@ MonoBehaviour:
   m_WeavedAssemblies:
   - m_RelativePath: Library\ScriptAssemblies\Assembly-CSharp.dll
     m_Enabled: 1
-    m_LastWriteTime: 50
+    m_LastWriteTime: 35
   - m_RelativePath: Assets\Weaver\Editor\Lib\
     m_Enabled: 1
     m_LastWriteTime: 49
   m_Components:
     m_SubObjects:
     - {fileID: 114447817798137136}
+    - {fileID: 114841883208491810}
+    - {fileID: 114335753721210474}
+    - {fileID: 114193912106786986}
     m_Owner: {fileID: 11400000}
-  m_RunAutomatically: 1
+  m_IsEnabled: 1
   m_Log:
     m_Entries:
     - id: 1
-      lineNumber: 159
+      lineNumber: 158
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:159]: Checking for assembly modifications.'
+      message: '[Weaver Settings:158]: Checking for assembly modifications.'
       type: 1
     - id: 2
-      lineNumber: 179
+      lineNumber: 178
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:179]: Assembly at path <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>
+      message: '[Weaver Settings:178]: Assembly at path <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>
         had modifications.'
       type: 1
     - id: 3
-      lineNumber: 204
+      lineNumber: 203
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:204]: Populating Assembly Cache'
+      message: '[Weaver Settings:203]: Populating Assembly Cache'
       type: 1
     - id: 4
-      lineNumber: 209
+      lineNumber: 208
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:209]: Creating Reader Parameters'
+      message: '[Weaver Settings:208]: Creating Reader Parameters'
       type: 1
     - id: 5
-      lineNumber: 220
+      lineNumber: 223
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:220]: Creating ModuleDefinition for <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>.'
+      message: '[Weaver Settings:223]: Creating ModuleDefinition for <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>.'
       type: 1
     - id: 6
-      lineNumber: 225
+      lineNumber: 228
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:225]: Initializing Components.'
+      message: '[Weaver Settings:228]: Initializing Components.'
       type: 1
     - id: 7
-      lineNumber: 229
+      lineNumber: 232
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:229]: Visiting Modules.'
+      message: '[Weaver Settings:232]: Visiting Modules.'
       type: 1
     - id: 8
-      lineNumber: 115
+      lineNumber: 90
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
-      message: '[WeaverExtension:115]: Visiting module'
+      message: '[Property Changed:90]: Visiting module'
       type: 1
     - id: 9
-      lineNumber: 115
+      lineNumber: 90
       fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
-      message: '[WeaverExtension:115]: Module visitation complete'
+      message: '[Profile Sample:90]: Visiting module'
       type: 1
     - id: 10
-      lineNumber: 234
-      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:234]: Writing Module <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>
-        to disk.'
+      lineNumber: 90
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
+      message: '[Obsolete Case:90]: Visiting module'
       type: 1
     - id: 11
-      lineNumber: 238
-      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:238]: Weaving Successfully Completed. Total elapsed
-        milliseconds : 226'
+      lineNumber: 90
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
+      message: '[Method Timer:90]: Visiting module'
       type: 1
     - id: 12
-      lineNumber: 138
-      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
-      message: '[WeaverSettings:138]: Subscribing to next assembly reload.'
+      lineNumber: 100
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
+      message: '[Property Changed:100]: Module visitation complete'
       type: 1
+    - id: 13
+      lineNumber: 100
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
+      message: '[Profile Sample:100]: Module visitation complete'
+      type: 1
+    - id: 14
+      lineNumber: 100
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
+      message: '[Obsolete Case:100]: Module visitation complete'
+      type: 1
+    - id: 15
+      lineNumber: 100
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\WeaverExtension.cs
+      message: '[Method Timer:100]: Module visitation complete'
+      type: 1
+    - id: 16
+      lineNumber: 237
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Weaver Settings:237]: Writing Module <i>Library\ScriptAssemblies\Assembly-CSharp.dll</i>
+        to disk.'
+      type: 1
+    - id: 17
+      lineNumber: 241
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Weaver Settings:241]: Weaving Successfully Completed'
+      type: 1
+    - id: 18
+      lineNumber: 244
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Statistics:244]: Weaving Time ms: 238'
+      type: 1
+    - id: 19
+      lineNumber: 245
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Statistics:245]: Modules Visited: 1'
+      type: 1
+    - id: 20
+      lineNumber: 246
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Statistics:246]: Types Visited: 6'
+      type: 1
+    - id: 21
+      lineNumber: 247
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Statistics:247]: Methods Visited: 6'
+      type: 1
+    - id: 22
+      lineNumber: 248
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Statistics:248]: Fields Visited: 6'
+      type: 1
+    - id: 23
+      lineNumber: 249
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Statistics:249]: Properties Visited: 6'
+      type: 1
+    - id: 24
+      lineNumber: 137
+      fileName: D:\Repositories\Weaver\Assets\Weaver\Editor\Settings\WeaverSettings.cs
+      message: '[Weaver Settings:137]: Subscribing to next assembly reload.'
+      type: 1
+--- !u!114 &114193912106786986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77c5a7de32b0b94ca13abec70ce4b35, type: 3}
+  m_Name: Weaver.PropertyChangedComponent
+  m_EditorClassIdentifier: 
+--- !u!114 &114335753721210474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a14f24f5f79ba499364dfa634b0243, type: 3}
+  m_Name: Weaver.ProfileSampleComponent
+  m_EditorClassIdentifier: 
 --- !u!114 &114447817798137136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,4 +182,15 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15da2ce92a1b2a34d84f72d5dd9f7e52, type: 3}
   m_Name: Weaver.MethodTimerComponent
+  m_EditorClassIdentifier: 
+--- !u!114 &114841883208491810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f12c0ef0fd1366941aac37bc90ad4397, type: 3}
+  m_Name: Weaver.ObsoleteCaseComponent
   m_EditorClassIdentifier: 

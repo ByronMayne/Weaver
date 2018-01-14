@@ -13,6 +13,12 @@ namespace Weaver
         /// </summary>
         private DefinitionType m_ActiveDefinitions;
 
+        public int totalModulesVisited { get; private set; }
+        public int totalTypesVisited { get; private set; }
+        public int totalMethodsVisited { get; private set; }
+        public int totalFieldsVisited { get; private set; }
+        public int totalPropertiesVisited { get; private set; }
+
         /// <summary>
         /// Sets up the component controller. 
         /// </summary>
@@ -31,6 +37,12 @@ namespace Weaver
         /// </summary>
         public void VisitModules(Collection<ModuleDefinition> moduleCollection, Log log)
         {
+            totalModulesVisited = 0;
+            totalTypesVisited = 0;
+            totalMethodsVisited = 0;
+            totalFieldsVisited = 0;
+            totalPropertiesVisited = 0;
+
             if (m_ActiveDefinitions != DefinitionType.None)
             {
                 for (int moduleIndex = moduleCollection.Count - 1; moduleIndex >= 0; moduleIndex--)
@@ -54,6 +66,8 @@ namespace Weaver
                     {
                         m_SubObjects[componentIndex].OnModuleEditComplete(moduleCollection[moduleIndex]);
                     }
+                    // Increase count
+                    totalModulesVisited++;
                 }
             }
         }
@@ -79,6 +93,8 @@ namespace Weaver
                     VisitFields(typeCollection[typeIndex].Fields);
                     // visit Properties
                     VisitProperties(typeCollection[typeIndex].Properties);
+                    // Increase count
+                    totalTypesVisited++;
                 }
             }
         }
@@ -99,6 +115,8 @@ namespace Weaver
                         m_SubObjects[componentIndex].VisitMethod(methodCollection[methodIndex]);
                     }
                 }
+                // Increase count
+                totalMethodsVisited++;
             }
         }
 
@@ -118,6 +136,8 @@ namespace Weaver
                         m_SubObjects[componentIndex].VisitField(fieldCollection[fieldIndex]);
                     }
                 }
+                // Increase count
+                totalFieldsVisited++;
             }
         }
 
@@ -137,6 +157,8 @@ namespace Weaver
                         m_SubObjects[componentIndex].VisitProperty(propertyCollection[propertyIndex]);
                     }
                 }
+                // Increase count
+                totalPropertiesVisited++;
             }
         }
     }

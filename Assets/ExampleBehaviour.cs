@@ -27,6 +27,10 @@ public class ExampleBehaviour : MonoBehaviour
         }
     }
 
+    public void Other()
+    {
+
+    }
     public void Start()
     {
         age = 23;

@@ -66,7 +66,23 @@ To make the process a bit more clear but also not spam to your console Weaver lo
 
 * [**Property Changed**](.//Assets//Weaver//Extensions//PropertyChanged//docs//README.md) : Invoke a callback whenever a property is marked with the `[OnChanged(string callback)]` attribute.. 
 
+### Analytics
+I have had some basic analytics to the project to get an idea of what components are being used and any exceptions are being thrown. I only capture the following:
+* Computer Name (md5 encoded)
+* Product Name + Company Name (md5 encoded)
+* Script Count
+* Assembly Count
+* Platform 
+* Unity Version
+* Number of members visited
+* Weaving Time
+* New component added (type name)
+* Component removed (type name)
+* Exceptions thrown while weaving
 
+I do not capture and send anything besides those values. I mostly use this to get an idea of how well Weaver is doing. I don't have much data on how fast it runs on larger projects.
+
+ All that being said you can remove the Analytics if you want by commenting out `WeaverAnalytics.Send` function.
 
 ### Git Sub Modules
 * [Capture Groups](https://github.com/ByronMayne/CaptureGroups): Used to generate the screen shots because I am too lazy to do that by hand. All code is under the preproc `CAPTURE_GROUPS` so feel free to remove this if you copy over the code.
