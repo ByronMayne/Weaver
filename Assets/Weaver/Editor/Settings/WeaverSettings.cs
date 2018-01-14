@@ -254,7 +254,7 @@ namespace Weaver
                 m_Log.Info("Statistics", "Methods Visited: " + m_Components.totalMethodsVisited, false);
                 m_Log.Info("Statistics", "Fields Visited: " + m_Components.totalFieldsVisited, false);
                 m_Log.Info("Statistics", "Properties Visited: " + m_Components.totalPropertiesVisited, false);
-                WeaverAnalytics.SendTiming("WeavingTime", m_Timer.ElapsedMilliseconds);
+                WeaverAnalytics.SendTiming("WeaveStats", "Elapsed Time", m_Timer.ElapsedMilliseconds);
                 WeaverAnalytics.SendEvent("WeaveStats", "Modules Visited", componentController.totalModulesVisited.ToString(), null);
                 WeaverAnalytics.SendEvent("WeaveStats", "Types Visited", componentController.totalTypesVisited.ToString(), null);
                 WeaverAnalytics.SendEvent("WeaveStats", "Methods Visited", componentController.totalMethodsVisited.ToString(), null);

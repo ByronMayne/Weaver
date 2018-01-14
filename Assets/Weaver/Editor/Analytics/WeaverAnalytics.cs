@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using UnityEditorInternal;
 using System.Text;
 using System.Security.Cryptography;
+using System;
 
 namespace Weaver.Analytics
 {
@@ -49,26 +50,37 @@ namespace Weaver.Analytics
             Send(postData, HitType.Exception);
         }
 
-        public static void SendTiming(string variableName, long length)
+        public static void SendTiming(string catagory, string variableName, long length)
+        {
+            SendTiming(catagory, variableName, length, null);
+        }
+
+        public static void SendTiming(string catagory, string variableName, long length, string label)
         {
             Dictionary<string, string> postData = new Dictionary<string, string>();
-            postData["utv"] = variableName;
-            postData["utt"] = length.ToString();
+            postData["utc"] = catagory; //User timing category
+            postData["utv"] = variableName; // User timing variable name
+            postData["utt"] = length.ToString(); //User timing time
+            if (!string.IsNullOrEmpty(label))
+            {
+                postData["utl"] = label; // Event Label
+            }
             Send(postData, HitType.Timing);
         }
+
 
         public static void SendEvent(string category, string action, string label, int? value = null)
         {
             Dictionary<string, string> postData = new Dictionary<string, string>();
+            postData["ec"] = category; // Event Category
+            postData["ea"] = action; // Event Action
             if (value.HasValue)
             {
-                postData.Add("ev", value.ToString());
-                postData["ec"] = category;
-                postData["ea"] = action;
-                if (!string.IsNullOrEmpty(label))
-                {
-                    postData["el"] = label;
-                }
+                postData.Add("ev", value.ToString()); // Event Value
+            }
+            if (!string.IsNullOrEmpty(label))
+            {
+                postData["el"] = label; // Event Label
             }
             Send(postData, HitType.Event);
         }
@@ -83,18 +95,25 @@ namespace Weaver.Analytics
         /// <param name="value">The value of the action</param>
         public static void Send(Dictionary<string, string> postData, HitType hitType)
         {
-            postData["v"] = AnalyticsConstants.PROTOCOL_VERSION;
-            postData["ds"] = InternalEditorUtility.GetFullUnityVersion() + ":" + Application.platform.ToString();
-            postData["tid"] = AnalyticsConstants.TRACKING_ID;
-            postData["uid"] = GetUserID();
-            postData["cid"] = GetClientID();
-            postData["t"] = hitType.ToString().ToLower();
-            postData["av"] = WeaverSettings.VERSION;
+            postData["t"] = hitType.ToString().ToLower(); // Hit Type
+            postData["v"] = AnalyticsConstants.PROTOCOL_VERSION; // Protocol Version
+            postData["tid"] = AnalyticsConstants.TRACKING_ID; // Tracking ID 
+            postData["ds"] = InternalEditorUtility.GetFullUnityVersion(); // DataSource
+            postData["cid"] = GetClientID(); // Client ID
+            postData["uid"] = GetUserID(); // User ID
+            postData["av"] = WeaverSettings.VERSION; // Application Version
 
             // Create our request
             UnityWebRequest www = UnityWebRequest.Post(AnalyticsConstants.URL, postData);
             // Send the even t
-            www.SendWebRequest();
+            UnityWebRequestAsyncOperation asyncOp = www.SendWebRequest();
+            // Subscribe
+            asyncOp.completed += OnRequestComplete;
+        }
+
+        private static void OnRequestComplete(AsyncOperation asyncOp)
+        {
+            Debug.Log("Request Sent: " + asyncOp.isDone);
         }
 
         /// <summary>
@@ -108,20 +127,28 @@ namespace Weaver.Analytics
 
         private static string GetUserID()
         {
-            return EncodeString(System.Environment.UserName);
+            return EncodeString(Environment.MachineName);
         }
 
         private static string EncodeString(string input)
         {
-            MD5 md5 = MD5.Create();
-            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
-            byte[] hash = md5.ComputeHash(inputBytes);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
+            uint result;
+            unchecked
             {
-                sb.Append(hash[i].ToString("X2"));
+                uint hash1 = 5381;
+                uint hash2 = hash1;
+
+                for (int i = 0; i < input.Length && input[i] != '\0'; i += 2)
+                {
+                    hash1 = ((hash1 << 5) + hash1) ^ input[i];
+                    if (i == input.Length - 1 || input[i + 1] == '\0')
+                        break;
+                    hash2 = ((hash2 << 5) + hash2) ^ input[i + 1];
+                }
+
+                result = hash1 + (hash2 * 1566083941);
             }
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }
