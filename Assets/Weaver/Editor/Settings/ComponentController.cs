@@ -114,9 +114,9 @@ namespace Weaver
                     {
                         m_SubObjects[componentIndex].VisitMethod(methodCollection[methodIndex]);
                     }
+                    // Increase count
+                    totalMethodsVisited++;
                 }
-                // Increase count
-                totalMethodsVisited++;
             }
         }
 
@@ -135,9 +135,9 @@ namespace Weaver
                     {
                         m_SubObjects[componentIndex].VisitField(fieldCollection[fieldIndex]);
                     }
+                    // Increase count
+                    totalFieldsVisited++;
                 }
-                // Increase count
-                totalFieldsVisited++;
             }
         }
 
@@ -156,9 +156,9 @@ namespace Weaver
                     {
                         m_SubObjects[componentIndex].VisitProperty(propertyCollection[propertyIndex]);
                     }
+                    // Increase count
+                    totalPropertiesVisited++;
                 }
-                // Increase count
-                totalPropertiesVisited++;
             }
         }
     }
