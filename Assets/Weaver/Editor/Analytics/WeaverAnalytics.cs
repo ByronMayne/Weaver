@@ -3,9 +3,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEditorInternal;
-using System.Text;
-using System.Security.Cryptography;
 using System;
+using System.Globalization;
 
 namespace Weaver.Analytics
 {
