@@ -17,7 +17,7 @@ namespace Weaver
     [CreateAssetMenu(menuName = "Weaver/Settings", fileName = "Weaver Settings")]
     public class WeaverSettings : ScriptableObject, ILogable
     {
-        public const string VERSION = "3.2.0";
+        public const string VERSION = "3.2.1";
 
         [SerializeField]
         private List<WeavedAssembly> m_WeavedAssemblies;
