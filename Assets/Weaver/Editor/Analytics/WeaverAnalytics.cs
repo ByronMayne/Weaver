@@ -101,18 +101,13 @@ namespace Weaver.Analytics
             postData["cid"] = GetClientID(); // Client ID
             postData["uid"] = GetUserID(); // User ID
             postData["av"] = WeaverSettings.VERSION; // Application Version
+            postData["ul"] = CultureInfo.CurrentCulture.Name; // User Language
+            postData["an"] = "Weaver"; // Application Name
 
             // Create our request
             UnityWebRequest www = UnityWebRequest.Post(AnalyticsConstants.URL, postData);
             // Send the even t
             UnityWebRequestAsyncOperation asyncOp = www.SendWebRequest();
-            // Subscribe
-            asyncOp.completed += OnRequestComplete;
-        }
-
-        private static void OnRequestComplete(AsyncOperation asyncOp)
-        {
-            Debug.Log("Request Sent: " + asyncOp.isDone);
         }
 
         /// <summary>
