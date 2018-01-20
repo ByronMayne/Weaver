@@ -36,6 +36,29 @@ namespace Weaver
         }
         
         /// <summary>
+        /// Forces Unity to recompile all scripts and then refresh. 
+        /// </summary>
+        public static void DirtyAllScripts()
+        {
+            // Grab the UnityEditor assembly
+            Assembly editorAssembly = typeof(UnityEditor.Editor).Assembly;
+            // Find the type that contains the method we want 
+            Type compilationInterface = editorAssembly.GetType("UnityEditor.Scripting.ScriptCompilation.EditorCompilationInterface");
+            // Make sure it's not null 
+            if (compilationInterface != null)
+            {
+                // Create our binding flags
+                BindingFlags staticBindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+                // Grab the dirty method 
+                MethodInfo dirtyAllScriptsMethod = compilationInterface.GetMethod("DirtyAllScripts", staticBindingFlags);
+                // Invoke the static method with no arguments.
+                dirtyAllScriptsMethod.Invoke(null, null);
+            }
+            // Force the database to refresh.
+            UnityEditor.AssetDatabase.Refresh();
+        }
+
+        /// <summary>
         /// Looks over all cached user assemblies for all types that inherit from
         /// the sent in generic. 
         /// </summary>
