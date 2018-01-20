@@ -88,7 +88,7 @@ namespace Weaver.Editors
             {
                 Type type = componentTypes[i];
                 // Check if we already have that type
-                if (!(bool)m_HasInstanceOfTypeMethod.Invoke(type))
+                if (m_HasInstanceOfTypeMethod.Invoke(type).AreEqual(false))
                 {
                     GUIContent menuLabel = new GUIContent(type.Assembly.GetName().Name + "/" + type.Name);
                     componentMenu.AddItem(menuLabel, false, OnTypeAdded, type);
