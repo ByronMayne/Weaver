@@ -55,7 +55,9 @@ namespace Weaver.Editors
         private GUIContent m_WeavedAssemblyHeaderLabel;
         private static Styles m_Styles;
 
-        public void OnEnable()
+        private bool _hasModifiedProperties;
+
+        private void OnEnable()
         {
             AssemblyUtility.PopulateAssemblyCache();
             m_WeavedAssemblies = serializedObject.FindProperty("m_WeavedAssemblies");
@@ -74,6 +76,23 @@ namespace Weaver.Editors
             m_WeavedAssemblyHeaderLabel = new GUIContent("Weaved Assemblies");
         }
 
+        private void OnDisable()
+        {
+            if(_hasModifiedProperties)
+            {
+                string title = "Weaver Settings Pending Changes";
+                string message = "You currently have some pending changes that have not been applied and will be lost. Would you like to apply them now?";
+                string ok = "Apply Changes";
+                string cancel = "Discard Changes";
+                bool shouldApply = EditorUtility.DisplayDialog(title, message, ok, cancel);
+                if(shouldApply)
+                {
+                    ApplyModifiedProperties();
+                }
+                _hasModifiedProperties = false;
+            }
+        }
+
         private void OnWeavedAssemblyDrawHeader(Rect rect)
         {
             GUI.Label(rect, WeaverContent.settingsWeavedAsesmbliesTitle);
@@ -82,50 +101,65 @@ namespace Weaver.Editors
         private void OnWeavedAssemblyRemoved(ReorderableList list)
         {
             m_WeavedAssemblies.DeleteArrayElementAtIndex(list.index);
-            serializedObject.ApplyModifiedProperties();
         }
 
         public override void OnInspectorGUI()
         {
-            CGWrapper.Begin("Docs/WeaverFull.png");
+            EditorGUI.BeginChangeCheck();
             {
-                if (m_Styles == null)
+                CGWrapper.Begin("Docs/WeaverFull.png");
                 {
-                    m_Styles = new Styles();
-                }
+                    if (m_Styles == null)
+                    {
+                        m_Styles = new Styles();
+                    }
 
-                GUILayout.Label("Settings", EditorStyles.boldLabel);
-                EditorGUI.BeginChangeCheck();
-                {
+                    GUILayout.Label("Settings", EditorStyles.boldLabel);
+
                     EditorGUILayout.PropertyField(m_Enabled);
-                }
-                if (EditorGUI.EndChangeCheck())
-                {
-                    serializedObject.ApplyModifiedProperties();
-                }
 
-                EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
-                {
-                    CGWrapper.Begin("Docs/WeaverComponents.png");
+                    EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
                     {
-                        EditorGUILayout.PropertyField(m_Components);
+                        CGWrapper.Begin("Docs/WeaverComponents.png");
+                        {
+                            EditorGUILayout.PropertyField(m_Components);
+                        }
+                        CGWrapper.End();
+                        CGWrapper.Begin("Docs/WeavedAssemblies.png");
+                        {
+                            m_WeavedAssembliesList.DoLayoutList();
+                        }
+                        CGWrapper.End();
+                        CGWrapper.Begin("Docs/Logs.png");
+                        {
+                            GUILayout.Label("Log", EditorStyles.boldLabel);
+                            DrawLogs();
+                        }
+                        CGWrapper.End();
                     }
-                    CGWrapper.End();
-                    CGWrapper.Begin("Docs/WeavedAssemblies.png");
-                    {
-                        m_WeavedAssembliesList.DoLayoutList();
-                    }
-                    CGWrapper.End();
-                    CGWrapper.Begin("Docs/Logs.png");
-                    {
-                        GUILayout.Label("Log", EditorStyles.boldLabel);
-                        DrawLogs();
-                    }
-                    CGWrapper.End();
+                    EditorGUI.EndDisabledGroup();
                 }
-                EditorGUI.EndDisabledGroup();
+                CGWrapper.End();
+
+                if (_hasModifiedProperties)
+                {
+                    if (GUILayout.Button("Apply Modified Properties"))
+                    {
+                        ApplyModifiedProperties();
+                    }
+                }
             }
-            CGWrapper.End();
+            if(EditorGUI.EndChangeCheck())
+            {
+                _hasModifiedProperties = true; 
+            }
+        }
+
+        private void ApplyModifiedProperties()
+        {
+            _hasModifiedProperties = false; 
+            serializedObject.ApplyModifiedProperties();
+            AssemblyUtility.DirtyAllScripts();
         }
 
         private void DrawLogs()
@@ -193,11 +227,6 @@ namespace Weaver.Editors
                     // If we go out of bounds we zero out our selection
                     m_SelectedLogIndex = -1;
                 }
-
-                if (m_SelectedLogIndex >= 0)
-                {
-                    GUILayout.Label("Selected: " + m_SelectedLogIndex);
-                }
             }
             EditorGUILayout.EndScrollView();
         }
@@ -255,7 +284,6 @@ namespace Weaver.Editors
             SerializedProperty weaved = m_WeavedAssemblies.GetArrayElementAtIndex(m_WeavedAssemblies.arraySize - 1);
             weaved.FindPropertyRelative("m_RelativePath").stringValue = (string)path;
             weaved.FindPropertyRelative("m_Enabled").boolValue = true;
-            serializedObject.ApplyModifiedProperties();
         }
         #endregion
 
