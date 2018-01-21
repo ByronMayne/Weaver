@@ -147,19 +147,20 @@ namespace Weaver.Editors
                         m_WeavedAssembliesList.DoLayoutList();
                     }
                     CGWrapper.End();
-                    CGWrapper.Begin("Docs/Logs.png");
-                    {
-                        GUILayout.Label("Log", EditorStyles.boldLabel);
-                        DrawLogs();
-                    }
-                    CGWrapper.End();
+                }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    _hasModifiedProperties = true;
+                }
+                CGWrapper.Begin("Docs/Logs.png");
+                {
+                    GUILayout.Label("Log", EditorStyles.boldLabel);
+                    DrawLogs();
                 }
                 CGWrapper.End();
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                _hasModifiedProperties = true;
-            }
+            CGWrapper.End();
+
             if (_hasModifiedProperties)
             {
                 if (GUILayout.Button("Apply Modified Properties"))

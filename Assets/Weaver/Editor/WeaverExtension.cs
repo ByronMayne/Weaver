@@ -20,15 +20,18 @@ namespace Weaver
 
     public abstract class WeaverComponent : ScriptableObject, ILogable
     {
+        [SerializeField]
+        private bool m_IsEnabled;
+        [SerializeField]
+        private ScriptingSymbols m_RequiredScriptingSymbols;
+
         private ModuleDefinition m_ActiveModule;
         public abstract string addinName { get; }
-        private bool m_Enabled;
         private Log m_Log;
 
-        public bool enabled
+        public bool isActive
         {
-            get { return m_Enabled; }
-            set { m_Enabled = value; }
+            get { return m_IsEnabled && m_RequiredScriptingSymbols.isActive; }
         }
 
         /// <summary>
@@ -71,6 +74,11 @@ namespace Weaver
             get { return GetType().Name; }
         }
 
+        private void OnEnable()
+        {
+            m_RequiredScriptingSymbols.ValidateSymbols();
+        }
+
         /// <summary>
         /// Returns true if this addin effects the definition
         /// of a type. 
@@ -86,9 +94,16 @@ namespace Weaver
         /// </summary>
         public virtual void OnBeforeModuleEdited(ModuleDefinition moduleDefinition, Log log)
         {
-            m_Log = log;
-            Log("Visiting module");
-            m_ActiveModule = moduleDefinition;
+            if (m_RequiredScriptingSymbols.isActive)
+            {
+                m_Log = log;
+                m_ActiveModule = moduleDefinition;
+                Log("Visiting module");
+            }
+            else
+            {
+                Log("Visitation skip as scripting define requirements not met.");
+            }
         }
 
         /// <summary>

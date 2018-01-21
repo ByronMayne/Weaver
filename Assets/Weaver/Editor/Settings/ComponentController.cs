@@ -52,8 +52,10 @@ namespace Weaver
                     {
                         // Assign our type system
                         m_SubObjects[componentIndex].OnBeforeModuleEdited(moduleCollection[moduleIndex], log);
+
+
                         // Loop over modules if we are editing them 
-                        if ((m_ActiveDefinitions & DefinitionType.Module) == DefinitionType.Module)
+                        if (m_SubObjects[componentIndex].isActive && (m_ActiveDefinitions & DefinitionType.Module) == DefinitionType.Module)
                         {
                             m_SubObjects[componentIndex].VisitModule(moduleCollection[moduleIndex]);
                         }
@@ -85,7 +87,10 @@ namespace Weaver
                 {
                     for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
                     {
-                        m_SubObjects[componentIndex].VisitType(typeCollection[typeIndex]);
+                        if (m_SubObjects[componentIndex].isActive)
+                        {
+                            m_SubObjects[componentIndex].VisitType(typeCollection[typeIndex]);
+                        }
                     }
                     // visit Methods
                     VisitMethods(typeCollection[typeIndex].Methods);
@@ -112,7 +117,10 @@ namespace Weaver
                 {
                     for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
                     {
-                        m_SubObjects[componentIndex].VisitMethod(methodCollection[methodIndex]);
+                        if (m_SubObjects[componentIndex].isActive)
+                        {
+                            m_SubObjects[componentIndex].VisitMethod(methodCollection[methodIndex]);
+                        }
                     }
                     // Increase count
                     totalMethodsVisited++;
@@ -133,7 +141,10 @@ namespace Weaver
                 {
                     for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
                     {
-                        m_SubObjects[componentIndex].VisitField(fieldCollection[fieldIndex]);
+                        if (m_SubObjects[componentIndex].isActive)
+                        {
+                            m_SubObjects[componentIndex].VisitField(fieldCollection[fieldIndex]);
+                        }
                     }
                     // Increase count
                     totalFieldsVisited++;
@@ -154,7 +165,10 @@ namespace Weaver
                 {
                     for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
                     {
-                        m_SubObjects[componentIndex].VisitProperty(propertyCollection[propertyIndex]);
+                        if (m_SubObjects[componentIndex].isActive)
+                        {
+                            m_SubObjects[componentIndex].VisitProperty(propertyCollection[propertyIndex]);
+                        }
                     }
                     // Increase count
                     totalPropertiesVisited++;
