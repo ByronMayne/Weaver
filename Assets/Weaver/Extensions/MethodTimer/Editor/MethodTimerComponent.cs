@@ -66,10 +66,15 @@ namespace Weaver
         public override void VisitMethod(MethodDefinition methodDefinition)
         {
             // Check if we have our attribute
-            if(!methodDefinition.HasCustomAttribute<MethodTimerAttribute>())
+            CustomAttribute customAttribute = methodDefinition.GetCustomAttribute<MethodTimerAttribute>();
+            if(customAttribute == null)
             {
                 return;
             }
+
+
+            // Remove the attribute
+            methodDefinition.CustomAttributes.Remove(customAttribute);
 
             MethodBody body = methodDefinition.Body;
             ILProcessor bodyProcessor = body.GetILProcessor();
@@ -143,6 +148,7 @@ namespace Weaver
                 bodyProcessor.InsertAfter(_11, _12);
                 bodyProcessor.InsertAfter(_12, _13);
             }
+
         }
     }
 }
