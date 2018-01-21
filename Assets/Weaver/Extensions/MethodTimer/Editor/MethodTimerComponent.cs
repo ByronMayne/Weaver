@@ -1,6 +1,7 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System.Diagnostics;
+using Weaver.Extensions;
 using Debug = UnityEngine.Debug;
 
 namespace Weaver

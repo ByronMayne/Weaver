@@ -2,7 +2,7 @@
 using Mono.Collections.Generic;
 using System;
 
-namespace Weaver
+namespace Weaver.Extensions
 {
     public static class ICustomAttributeProviderExtensions
     {

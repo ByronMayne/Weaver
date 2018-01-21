@@ -1,6 +1,7 @@
 ﻿using System;
 using Mono.Cecil;
 using UnityEngine;
+using Weaver.Extensions;
 
 namespace Weaver
 {

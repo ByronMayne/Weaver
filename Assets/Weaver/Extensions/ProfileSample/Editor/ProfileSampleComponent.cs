@@ -2,6 +2,7 @@
 using Mono.Cecil;
 using UnityEngine;
 using Mono.Cecil.Cil;
+using Weaver.Extensions;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Profiling; 
 #endif

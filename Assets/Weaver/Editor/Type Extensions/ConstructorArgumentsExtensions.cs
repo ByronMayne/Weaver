@@ -1,19 +1,21 @@
-﻿using UnityEngine;
-using Mono.Cecil;
+﻿using Mono.Cecil;
 
-public static class ConstructorArguments
+namespace Weaver.Extensions
 {
-    public static T GetValue<T>(this CustomAttribute customAttribute, string propertyName)
+    public static class ConstructorArguments
     {
-        for (int i = 0; i < customAttribute.Properties.Count; i++)
+        public static T GetValue<T>(this CustomAttribute customAttribute, string propertyName)
         {
-            CustomAttributeNamedArgument arguement = customAttribute.Properties[i];
-            if(string.Equals(propertyName, arguement.Name, System.StringComparison.Ordinal))
+            for (int i = 0; i < customAttribute.Properties.Count; i++)
             {
-                return (T)arguement.Argument.Value;
-            }
+                CustomAttributeNamedArgument arguement = customAttribute.Properties[i];
+                if (string.Equals(propertyName, arguement.Name, System.StringComparison.Ordinal))
+                {
+                    return (T)arguement.Argument.Value;
+                }
 
+            }
+            return default(T);
         }
-        return default(T);
     }
 }

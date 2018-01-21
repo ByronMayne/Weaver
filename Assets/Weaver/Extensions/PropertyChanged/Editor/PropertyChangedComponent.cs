@@ -1,8 +1,7 @@
 ﻿using System;
-using UnityEngine;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using Mono.Collections.Generic;
+using Weaver.Extensions;
 
 namespace Weaver
 {
