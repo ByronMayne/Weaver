@@ -52,13 +52,18 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Editor\CaptureGroups\CaptureGroup.cs" />
+     <Compile Include="Assets\Weaver\Editor\Analytics\AnalyticConstants.cs" />
+     <Compile Include="Assets\Weaver\Editor\Analytics\AnalyticState.cs" />
+     <Compile Include="Assets\Weaver\Editor\Analytics\WeaverAnalytics.cs" />
      <Compile Include="Assets\Weaver\Editor\AssemblyPosprocessor.cs" />
      <Compile Include="Assets\Weaver\Editor\AssemblyUtility.cs" />
      <Compile Include="Assets\Weaver\Editor\Inspectors\ComponentControllerEditor.cs" />
+     <Compile Include="Assets\Weaver\Editor\Inspectors\ScriptingSymbolsDrawer.cs" />
      <Compile Include="Assets\Weaver\Editor\Inspectors\WeavedAssemblyDrawer.cs" />
      <Compile Include="Assets\Weaver\Editor\Inspectors\WeaverSettingsEditor.cs" />
      <Compile Include="Assets\Weaver\Editor\Resolver\WeaverAssemblyResolver.cs" />
      <Compile Include="Assets\Weaver\Editor\Settings\ComponentController.cs" />
+     <Compile Include="Assets\Weaver\Editor\Settings\ScriptingSymbols.cs" />
      <Compile Include="Assets\Weaver\Editor\Settings\SerializedWeaver.cs" />
      <Compile Include="Assets\Weaver\Editor\Settings\WeavedAssembly.cs" />
      <Compile Include="Assets\Weaver\Editor\Settings\WeaverSettings.cs" />

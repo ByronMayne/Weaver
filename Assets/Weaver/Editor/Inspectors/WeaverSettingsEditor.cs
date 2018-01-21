@@ -41,8 +41,10 @@ namespace Weaver.Editors
         private SerializedProperty m_WeavedAssemblies;
         private SerializedProperty m_Components;
         private SerializedProperty m_Enabled;
+        private SerializedProperty m_IsSymbolsDefined;
         private SerializedProperty m_Log;
         private SerializedProperty m_Entries;
+        private SerializedProperty m_RequiredScriptingSymbols;
 
         // Lists
         private ReorderableList m_WeavedAssembliesList;
@@ -65,27 +67,28 @@ namespace Weaver.Editors
             m_Enabled = serializedObject.FindProperty("m_IsEnabled");
             m_Log = serializedObject.FindProperty("m_Log");
             m_Entries = m_Log.FindPropertyRelative("m_Entries");
+            m_RequiredScriptingSymbols = serializedObject.FindProperty("m_RequiredScriptingSymbols");
+            m_IsSymbolsDefined = m_RequiredScriptingSymbols.FindPropertyRelative("m_IsActive");
             m_WeavedAssembliesList = new ReorderableList(serializedObject, m_WeavedAssemblies);
             m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyDrawHeader;
             m_WeavedAssembliesList.drawElementCallback += OnWeavedAssemblyDrawElement;
             m_WeavedAssembliesList.onAddCallback += OnWeavedAssemblyElementAdded;
             m_WeavedAssembliesList.drawHeaderCallback += OnWeavedAssemblyHeader;
             m_WeavedAssembliesList.onRemoveCallback += OnWeavedAssemblyRemoved;
-
             // Labels 
             m_WeavedAssemblyHeaderLabel = new GUIContent("Weaved Assemblies");
         }
 
         private void OnDisable()
         {
-            if(_hasModifiedProperties)
+            if (_hasModifiedProperties)
             {
                 string title = "Weaver Settings Pending Changes";
                 string message = "You currently have some pending changes that have not been applied and will be lost. Would you like to apply them now?";
                 string ok = "Apply Changes";
                 string cancel = "Discard Changes";
                 bool shouldApply = EditorUtility.DisplayDialog(title, message, ok, cancel);
-                if(shouldApply)
+                if (shouldApply)
                 {
                     ApplyModifiedProperties();
                 }
@@ -116,50 +119,62 @@ namespace Weaver.Editors
 
                     GUILayout.Label("Settings", EditorStyles.boldLabel);
 
-                    EditorGUILayout.PropertyField(m_Enabled);
-
-                    EditorGUI.BeginDisabledGroup(!m_Enabled.boolValue);
+                    CGWrapper.Begin("Docs/EnabledSettings.png");
                     {
-                        CGWrapper.Begin("Docs/WeaverComponents.png");
-                        {
-                            EditorGUILayout.PropertyField(m_Components);
-                        }
-                        CGWrapper.End();
-                        CGWrapper.Begin("Docs/WeavedAssemblies.png");
-                        {
-                            m_WeavedAssembliesList.DoLayoutList();
-                        }
-                        CGWrapper.End();
-                        CGWrapper.Begin("Docs/Logs.png");
-                        {
-                            GUILayout.Label("Log", EditorStyles.boldLabel);
-                            DrawLogs();
-                        }
-                        CGWrapper.End();
+                        EditorGUILayout.PropertyField(m_Enabled);
+                        EditorGUILayout.PropertyField(m_RequiredScriptingSymbols);
                     }
-                    EditorGUI.EndDisabledGroup();
+                    CGWrapper.End();
+
+                    if (!m_Enabled.boolValue)
+                    {
+                        EditorGUILayout.HelpBox("Weaver will not run as it's currently disabled.", MessageType.Info);
+                    }
+                    else if (!m_IsSymbolsDefined.boolValue)
+                    {
+                        EditorGUILayout.HelpBox("Weaver will not run the required scripting symbols are not defined.", MessageType.Info);
+                    }
+                    GUILayout.Box(GUIContent.none, GUILayout.Height(3f), GUILayout.ExpandWidth(true));
+
+
+                    CGWrapper.Begin("Docs/WeaverComponents.png");
+                    {
+                        EditorGUILayout.PropertyField(m_Components);
+                    }
+                    CGWrapper.End();
+                    CGWrapper.Begin("Docs/WeavedAssemblies.png");
+                    {
+                        m_WeavedAssembliesList.DoLayoutList();
+                    }
+                    CGWrapper.End();
+                    CGWrapper.Begin("Docs/Logs.png");
+                    {
+                        GUILayout.Label("Log", EditorStyles.boldLabel);
+                        DrawLogs();
+                    }
+                    CGWrapper.End();
                 }
                 CGWrapper.End();
-
-                if (_hasModifiedProperties)
-                {
-                    if (GUILayout.Button("Apply Modified Properties"))
-                    {
-                        ApplyModifiedProperties();
-                    }
-                }
             }
-            if(EditorGUI.EndChangeCheck())
+            if (EditorGUI.EndChangeCheck())
             {
-                _hasModifiedProperties = true; 
+                _hasModifiedProperties = true;
+            }
+            if (_hasModifiedProperties)
+            {
+                if (GUILayout.Button("Apply Modified Properties"))
+                {
+                    ApplyModifiedProperties();
+                }
             }
         }
 
         private void ApplyModifiedProperties()
         {
-            _hasModifiedProperties = false; 
+            _hasModifiedProperties = false;
             serializedObject.ApplyModifiedProperties();
             AssemblyUtility.DirtyAllScripts();
+            serializedObject.Update();
         }
 
         private void DrawLogs()

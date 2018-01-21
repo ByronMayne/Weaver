@@ -17,7 +17,11 @@ namespace Weaver
     [CreateAssetMenu(menuName = "Weaver/Settings", fileName = "Weaver Settings")]
     public class WeaverSettings : ScriptableObject, ILogable
     {
-        public const string VERSION = "3.2.1";
+        public const string VERSION = "3.3.0";
+
+        [SerializeField]
+        [Tooltip("This is evaluated before Weaver runs to check if it should execute. The symbol expression must come out to be true")]
+        private ScriptingSymbols m_RequiredScriptingSymbols;
 
         [SerializeField]
         private List<WeavedAssembly> m_WeavedAssemblies;
@@ -167,8 +171,13 @@ namespace Weaver
 
                 if (!m_IsEnabled)
                 {
-                    m_Log.Info("Weaver Settings", "Automatic weaving aborted due to RunAutomaticlly being turned off.", false);
-                    // We don't want to run if the users said not too.
+                    m_Log.Info("Weaver Settings", "Weaving aborted due to being Disabled.", false);
+                    return;
+                }
+
+                if(!m_RequiredScriptingSymbols.isActive)
+                {
+                    m_Log.Info("Weaver Settings", "Weaving aborted due to required scripting symbols not being defined.", false);
                     return;
                 }
 
@@ -266,6 +275,12 @@ namespace Weaver
                 WeaverAnalytics.SendException(e.ToString(), true);
                 throw e;
             }
+        }
+
+        [UsedImplicitly]
+        private void OnValidate()
+        {
+            m_RequiredScriptingSymbols.ValidateSymbols();
         }
     }
 }
