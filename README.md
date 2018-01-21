@@ -59,6 +59,14 @@ To make the process a bit more clear but also not spam to your console Weaver lo
 ![](./docs/Logs.png)
 
 
+### Toggling Weaver
+
+If you would like Weaver to not run while in your project you can uncheck `Is Enabled` in the settings object. You also have the option to define if Weaver will run depending on the Script Symbols defined in Unity.
+
+![](./docs/EnabledSettings.png)
+
+You can use any flag like `UNITY_EDITOR` or the inverse flag `!UNITY_EDITOR`. Weaver will only run if all flags are active.
+
 ## Current Extensions
 * [**Method Timer**](.//Assets//Weaver//Extensions//MethodTimer//README.md) - Any method with the `MethodTimerAttribute` will be timed using [Stopwatch](https://msdn.microsoft.com/en-us/library/system.diagnostics.stopwatch(v=vs.110).aspx) and logged to the console. 
 
