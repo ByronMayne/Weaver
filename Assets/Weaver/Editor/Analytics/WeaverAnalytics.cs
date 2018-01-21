@@ -107,7 +107,7 @@ namespace Weaver.Analytics
             // Create our request
             UnityWebRequest www = UnityWebRequest.Post(AnalyticsConstants.URL, postData);
             // Send the even t
-            UnityWebRequestAsyncOperation asyncOp = www.SendWebRequest();
+            www.SendWebRequest();
         }
 
         /// <summary>
