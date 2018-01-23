@@ -50,14 +50,20 @@ namespace Weaver.Editors
             rect.height = EditorGUIUtility.singleLineHeight;
             rect.y += 2.0f;
             SerializedProperty element = m_SubObjects.GetArrayElementAtIndex(index);
-            SerializedObject serializedObject = new SerializedObject(element.objectReferenceValue);
             rect.width -= 20f;
             GUI.Label(rect, element.objectReferenceValue.name, EditorStyles.textArea);
             rect.x += rect.width;
             rect.width = 20f;
-            SerializedProperty isEnabled = serializedObject.FindProperty("m_Enabled");
-            isEnabled.boolValue = EditorGUI.Toggle(rect, isEnabled.boolValue);
-            serializedObject.ApplyModifiedProperties();
+            var weaverComponent = element.objectReferenceValue as WeaverComponent;
+            if (weaverComponent != null)
+            {
+                EditorGUI.BeginChangeCheck();
+                weaverComponent.IsEnabled =  EditorGUI.Toggle(rect, weaverComponent.IsEnabled);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    EditorUtility.SetDirty(weaverComponent);
+                }
+            }
         }
 
         private void OnDrawHeader(Rect rect)
