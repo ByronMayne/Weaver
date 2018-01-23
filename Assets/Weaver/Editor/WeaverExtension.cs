@@ -34,6 +34,14 @@ namespace Weaver
             get { return m_IsEnabled && m_RequiredScriptingSymbols.isActive; }
         }
 
+        public bool IsEnabled
+        {
+            get { return m_IsEnabled; }
+#if UNITY_EDITOR
+            set { m_IsEnabled = value; }
+#endif
+        }
+
         /// <summary>
         /// Returns back the type system for the module
         /// currently being edited. If we are not editing a module this
