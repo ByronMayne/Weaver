@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -34,10 +35,12 @@ namespace Weaver
                 m_Assemblies[i] = Assembly.LoadFile(assemblyPaths[i]);
             }
         }
-        
+
         /// <summary>
         /// Forces Unity to recompile all scripts and then refresh. 
         /// </summary>
+        /// 
+        [MenuItem("CONTEXT/WeaverSettings/Re-weave Assemblies")]
         public static void DirtyAllScripts()
         {
             // Grab the UnityEditor assembly
