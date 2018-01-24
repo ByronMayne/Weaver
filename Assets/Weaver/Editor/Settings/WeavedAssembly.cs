@@ -17,7 +17,7 @@ namespace Weaver
         [SerializeField]
         private string m_RelativePath;
         [SerializeField]
-        private bool m_Enabled;
+        private bool m_IsActive = true;
         [SerializeField]
         private int m_LastWriteTime;
 
@@ -45,10 +45,10 @@ namespace Weaver
         /// Returns true if this assembly should be modified
         /// by Weaver or not. 
         /// </summary>
-        public bool enabled
+        public bool IsActive
         {
-            get { return m_Enabled; }
-            set { m_Enabled = value; }
+            get { return m_IsActive; }
+            set { m_IsActive = value; }
         }
 
         /// <summary>

@@ -124,15 +124,12 @@ namespace Weaver
         [UsedImplicitly]
         private void OnEnable()
         {
-            if (m_Log == null)
-            {
-                m_Log = new Log(this);
-            }
+            if (m_Log == null) m_Log = new Log(this);
+            if (m_Components == null) m_Components = new ComponentController();
+            if (m_WeavedAssemblies == null) m_WeavedAssemblies = new List<WeavedAssembly>();
 
-            if (m_Components == null)
-            {
-                m_Components = new ComponentController();
-            }
+            m_Components.SetOwner(this);
+            m_RequiredScriptingSymbols.ValidateSymbols();
 
             // Enable all our components 
             for (int i = 0; i < m_WeavedAssemblies.Count; i++)
@@ -143,7 +140,6 @@ namespace Weaver
             // Subscribe to the before reload event so we can modify the assemblies!
             m_Log.Info("Weaver Settings", "Subscribing to next assembly reload.", false);
             AssemblyUtility.PopulateAssemblyCache();
-            m_Components.SetOwner(this);
 #if UNITY_2017_1_OR_NEWER
             AssemblyReloadEvents.beforeAssemblyReload += CheckForAssemblyModifications;
 #else
@@ -175,7 +171,7 @@ namespace Weaver
                     return;
                 }
 
-                if(!m_RequiredScriptingSymbols.isActive)
+                if (!m_RequiredScriptingSymbols.isActive)
                 {
                     m_Log.Info("Weaver Settings", "Weaving aborted due to required scripting symbols not being defined.", false);
                     return;
@@ -186,14 +182,18 @@ namespace Weaver
 
                 for (int i = 0; i < m_WeavedAssemblies.Count; i++)
                 {
-                    if (m_WeavedAssemblies[i].HasChanges())
+                    if (m_WeavedAssemblies[i].HasChanges() && m_WeavedAssemblies[i].IsActive)
                     {
                         m_Log.Info("Weaver Settings", "Assembly at path <i>" + m_WeavedAssemblies[i].relativePath + "</i> had modifications.", false);
                         assembliesToWrite.Add(m_WeavedAssemblies[i]);
                     }
                 }
 
-                WeaveAssemblies(assembliesToWrite);
+                // Check if any components are added
+                if (assembliesToWrite.Count > 0)
+                {
+                    WeaveAssemblies(assembliesToWrite);
+                }
             }
             catch (Exception e)
             {

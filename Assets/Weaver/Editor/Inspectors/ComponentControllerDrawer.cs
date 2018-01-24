@@ -55,7 +55,7 @@ namespace Weaver.Editors
             GUI.Label(rect, element.objectReferenceValue.name, EditorStyles.textArea);
             rect.x += rect.width;
             rect.width = 20f;
-            SerializedProperty isEnabled = serializedObject.FindProperty("m_Enabled");
+            SerializedProperty isEnabled = serializedObject.FindProperty("m_IsActive");
             isEnabled.boolValue = EditorGUI.Toggle(rect, isEnabled.boolValue);
             serializedObject.ApplyModifiedProperties();
         }
