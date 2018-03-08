@@ -26,3 +26,5 @@ sysinfo.txt
 Weaver\.Editor\.csproj
 
 Weaver\.csproj
+
+*.sln
