@@ -10,7 +10,6 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using JetBrains.Annotations;
-using Weaver.Analytics;
 
 namespace Weaver
 {
@@ -145,7 +144,6 @@ namespace Weaver
 #else
             m_Log.Warning("Dynamic Assembly Reload not support until Unity 2017. Enter play mode to reload assemblies to see the effects of Weaving.", false);
 #endif
-            WeaverAnalytics.OnSettingsEnabled(this);
         }
 
         /// <summary>
@@ -263,16 +261,9 @@ namespace Weaver
                 m_Log.Info("Statistics", "Methods Visited: " + m_Components.totalMethodsVisited, false);
                 m_Log.Info("Statistics", "Fields Visited: " + m_Components.totalFieldsVisited, false);
                 m_Log.Info("Statistics", "Properties Visited: " + m_Components.totalPropertiesVisited, false);
-                WeaverAnalytics.SendTiming("WeaveStats", "Elapsed Time", m_Timer.ElapsedMilliseconds);
-                WeaverAnalytics.SendEvent("WeaveStats", "Modules Visited", componentController.totalModulesVisited.ToString(), null);
-                WeaverAnalytics.SendEvent("WeaveStats", "Types Visited", componentController.totalTypesVisited.ToString(), null);
-                WeaverAnalytics.SendEvent("WeaveStats", "Methods Visited", componentController.totalMethodsVisited.ToString(), null);
-                WeaverAnalytics.SendEvent("WeaveStats", "Fields Visited", componentController.totalFieldsVisited.ToString(), null);
-                WeaverAnalytics.SendEvent("WeaveStats", "Properties Visited", componentController.totalPropertiesVisited.ToString(), null);
             }
             catch (Exception e)
             {
-                WeaverAnalytics.SendException(e.ToString(), true);
                 throw e;
             }
         }
