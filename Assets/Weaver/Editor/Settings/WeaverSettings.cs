@@ -33,7 +33,6 @@ namespace Weaver
         [UsedImplicitly]
         private bool m_IsEnabled = true; // m_Enabled is used by Unity and throws errors (even if scriptable objects don't have that field) 
 
-        [SerializeField]
         [UsedImplicitly]
         private Log m_Log;
 

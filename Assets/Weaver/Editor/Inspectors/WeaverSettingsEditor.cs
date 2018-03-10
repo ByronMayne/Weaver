@@ -42,9 +42,8 @@ namespace Weaver.Editors
         private SerializedProperty m_Components;
         private SerializedProperty m_Enabled;
         private SerializedProperty m_IsSymbolsDefined;
-        private SerializedProperty m_Log;
-        private SerializedProperty m_Entries;
         private SerializedProperty m_RequiredScriptingSymbols;
+        private Log m_Log;
 
         // Lists
         private ReorderableList m_WeavedAssembliesList;
@@ -65,8 +64,10 @@ namespace Weaver.Editors
             m_WeavedAssemblies = serializedObject.FindProperty("m_WeavedAssemblies");
             m_Components = serializedObject.FindProperty("m_Components");
             m_Enabled = serializedObject.FindProperty("m_IsEnabled");
-            m_Log = serializedObject.FindProperty("m_Log");
-            m_Entries = m_Log.FindPropertyRelative("m_Entries");
+
+            // Get the log
+            m_Log = serializedObject.FindField<Log>("m_Log").value;
+
             m_RequiredScriptingSymbols = serializedObject.FindProperty("m_RequiredScriptingSymbols");
             m_IsSymbolsDefined = m_RequiredScriptingSymbols.FindPropertyRelative("m_IsActive");
             m_WeavedAssembliesList = new ReorderableList(serializedObject, m_WeavedAssemblies);
@@ -182,17 +183,15 @@ namespace Weaver.Editors
         {
             m_LogScrollPosition = EditorGUILayout.BeginScrollView(m_LogScrollPosition, EditorStyles.textArea);
             {
-                for (int i = 0; i < m_Entries.arraySize; i++)
+                for (int i = 0; i < m_Log.entries.Count; i++)
                 {
-                    SerializedProperty entry = m_Entries.GetArrayElementAtIndex(i);
+                    Log.Entry entry = m_Log.entries[i];
                     if (m_Styles == null)
                     {
                         m_Styles = new Styles();
                     }
 
-                    SerializedProperty message = entry.FindPropertyRelative("message");
-                    SerializedProperty id = entry.FindPropertyRelative("id");
-                    Rect position = GUILayoutUtility.GetRect(m_Styles.Content(message.stringValue), m_Styles.zebraStyle);
+                    Rect position = GUILayoutUtility.GetRect(m_Styles.Content(entry.message), m_Styles.zebraStyle);
                     // Input
                     int controlID = GUIUtility.GetControlID(321324, FocusType.Keyboard, position);
                     Event current = Event.current;
@@ -201,9 +200,7 @@ namespace Weaver.Editors
                     {
                         if (current.clickCount == 2)
                         {
-                            SerializedProperty fileName = entry.FindPropertyRelative("fileName");
-                            SerializedProperty lineNumber = entry.FindPropertyRelative("lineNumber");
-                            InternalEditorUtility.OpenFileAtLineExternal(fileName.stringValue, lineNumber.intValue);
+                            InternalEditorUtility.OpenFileAtLineExternal(entry.fileName, entry.lineNumber);
                         }
                         GUIUtility.keyboardControl = controlID;
                         m_SelectedLogIndex = i;
@@ -219,7 +216,7 @@ namespace Weaver.Editors
                             current.Use();
                         }
 
-                        if (current.keyCode == KeyCode.DownArrow && m_SelectedLogIndex < m_Entries.arraySize - 1)
+                        if (current.keyCode == KeyCode.DownArrow && m_SelectedLogIndex < m_Log.entries.Count - 1)
                         {
                             m_SelectedLogIndex++;
                             current.Use();
@@ -229,16 +226,16 @@ namespace Weaver.Editors
 
                     if (eventType == EventType.Repaint)
                     {
-                        bool isHover = id.intValue % 2 == 0;
+                        bool isHover = entry.id % 2 == 0;
                         bool isActive = false;
                         bool isOn = true;
                         bool hasKeyboardFocus = m_SelectedLogIndex == i;
-                        m_Styles.zebraStyle.Draw(position, m_Styles.Content(message.stringValue), isHover, isActive, isOn, hasKeyboardFocus);
+                        m_Styles.zebraStyle.Draw(position, m_Styles.Content(entry.message), isHover, isActive, isOn, hasKeyboardFocus);
                     }
                 }
                 GUILayout.FlexibleSpace();
 
-                if (m_SelectedLogIndex < 0 || m_SelectedLogIndex >= m_Entries.arraySize)
+                if (m_SelectedLogIndex < 0 || m_SelectedLogIndex >= m_Log.entries.Count)
                 {
                     // If we go out of bounds we zero out our selection
                     m_SelectedLogIndex = -1;
