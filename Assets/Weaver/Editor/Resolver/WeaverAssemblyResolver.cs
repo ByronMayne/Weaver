@@ -1,84 +1,95 @@
 ﻿using Mono.Cecil;
 using System;
-using System.IO;
-using UnityEditorInternal;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Weaver
 {
     /// <summary>
-    /// Used to resolve any references to the Unity Editor or UnityEngine assemblies.
+    /// Used to resolve any references to assemblies that are current in the unity 
+    /// project.
     /// </summary>
     public class WeaverAssemblyResolver : DefaultAssemblyResolver
     {
-        private const string UNITY_PREFIX = "Unity";
-
-        private readonly string _unityAssembliesDirectory;
+        private readonly IDictionary<string, string> _appDomainAssemblyLocations;
 
         public WeaverAssemblyResolver()
         {
-            // Get the location of the core dll ([ProjectRoot]/Library/UnityAssemblies) 
-            string coreAssemblyPath = InternalEditorUtility.GetEngineAssemblyPath();
-            // Get the directory name
-            _unityAssembliesDirectory = Path.GetDirectoryName(coreAssemblyPath);
+            // Create a map
+            _appDomainAssemblyLocations = new Dictionary<string, string>();
+            // Get the current app domain
+            AppDomain domain = AppDomain.CurrentDomain;
+            // Find all assemblies
+            Assembly[] assemblies = domain.GetAssemblies();
+            // Loop over all assemblies and populate the map
+            for(int i = 0; i < assemblies.Length; i++)
+            {
+                _appDomainAssemblyLocations[assemblies[i].FullName] = assemblies[i].Location;
+            }
         }
 
         public override AssemblyDefinition Resolve(string fullName)
         {
-            if (fullName.StartsWith(UNITY_PREFIX))
+            AssemblyDefinition assemblyDef = FindAssemblyDefinition(fullName);
+
+            if (assemblyDef == null)
             {
-                return GetUnityAssemblyDefintion(fullName);
+             
+                assemblyDef = base.Resolve(fullName);
             }
 
-            return base.Resolve(fullName);
+            return assemblyDef;
         }
 
         public override AssemblyDefinition Resolve(AssemblyNameReference name)
         {
-            if (name.FullName.StartsWith(UNITY_PREFIX))
+            AssemblyDefinition assemblyDef = FindAssemblyDefinition(name.FullName); 
+
+            if (assemblyDef == null)
             {
-                return GetUnityAssemblyDefintion(name.FullName);
+                assemblyDef = base.Resolve(name);
             }
 
-            return base.Resolve(name);
+            return assemblyDef;
         }
 
         public override AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
         {
-            if (name.FullName.StartsWith(UNITY_PREFIX))
+            AssemblyDefinition assemblyDef = FindAssemblyDefinition(name.FullName); 
+
+            if (assemblyDef == null)
             {
-                return GetUnityAssemblyDefintion(name.FullName);
+                assemblyDef = base.Resolve(name, parameters);
             }
 
-            return base.Resolve(name, parameters);
+            return assemblyDef;
         }
 
         public override AssemblyDefinition Resolve(string fullName, ReaderParameters parameters)
         {
-            if (fullName.StartsWith(UNITY_PREFIX))
+            AssemblyDefinition assemblyDef = FindAssemblyDefinition(fullName);
+
+            if (assemblyDef == null)
             {
-                return GetUnityAssemblyDefintion(fullName);
+                assemblyDef = base.Resolve(fullName, parameters);
             }
 
-            return base.Resolve(fullName, parameters);
+            return assemblyDef;
         }
 
-        private AssemblyDefinition GetUnityAssemblyDefintion(string strongName)
+        /// <summary>
+        /// Using the assembly map we try to find the assembly and create an Assembly Definition
+        /// </summary>
+        private AssemblyDefinition FindAssemblyDefinition(string strongName)
         {
-            // Example input: "UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")
-            // Get the starting index 
-            int index = strongName.IndexOf(',');
-            // Split the start
-            strongName = strongName.Substring(0, index);
-            // Guess the path (it's always UnityEngine.UI.dll or something) 
-            string path = Path.Combine(_unityAssembliesDirectory, strongName + ".dll");
-            // If it does not exist 
-            if (!File.Exists(path))
+            // Try to match their name
+            if(_appDomainAssemblyLocations.ContainsKey(strongName))
             {
-                // Quite
-                return null;
+                string location = _appDomainAssemblyLocations[strongName];
+                // Ready the assembly off disk.
+                return AssemblyDefinition.ReadAssembly(location);
             }
-            // Load it
-            return AssemblyDefinition.ReadAssembly(path); 
+            return null;
         }
     }
 }
