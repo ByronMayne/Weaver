@@ -296,7 +296,7 @@ namespace Weaver.Editors
             m_WeavedAssemblies.arraySize++;
             SerializedProperty weaved = m_WeavedAssemblies.GetArrayElementAtIndex(m_WeavedAssemblies.arraySize - 1);
             weaved.FindPropertyRelative("m_RelativePath").stringValue = (string)path;
-            weaved.FindPropertyRelative("m_Enabled").boolValue = true;
+            weaved.FindPropertyRelative("m_IsActive").boolValue = true;
         }
         #endregion
 
