@@ -17,16 +17,30 @@ namespace Weaver.Editors
 
             public Styles()
             {
-                GUIStyle altStyle = "LODSliderRange";
-                GUIStyle selectedStyle = "MeTransitionSelect";
                 cachedContent = new GUIContent();
+
+                Texture2D altTexutre = new Texture2D(1, 1);
+                altTexutre.SetPixel(0, 0, new Color32(126, 126, 126, 50));
+                altTexutre.Apply();
+
+                Texture2D selectedTexture = new Texture2D(1, 1);
+                selectedTexture.SetPixel(0, 0, new Color32(0, 140, 255, 40));
+                selectedTexture.Apply();
+
                 zebraStyle = new GUIStyle(GUI.skin.label)
                 {
-                    onHover = { background = altStyle.normal.background },
-                    onFocused = { background = selectedStyle.normal.background }
+                    onHover = { background = altTexutre },
+                    onFocused = { background = selectedTexture }
                 };
-                zebraStyle.onFocused.textColor = zebraStyle.normal.textColor;
-                zebraStyle.border = selectedStyle.border;
+                // Set Color 
+                Color zebraFontColor = zebraStyle.normal.textColor;
+                zebraStyle.onFocused.textColor = zebraFontColor;
+                zebraStyle.onHover.textColor = zebraFontColor;
+
+                // Set Height
+                zebraStyle.fixedHeight = 20;
+                zebraStyle.alignment = TextAnchor.MiddleLeft;
+
                 zebraStyle.richText = true;
             }
 
