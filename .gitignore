@@ -28,3 +28,5 @@ Weaver\.Editor\.csproj
 Weaver\.csproj
 
 *.sln
+
+\.vs/
