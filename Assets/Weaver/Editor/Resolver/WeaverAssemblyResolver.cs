@@ -98,18 +98,18 @@ namespace Weaver
                 throw new ArgumentNullException("fullName");
             }
 
-            // Look in cache first
             AssemblyDefinition assemblyDefinition;
+
+            // Look in cache first
             if (_cache.TryGetValue(fullName, out assemblyDefinition))
             {
                 return assemblyDefinition;
             }
 
             // Try to use known location
-            if (_appDomainAssemblyLocations.ContainsKey(fullName))
+            string location;
+            if (_appDomainAssemblyLocations.TryGetValue(fullName, out location))
             {
-                string location = _appDomainAssemblyLocations[fullName];
-
                 // Ready the assembly off disk.
                 if (parameters != null)
                     assemblyDefinition = AssemblyDefinition.ReadAssembly(location, parameters);
