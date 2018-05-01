@@ -249,6 +249,8 @@ namespace Weaver
                 {
                     m_Log.Info("Weaver Settings", "Writing Module <i>" + assemblies[i].relativePath + "</i> to disk.", false);
                     editingModules[i].Write(assemblies[i].GetSystemPath(), writerParameters);
+                    // remember write time of modified assembly
+                    assemblies[i].HasChanges();
                 }
                 assemblies.Clear();
                 m_Log.Info("Weaver Settings", "Weaving Successfully Completed", false);
