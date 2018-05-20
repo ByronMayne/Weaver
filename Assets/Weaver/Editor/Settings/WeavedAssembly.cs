@@ -103,7 +103,7 @@ namespace Weaver
             if (File.Exists(relativePath))
             {
                 m_IsValid = true;
-				long writeTime = File.GetLastWriteTimeUtc(relativePath).ToFileTime();
+                long writeTime = File.GetLastWriteTimeUtc(relativePath).ToFileTime();
                 if (m_LastWriteTime != writeTime)
                 {
                     m_LastWriteTime = writeTime;
