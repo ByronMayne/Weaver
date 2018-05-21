@@ -19,7 +19,7 @@ namespace Weaver
         [SerializeField]
         private bool m_IsActive = true;
         [SerializeField]
-        private int m_LastWriteTime;
+        private long m_LastWriteTime;
 
         private bool m_IsValid;
 
@@ -103,7 +103,7 @@ namespace Weaver
             if (File.Exists(relativePath))
             {
                 m_IsValid = true;
-                int writeTime = File.GetLastWriteTime(relativePath).Second;
+                long writeTime = File.GetLastWriteTimeUtc(relativePath).ToFileTime();
                 if (m_LastWriteTime != writeTime)
                 {
                     m_LastWriteTime = writeTime;

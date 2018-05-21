@@ -190,7 +190,12 @@ namespace Weaver
                 if (assembliesToWrite.Count > 0)
                 {
                     WeaveAssemblies(assembliesToWrite);
+
+                    // save any changes to our weavedAssembly objects
+                    EditorUtility.SetDirty(this);
+                    AssetDatabase.SaveAssets();
                 }
+
             }
             catch (Exception e)
             {
