@@ -33,7 +33,7 @@ Weaver is run using a single ScriptableObjects you will need to create a new ins
 > **You Only Need One:** Only one instance should exist in your project since every operation only needs to happen once. 
 
 
-#### Weaved Assmblies
+#### Weaved Assemblies
 
 When you create a new instance by default Weaver will not edit any assemblies. It is up to you to define which assemblies you want to be modified. Click on the + icon on the bottom right and a context menu will pop up with all the valid assemblies you can target. You can also disable the assemblies in this list by unchecking the check box beside it's name. This will stop them from being edited.
 
