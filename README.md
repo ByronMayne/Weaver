@@ -33,7 +33,7 @@ Weaver is run using a single ScriptableObjects you will need to create a new ins
 > **You Only Need One:** Only one instance should exist in your project since every operation only needs to happen once. 
 
 
-#### Weaved Assmblies
+#### Weaved Assemblies
 
 When you create a new instance by default Weaver will not edit any assemblies. It is up to you to define which assemblies you want to be modified. Click on the + icon on the bottom right and a context menu will pop up with all the valid assemblies you can target. You can also disable the assemblies in this list by unchecking the check box beside it's name. This will stop them from being edited.
 
@@ -58,7 +58,6 @@ To make the process a bit more clear but also not spam to your console Weaver lo
 
 ![](./docs/Logs.png)
 
-
 ### Toggling Weaver
 
 If you would like Weaver to not run while in your project you can uncheck `Is Enabled` in the settings object. You also have the option to define if Weaver will run depending on the Script Symbols defined in Unity.
@@ -73,24 +72,6 @@ You can use any flag like `UNITY_EDITOR` or the inverse flag `!UNITY_EDITOR`. We
 * [**Profile Sample**]() - Any method with the `ProfileSample` attribute will be have a profile sample injected into the method. The sample name will be the name of the method. 
 
 * [**Property Changed**](.//Assets//Weaver//Extensions//PropertyChanged//docs//README.md) : Invoke a callback whenever a property is marked with the `[OnChanged(string callback)]` attribute.. 
-
-### Analytics
-I have added some basic analytics to the project to get an idea of what components are being used and any exceptions are being thrown. I only capture the following:
-* Computer Name (md5 encoded)
-* Product Name + Company Name (md5 encoded)
-* Script Count
-* Assembly Count
-* Platform 
-* Unity Version
-* Number of members visited
-* Weaving Time
-* New component added (type name)
-* Component removed (type name)
-* Exceptions thrown while weaving
-
-I do not capture and send anything besides those values. I mostly use this to get an idea of how well Weaver is doing. I don't have much data on how fast it runs on larger projects.
-
- All that being said you can remove the Analytics if you want by commenting out `WeaverAnalytics.Send` function.
 
 ### Git Sub Modules
 * [Capture Groups](https://github.com/ByronMayne/CaptureGroups): Used to generate the screen shots because I am too lazy to do that by hand. All code is under the preproc `CAPTURE_GROUPS` so feel free to remove this if you copy over the code.

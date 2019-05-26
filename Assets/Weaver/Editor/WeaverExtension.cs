@@ -20,9 +20,10 @@ namespace Weaver
 
     public abstract class WeaverComponent : ScriptableObject, ILogable
     {
-        [SerializeField]
-        private bool m_IsEnabled;
-        [SerializeField]
+        // Hidden for now
+        [SerializeField, HideInInspector]
+        private bool m_IsActive = true;
+        [SerializeField, HideInInspector]
         private ScriptingSymbols m_RequiredScriptingSymbols;
 
         private ModuleDefinition m_ActiveModule;
@@ -31,7 +32,7 @@ namespace Weaver
 
         public bool isActive
         {
-            get { return m_IsEnabled && m_RequiredScriptingSymbols.isActive; }
+            get { return m_IsActive && m_RequiredScriptingSymbols.isActive; }
         }
 
         /// <summary>

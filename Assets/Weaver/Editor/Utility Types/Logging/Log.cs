@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using Debug = UnityEngine.Debug;
 using UnityEngine;
 using UnityEditor;
-using Object = UnityEngine.Object;
 
 namespace Weaver
 {

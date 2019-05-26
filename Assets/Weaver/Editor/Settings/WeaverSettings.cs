@@ -10,7 +10,6 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using JetBrains.Annotations;
-using Weaver.Analytics;
 
 namespace Weaver
 {
@@ -34,7 +33,6 @@ namespace Weaver
         [UsedImplicitly]
         private bool m_IsEnabled = true; // m_Enabled is used by Unity and throws errors (even if scriptable objects don't have that field) 
 
-        [SerializeField]
         [UsedImplicitly]
         private Log m_Log;
 
@@ -124,15 +122,12 @@ namespace Weaver
         [UsedImplicitly]
         private void OnEnable()
         {
-            if (m_Log == null)
-            {
-                m_Log = new Log(this);
-            }
+            if (m_Log == null) m_Log = new Log(this);
+            if (m_Components == null) m_Components = new ComponentController();
+            if (m_WeavedAssemblies == null) m_WeavedAssemblies = new List<WeavedAssembly>();
 
-            if (m_Components == null)
-            {
-                m_Components = new ComponentController();
-            }
+            m_Components.SetOwner(this);
+            m_RequiredScriptingSymbols.ValidateSymbols();
 
             // Enable all our components 
             for (int i = 0; i < m_WeavedAssemblies.Count; i++)
@@ -143,13 +138,11 @@ namespace Weaver
             // Subscribe to the before reload event so we can modify the assemblies!
             m_Log.Info("Weaver Settings", "Subscribing to next assembly reload.", false);
             AssemblyUtility.PopulateAssemblyCache();
-            m_Components.SetOwner(this);
 #if UNITY_2017_1_OR_NEWER
             AssemblyReloadEvents.beforeAssemblyReload += CheckForAssemblyModifications;
 #else
             m_Log.Warning("Dynamic Assembly Reload not support until Unity 2017. Enter play mode to reload assemblies to see the effects of Weaving.", false);
 #endif
-            WeaverAnalytics.OnSettingsEnabled(this);
         }
 
         /// <summary>
@@ -175,7 +168,7 @@ namespace Weaver
                     return;
                 }
 
-                if(!m_RequiredScriptingSymbols.isActive)
+                if (!m_RequiredScriptingSymbols.isActive)
                 {
                     m_Log.Info("Weaver Settings", "Weaving aborted due to required scripting symbols not being defined.", false);
                     return;
@@ -186,14 +179,23 @@ namespace Weaver
 
                 for (int i = 0; i < m_WeavedAssemblies.Count; i++)
                 {
-                    if (m_WeavedAssemblies[i].HasChanges())
+                    if (m_WeavedAssemblies[i].HasChanges() && m_WeavedAssemblies[i].IsActive)
                     {
                         m_Log.Info("Weaver Settings", "Assembly at path <i>" + m_WeavedAssemblies[i].relativePath + "</i> had modifications.", false);
                         assembliesToWrite.Add(m_WeavedAssemblies[i]);
                     }
                 }
 
-                WeaveAssemblies(assembliesToWrite);
+                // Check if any components are added
+                if (assembliesToWrite.Count > 0)
+                {
+                    WeaveAssemblies(assembliesToWrite);
+
+                    // save any changes to our weavedAssembly objects
+                    EditorUtility.SetDirty(this);
+                    AssetDatabase.SaveAssets();
+                }
+
             }
             catch (Exception e)
             {
@@ -252,6 +254,8 @@ namespace Weaver
                 {
                     m_Log.Info("Weaver Settings", "Writing Module <i>" + assemblies[i].relativePath + "</i> to disk.", false);
                     editingModules[i].Write(assemblies[i].GetSystemPath(), writerParameters);
+                    // remember write time of modified assembly
+                    assemblies[i].HasChanges();
                 }
                 assemblies.Clear();
                 m_Log.Info("Weaver Settings", "Weaving Successfully Completed", false);
@@ -263,16 +267,9 @@ namespace Weaver
                 m_Log.Info("Statistics", "Methods Visited: " + m_Components.totalMethodsVisited, false);
                 m_Log.Info("Statistics", "Fields Visited: " + m_Components.totalFieldsVisited, false);
                 m_Log.Info("Statistics", "Properties Visited: " + m_Components.totalPropertiesVisited, false);
-                WeaverAnalytics.SendTiming("WeaveStats", "Elapsed Time", m_Timer.ElapsedMilliseconds);
-                WeaverAnalytics.SendEvent("WeaveStats", "Modules Visited", componentController.totalModulesVisited.ToString(), null);
-                WeaverAnalytics.SendEvent("WeaveStats", "Types Visited", componentController.totalTypesVisited.ToString(), null);
-                WeaverAnalytics.SendEvent("WeaveStats", "Methods Visited", componentController.totalMethodsVisited.ToString(), null);
-                WeaverAnalytics.SendEvent("WeaveStats", "Fields Visited", componentController.totalFieldsVisited.ToString(), null);
-                WeaverAnalytics.SendEvent("WeaveStats", "Properties Visited", componentController.totalPropertiesVisited.ToString(), null);
             }
             catch (Exception e)
             {
-                WeaverAnalytics.SendException(e.ToString(), true);
                 throw e;
             }
         }

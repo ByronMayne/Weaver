@@ -3,7 +3,6 @@ using UnityEditor;
 using UnityEditorInternal;
 using System;
 using System.Collections.Generic;
-using Weaver.Analytics;
 using Object = UnityEngine.Object;
 
 namespace Weaver.Editors
@@ -55,7 +54,7 @@ namespace Weaver.Editors
             GUI.Label(rect, element.objectReferenceValue.name, EditorStyles.textArea);
             rect.x += rect.width;
             rect.width = 20f;
-            SerializedProperty isEnabled = serializedObject.FindProperty("m_Enabled");
+            SerializedProperty isEnabled = serializedObject.FindProperty("m_IsActive");
             isEnabled.boolValue = EditorGUI.Toggle(rect, isEnabled.boolValue);
             serializedObject.ApplyModifiedProperties();
         }
@@ -71,7 +70,6 @@ namespace Weaver.Editors
             if (removedObject != null)
             {
                 string removedElementType = removedObject.GetType().FullName;
-                WeaverAnalytics.SendEvent("Components", "Removed", removedElementType);
             }
             m_RemoveItemMethod.Invoke(list.index);
             OnComponentAddedOrRemoved();
@@ -110,7 +108,6 @@ namespace Weaver.Editors
 
         private void OnTypeAdded(object argument)
         {
-            WeaverAnalytics.SendEvent("Components", "Added", ((Type)argument).FullName);
             m_AddItemMethod.Invoke(argument);
             OnComponentAddedOrRemoved();
         }

@@ -1,84 +1,127 @@
 ﻿using Mono.Cecil;
 using System;
-using System.IO;
-using UnityEditorInternal;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Weaver
 {
     /// <summary>
-    /// Used to resolve any references to the Unity Editor or UnityEngine assemblies.
+    /// Used to resolve any references to assemblies that are current in the unity 
+    /// project.
     /// </summary>
-    public class WeaverAssemblyResolver : DefaultAssemblyResolver
+    public class WeaverAssemblyResolver : BaseAssemblyResolver
     {
-        private const string UNITY_PREFIX = "Unity";
-
-        private readonly string _unityAssembliesDirectory;
+        // map of assembly locations
+        private readonly IDictionary<string, string> _appDomainAssemblyLocations;
+        // cache of loaded AssemblyDefinitions
+        private readonly IDictionary<string, AssemblyDefinition> _cache;
 
         public WeaverAssemblyResolver()
         {
-            // Get the location of the core dll ([ProjectRoot]/Library/UnityAssemblies) 
-            string coreAssemblyPath = InternalEditorUtility.GetEngineAssemblyPath();
-            // Get the directory name
-            _unityAssembliesDirectory = Path.GetDirectoryName(coreAssemblyPath);
+            // Caches
+            _appDomainAssemblyLocations = new Dictionary<string, string>();
+            _cache = new Dictionary<string, AssemblyDefinition>();
+            // Get the current app domain
+            AppDomain domain = AppDomain.CurrentDomain;
+            // Find all assemblies
+            Assembly[] assemblies = domain.GetAssemblies();
+            // for each currently loaded assembly,
+            for (int i = 0; i < assemblies.Length; i++)
+            {
+                // store locations
+                _appDomainAssemblyLocations[assemblies[i].FullName] = assemblies[i].Location;
+                // add all directories as search paths
+                AddSearchDirectory(System.IO.Path.GetDirectoryName(assemblies[i].Location));
+            }
         }
 
         public override AssemblyDefinition Resolve(string fullName)
         {
-            if (fullName.StartsWith(UNITY_PREFIX))
+            AssemblyDefinition assemblyDef = FindAssemblyDefinition(fullName, null);
+
+            if (assemblyDef == null)
             {
-                return GetUnityAssemblyDefintion(fullName);
+                assemblyDef = base.Resolve(fullName);
+                _cache[fullName] = assemblyDef;
             }
 
-            return base.Resolve(fullName);
+            return assemblyDef;
         }
 
         public override AssemblyDefinition Resolve(AssemblyNameReference name)
         {
-            if (name.FullName.StartsWith(UNITY_PREFIX))
+            AssemblyDefinition assemblyDef = FindAssemblyDefinition(name.FullName, null);
+
+            if (assemblyDef == null)
             {
-                return GetUnityAssemblyDefintion(name.FullName);
+                assemblyDef = base.Resolve(name);
+                _cache[name.FullName] = assemblyDef;
             }
 
-            return base.Resolve(name);
-        }
-
-        public override AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
-        {
-            if (name.FullName.StartsWith(UNITY_PREFIX))
-            {
-                return GetUnityAssemblyDefintion(name.FullName);
-            }
-
-            return base.Resolve(name, parameters);
+            return assemblyDef;
         }
 
         public override AssemblyDefinition Resolve(string fullName, ReaderParameters parameters)
         {
-            if (fullName.StartsWith(UNITY_PREFIX))
+            AssemblyDefinition assemblyDef = FindAssemblyDefinition(fullName, parameters);
+
+            if (assemblyDef == null)
             {
-                return GetUnityAssemblyDefintion(fullName);
+                assemblyDef = base.Resolve(fullName, parameters);
+                _cache[fullName] = assemblyDef;
             }
 
-            return base.Resolve(fullName, parameters);
+            return assemblyDef;
         }
 
-        private AssemblyDefinition GetUnityAssemblyDefintion(string strongName)
+        public override AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
         {
-            // Example input: "UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null")
-            // Get the starting index 
-            int index = strongName.IndexOf(',');
-            // Split the start
-            strongName = strongName.Substring(0, index);
-            // Guess the path (it's always UnityEngine.UI.dll or something) 
-            string path = Path.Combine(_unityAssembliesDirectory, strongName + ".dll");
-            // If it does not exist 
-            if (!File.Exists(path))
+            AssemblyDefinition assemblyDef = FindAssemblyDefinition(name.FullName, parameters);
+
+            if (assemblyDef == null)
             {
-                // Quite
-                return null;
+                assemblyDef = base.Resolve(name, parameters);
+                _cache[name.FullName] = assemblyDef;
             }
-            // Load it
-            return AssemblyDefinition.ReadAssembly(path); 
+
+            return assemblyDef;
+        }
+
+        /// <summary>
+        /// Searches for AssemblyDefinition in our cache, and failing that,
+        /// looks for a known location.  Returns null if both attempts fail.
+        /// </summary>
+        private AssemblyDefinition FindAssemblyDefinition(string fullName, ReaderParameters parameters)
+        {
+            if (fullName == null)
+            {
+                throw new ArgumentNullException("fullName");
+            }
+
+            AssemblyDefinition assemblyDefinition;
+
+            // Look in cache first
+            if (_cache.TryGetValue(fullName, out assemblyDefinition))
+            {
+                return assemblyDefinition;
+            }
+
+            // Try to use known location
+            string location;
+            if (_appDomainAssemblyLocations.TryGetValue(fullName, out location))
+            {
+                // Ready the assembly off disk.
+                if (parameters != null)
+                    assemblyDefinition = AssemblyDefinition.ReadAssembly(location, parameters);
+                else
+                    assemblyDefinition = AssemblyDefinition.ReadAssembly(location);
+
+                _cache[fullName] = assemblyDefinition;
+
+                return assemblyDefinition;
+            }
+
+            return null;
         }
     }
 }

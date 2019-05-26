@@ -17,9 +17,9 @@ namespace Weaver
         [SerializeField]
         private string m_RelativePath;
         [SerializeField]
-        private bool m_Enabled;
+        private bool m_IsActive = true;
         [SerializeField]
-        private int m_LastWriteTime;
+        private long m_LastWriteTime;
 
         private bool m_IsValid;
 
@@ -45,10 +45,10 @@ namespace Weaver
         /// Returns true if this assembly should be modified
         /// by Weaver or not. 
         /// </summary>
-        public bool enabled
+        public bool IsActive
         {
-            get { return m_Enabled; }
-            set { m_Enabled = value; }
+            get { return m_IsActive; }
+            set { m_IsActive = value; }
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Weaver
             if (File.Exists(relativePath))
             {
                 m_IsValid = true;
-                int writeTime = File.GetLastWriteTime(relativePath).Second;
+                long writeTime = File.GetLastWriteTimeUtc(relativePath).ToFileTime();
                 if (m_LastWriteTime != writeTime)
                 {
                     m_LastWriteTime = writeTime;
