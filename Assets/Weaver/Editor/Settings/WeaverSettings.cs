@@ -32,7 +32,7 @@ namespace Weaver
 
         [SerializeField]
         [UsedImplicitly]
-        private readonly bool m_IsEnabled = true; // m_Enabled is used by Unity and throws errors (even if scriptable objects don't have that field) 
+        private bool m_IsEnabled = true; // m_Enabled is used by Unity and throws errors (even if scriptable objects don't have that field) 
 
         [UsedImplicitly]
         private Log m_Log;

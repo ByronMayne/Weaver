@@ -228,7 +228,6 @@ namespace Weaver.Editors
                         m_Styles.zebraStyle.Draw(position, m_Styles.Content(entry.message), isHover, isActive, isOn, hasKeyboardFocus);
                     }
                 }
-                GUILayout.FlexibleSpace();
 
                 if (m_SelectedLogIndex < 0 || m_SelectedLogIndex >= m_Log.entries.Count)
                 {

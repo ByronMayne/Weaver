@@ -27,7 +27,7 @@ namespace Weaver
         private ScriptingSymbols m_RequiredScriptingSymbols;
 
         private ModuleDefinition m_ActiveModule;
-        public abstract string addinName { get; }
+        public abstract string ComponentName { get; }
         private Log m_Log;
 
         public bool isActive
@@ -48,7 +48,7 @@ namespace Weaver
         /// <summary>
         /// Returns back the type of definitions this component modifies. 
         /// </summary>
-        public virtual DefinitionType effectedDefintions
+        public virtual DefinitionType EffectedDefintions
         {
             get
             {
@@ -86,7 +86,7 @@ namespace Weaver
         /// </summary>
         public bool EffectsDefintion(DefinitionType type)
         {
-            return (type & effectedDefintions) == type;
+            return (type & EffectedDefintions) == type;
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Weaver
         /// </summary>
         protected void Log(string message)
         {
-            m_Log.Info(addinName, message, false, 3);
+            m_Log.Info(ComponentName, message, false, 3);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Weaver
         /// </summary>
         public void Log(string message, MemberLocation memberContext)
         {
-            m_Log.Info(addinName, memberContext + message, false, 3);
+            m_Log.Info(ComponentName, memberContext + message, false, 3);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Weaver
         /// </summary>
         public void Warning(string message)
         {
-            m_Log.Warning(addinName, message, false, 3);
+            m_Log.Warning(ComponentName, message, false, 3);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Weaver
         /// </summary>
         public void Warning(string message, MemberLocation memberContext)
         {
-            m_Log.Warning(addinName, memberContext + message, false, 3);
+            m_Log.Warning(ComponentName, memberContext + message, false, 3);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace Weaver
         /// </summary>
         public void Error(string message)
         {
-            m_Log.Error(addinName, message, true, 3);
+            m_Log.Error(ComponentName, message, true, 3);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Weaver
         /// </summary>
         public void Error(string message, MemberLocation memberContext)
         {
-            m_Log.Error(addinName, memberContext + message, false, 3);
+            m_Log.Error(ComponentName, memberContext + message, false, 3);
         }
         #endregion
 

@@ -26,7 +26,7 @@ namespace Weaver
             m_Owner = owner;
             for (int i = 0; i < m_SubObjects.Count; i++)
             {
-                m_ActiveDefinitions |= m_SubObjects[i].effectedDefintions;
+                m_ActiveDefinitions |= m_SubObjects[i].EffectedDefintions;
             }
         }
 

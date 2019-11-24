@@ -7,7 +7,7 @@ namespace Weaver
 {
     public class PropertyChangedComponent : WeaverComponent
     {
-        public override string addinName
+        public override string ComponentName
         {
             get
             {
@@ -15,7 +15,7 @@ namespace Weaver
             }
         }
 
-        public override DefinitionType effectedDefintions
+        public override DefinitionType EffectedDefintions
         {
             get
             {

@@ -23,6 +23,7 @@ MonoBehaviour:
     m_SubObjects:
     - {fileID: 7324576565797105393}
     m_Owner: {fileID: 11400000}
+  m_IsEnabled: 1
 --- !u!114 &7324576565797105393
 MonoBehaviour:
   m_ObjectHideFlags: 0

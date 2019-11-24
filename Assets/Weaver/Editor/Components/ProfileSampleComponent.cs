@@ -17,7 +17,7 @@ namespace Weaver
         private MethodReference m_EndSampleMethodRef;
         private MethodReference m_GetGameObjectMethodRef;
 
-        public override string addinName
+        public override string ComponentName
         {
             get
             {
@@ -25,7 +25,7 @@ namespace Weaver
             }
         }
 
-        public override DefinitionType effectedDefintions
+        public override DefinitionType EffectedDefintions
         {
             get
             {
