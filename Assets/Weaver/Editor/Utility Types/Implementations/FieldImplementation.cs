@@ -12,7 +12,7 @@ namespace Weaver
         public FieldImplementation(ModuleDefinition module, FieldDefinition fieldDefinition)
         {
             m_Module = module;
-            reference = m_Module.Import(fieldDefinition);
+            reference = m_Module.ImportReference(fieldDefinition);
             definition = reference.Resolve();
         }
     }

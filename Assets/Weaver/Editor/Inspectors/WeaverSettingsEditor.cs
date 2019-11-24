@@ -125,56 +125,35 @@ namespace Weaver.Editors
         {
             EditorGUI.BeginChangeCheck();
             {
-                CGWrapper.Begin("Docs/WeaverFull.png");
+                if (m_Styles == null)
                 {
-                    if (m_Styles == null)
-                    {
-                        m_Styles = new Styles();
-                    }
-
-                    GUILayout.Label("Settings", EditorStyles.boldLabel);
-
-                    CGWrapper.Begin("Docs/EnabledSettings.png");
-                    {
-                        EditorGUILayout.PropertyField(m_Enabled);
-                        EditorGUILayout.PropertyField(m_RequiredScriptingSymbols);
-                    }
-                    CGWrapper.End();
-
-                    if (!m_Enabled.boolValue)
-                    {
-                        EditorGUILayout.HelpBox("Weaver will not run as it's currently disabled.", MessageType.Info);
-                    }
-                    else if (!m_IsSymbolsDefined.boolValue)
-                    {
-                        EditorGUILayout.HelpBox("Weaver will not run the required scripting symbols are not defined.", MessageType.Info);
-                    }
-                    GUILayout.Box(GUIContent.none, GUILayout.Height(3f), GUILayout.ExpandWidth(true));
-
-
-                    CGWrapper.Begin("Docs/WeaverComponents.png");
-                    {
-                        EditorGUILayout.PropertyField(m_Components);
-                    }
-                    CGWrapper.End();
-                    CGWrapper.Begin("Docs/WeavedAssemblies.png");
-                    {
-                        m_WeavedAssembliesList.DoLayoutList();
-                    }
-                    CGWrapper.End();
+                    m_Styles = new Styles();
                 }
-                if (EditorGUI.EndChangeCheck())
+
+                GUILayout.Label("Settings", EditorStyles.boldLabel);
+
+                EditorGUILayout.PropertyField(m_Enabled);
+                EditorGUILayout.PropertyField(m_RequiredScriptingSymbols);
+
+                if (!m_Enabled.boolValue)
                 {
-                    _hasModifiedProperties = true;
+                    EditorGUILayout.HelpBox("Weaver will not run as it's currently disabled.", MessageType.Info);
                 }
-                CGWrapper.Begin("Docs/Logs.png");
+                else if (!m_IsSymbolsDefined.boolValue)
                 {
-                    GUILayout.Label("Log", EditorStyles.boldLabel);
-                    DrawLogs();
+                    EditorGUILayout.HelpBox("Weaver will not run the required scripting symbols are not defined.", MessageType.Info);
                 }
-                CGWrapper.End();
+                GUILayout.Box(GUIContent.none, GUILayout.Height(3f), GUILayout.ExpandWidth(true));
+
+                EditorGUILayout.PropertyField(m_Components);
+                m_WeavedAssembliesList.DoLayoutList();
             }
-            CGWrapper.End();
+            if (EditorGUI.EndChangeCheck())
+            {
+                _hasModifiedProperties = true;
+            }
+            GUILayout.Label("Log", EditorStyles.boldLabel);
+            DrawLogs();
 
             if (_hasModifiedProperties)
             {
@@ -214,7 +193,9 @@ namespace Weaver.Editors
                     {
                         if (current.clickCount == 2)
                         {
+#pragma warning disable CS0618 // Type or member is obsolete
                             InternalEditorUtility.OpenFileAtLineExternal(entry.fileName, entry.lineNumber);
+#pragma warning restore CS0618 // Type or member is obsolete
                         }
                         GUIUtility.keyboardControl = controlID;
                         m_SelectedLogIndex = i;
@@ -313,24 +294,5 @@ namespace Weaver.Editors
             weaved.FindPropertyRelative("m_IsActive").boolValue = true;
         }
         #endregion
-
-#if CAPTURE_GROUPS
-        [MenuItem("CONTEXT/WeaverSettings/Toggle Debug Capture Groups")]
-        public static void CaptureGroupsToggleDebugMenu(MenuCommand command)
-        {
-            CaptureGroup.ShowDebug = !CaptureGroup.ShowDebug;
-        }
-
-        [MenuItem("CONTEXT/WeaverSettings/Preform Capture")]
-        public static void CaptureGroupPreformCapture(MenuCommand command)
-        {
-            WeaverSettingsEditor[] inspectors = Resources.FindObjectsOfTypeAll<WeaverSettingsEditor>();
-            CaptureGroup.CapturePadding = new RectOffset(4, 4, 4, 4);
-            if (inspectors.Length > 0)
-            {
-                CaptureGroup.PreformCapture(inspectors[0]);
-            }
-        }
-#endif
     }
 }

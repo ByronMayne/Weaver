@@ -37,11 +37,13 @@ namespace Weaver
                     {
                         Instruction instruction = body.Instructions[instructionIndex];
 
-                        if (instruction.SequencePoint != null)
+                        SequencePoint sequencePoint = body.Method.DebugInformation.GetSequencePoint(instruction); 
+
+                        if (sequencePoint != null)
                         {
                             return new MemberLocation
                             {
-                                Url = instruction.SequencePoint.Document.Url
+                                Url = sequencePoint.Document.Url
                             };
                         }
                     }
@@ -55,12 +57,14 @@ namespace Weaver
         {
             foreach (var instruction in method.Body.Instructions)
             {
-                if (instruction.SequencePoint != null)
+                SequencePoint sequencePoint = method.DebugInformation.GetSequencePoint(instruction);
+
+                if (sequencePoint != null)
                 {
                     return new MethodLocation
                     {
-                        Url = instruction.SequencePoint.Document.Url,
-                        Line = instruction.SequencePoint.StartLine
+                        Url = sequencePoint.Document.Url,
+                        Line = sequencePoint.StartLine
                     };
                 }
             }

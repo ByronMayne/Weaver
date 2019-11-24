@@ -11,7 +11,7 @@ namespace Weaver
         public MethodImplementation(ModuleDefinition module, MethodDefinition methodDefinition)
         {
             m_Module = module;
-            reference = m_Module.Import(methodDefinition);
+            reference = m_Module.ImportReference(methodDefinition);
             definition = reference.Resolve();
         }
     }

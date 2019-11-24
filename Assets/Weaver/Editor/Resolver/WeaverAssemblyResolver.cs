@@ -26,26 +26,17 @@ namespace Weaver
             // Find all assemblies
             Assembly[] assemblies = domain.GetAssemblies();
             // for each currently loaded assembly,
-            for (int i = 0; i < assemblies.Length; i++)
+            foreach (Assembly assembly in assemblies)
             {
+				// Dynamic assemblies don't live on disk. 
+				if (assembly.ReflectionOnly)
+					continue;
+
                 // store locations
-                _appDomainAssemblyLocations[assemblies[i].FullName] = assemblies[i].Location;
+                _appDomainAssemblyLocations[assembly.FullName] = assembly.Location;
                 // add all directories as search paths
-                AddSearchDirectory(System.IO.Path.GetDirectoryName(assemblies[i].Location));
+                AddSearchDirectory(System.IO.Path.GetDirectoryName(assembly.Location));
             }
-        }
-
-        public override AssemblyDefinition Resolve(string fullName)
-        {
-            AssemblyDefinition assemblyDef = FindAssemblyDefinition(fullName, null);
-
-            if (assemblyDef == null)
-            {
-                assemblyDef = base.Resolve(fullName);
-                _cache[fullName] = assemblyDef;
-            }
-
-            return assemblyDef;
         }
 
         public override AssemblyDefinition Resolve(AssemblyNameReference name)
@@ -56,19 +47,6 @@ namespace Weaver
             {
                 assemblyDef = base.Resolve(name);
                 _cache[name.FullName] = assemblyDef;
-            }
-
-            return assemblyDef;
-        }
-
-        public override AssemblyDefinition Resolve(string fullName, ReaderParameters parameters)
-        {
-            AssemblyDefinition assemblyDef = FindAssemblyDefinition(fullName, parameters);
-
-            if (assemblyDef == null)
-            {
-                assemblyDef = base.Resolve(fullName, parameters);
-                _cache[fullName] = assemblyDef;
             }
 
             return assemblyDef;

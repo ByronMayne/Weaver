@@ -179,7 +179,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(type);
+            return m_ActiveModule.ImportReference(type);
         }
 
         public TypeReference Import(Type type, IGenericParameterProvider context)
@@ -188,7 +188,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(type);
+            return m_ActiveModule.ImportReference(type);
         }
 
         public FieldReference Import(FieldInfo field)
@@ -197,7 +197,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(field);
+            return m_ActiveModule.ImportReference(field);
         }
 
         public FieldReference Import(FieldInfo field, IGenericParameterProvider context)
@@ -206,7 +206,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(field);
+            return m_ActiveModule.ImportReference(field);
         }
 
         public MethodReference Import(MethodBase method)
@@ -215,7 +215,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(method);
+            return m_ActiveModule.ImportReference(method);
         }
 
         public MethodReference Import(MethodBase method, IGenericParameterProvider context)
@@ -224,7 +224,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(method, context);
+            return m_ActiveModule.ImportReference(method, context);
         }
 
         public TypeReference Import(TypeReference type, IGenericParameterProvider context)
@@ -233,7 +233,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(type, context);
+            return m_ActiveModule.ImportReference(type, context);
         }
 
         public TypeReference Import(Type type)
@@ -242,7 +242,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(type);
+            return m_ActiveModule.ImportReference(type);
         }
 
         public FieldReference Import(FieldReference field)
@@ -251,7 +251,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(field);
+            return m_ActiveModule.ImportReference(field);
         }
 
         public MethodReference Import(MethodReference method)
@@ -260,7 +260,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(method);
+            return m_ActiveModule.ImportReference(method);
         }
 
         public MethodReference Import(MethodReference method, IGenericParameterProvider context)
@@ -269,7 +269,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(method, context);
+            return m_ActiveModule.ImportReference(method, context);
         }
 
         public FieldReference Import(FieldReference field, IGenericParameterProvider context)
@@ -278,7 +278,7 @@ namespace Weaver
             {
                 return null;
             }
-            return m_ActiveModule.Import(field, context);
+            return m_ActiveModule.ImportReference(field, context);
         }
         #endregion
     }

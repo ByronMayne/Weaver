@@ -10,12 +10,6 @@ namespace Weaver.Editors
     [CustomPropertyDrawer(typeof(ComponentController))]
     public class ComponentControllerDrawer : PropertyDrawer
     {
-        private struct AddTypeCommand
-        {
-            public Type type;
-            public SerializedObject target;
-        }
-
         private SerializedProperty m_SubObjects;
         private ReflectedMethod m_AddItemMethod;
         private ReflectedMethod m_RemoveItemMethod;

@@ -30,3 +30,7 @@ Weaver\.csproj
 *.sln
 
 \.vs/
+
+Assembly-CSharp\.csproj
+
+*.csproj

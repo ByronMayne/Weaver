@@ -13,7 +13,6 @@ namespace Weaver
         /// </summary>
         private DefinitionType m_ActiveDefinitions;
 
-        public int totalModulesVisited { get; private set; }
         public int totalTypesVisited { get; private set; }
         public int totalMethodsVisited { get; private set; }
         public int totalFieldsVisited { get; private set; }
@@ -35,9 +34,8 @@ namespace Weaver
         /// Takes in a module and invokes <see cref="WeaverComponent.VisitModule(ModuleDefinition)"/> 
         /// on all components. 
         /// </summary>
-        public void VisitModules(Collection<ModuleDefinition> moduleCollection, Log log)
+        public void VisitModule(ModuleDefinition moduleCollection, Log log)
         {
-            totalModulesVisited = 0;
             totalTypesVisited = 0;
             totalMethodsVisited = 0;
             totalFieldsVisited = 0;
@@ -45,31 +43,27 @@ namespace Weaver
 
             if (m_ActiveDefinitions != DefinitionType.None)
             {
-                for (int moduleIndex = moduleCollection.Count - 1; moduleIndex >= 0; moduleIndex--)
+
+                // Loop over all sub objects
+                for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
                 {
-                    // Loop over all sub objects
-                    for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
-                    {
-                        // Assign our type system
-                        m_SubObjects[componentIndex].OnBeforeModuleEdited(moduleCollection[moduleIndex], log);
+                    // Assign our type system
+                    m_SubObjects[componentIndex].OnBeforeModuleEdited(moduleCollection, log);
 
 
-                        // Loop over modules if we are editing them 
-                        if (m_SubObjects[componentIndex].isActive && (m_ActiveDefinitions & DefinitionType.Module) == DefinitionType.Module)
-                        {
-                            m_SubObjects[componentIndex].VisitModule(moduleCollection[moduleIndex]);
-                        }
-                    }
-                    // Visit Types
-                    VisitTypes(moduleCollection[moduleIndex].Types);
-                    // Loop over all components and invoke our on complete event
-                    for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
-                    // Invoke that we have complete editing this module
+                    // Loop over modules if we are editing them 
+                    if (m_SubObjects[componentIndex].isActive && (m_ActiveDefinitions & DefinitionType.Module) == DefinitionType.Module)
                     {
-                        m_SubObjects[componentIndex].OnModuleEditComplete(moduleCollection[moduleIndex]);
+                        m_SubObjects[componentIndex].VisitModule(moduleCollection);
                     }
-                    // Increase count
-                    totalModulesVisited++;
+                }
+                // Visit Types
+                VisitTypes(moduleCollection.Types);
+                // Loop over all components and invoke our on complete event
+                for (int componentIndex = m_SubObjects.Count - 1; componentIndex >= 0; componentIndex--)
+                // Invoke that we have complete editing this module
+                {
+                    m_SubObjects[componentIndex].OnModuleEditComplete(moduleCollection);
                 }
             }
         }
