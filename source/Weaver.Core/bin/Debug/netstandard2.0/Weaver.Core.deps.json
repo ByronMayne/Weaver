@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETStandard,Version=v2.0/",
-    "signature": "cfe1dc2a80602aef150a12815387068463a61a0d"
+    "signature": "a9cf10af399011ff330e8f625f02c0cddcd74c0b"
   },
   "compilationOptions": {},
   "targets": {
@@ -9,6 +9,7 @@
     ".NETStandard,Version=v2.0/": {
       "Weaver.Core/1.0.0": {
         "dependencies": {
+          "Mono.Cecil": "0.11.1",
           "NETStandard.Library": "2.0.3"
         },
         "runtime": {
@@ -16,6 +17,26 @@
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {},
+      "Mono.Cecil/0.11.1": {
+        "runtime": {
+          "lib/netstandard2.0/Mono.Cecil.Mdb.dll": {
+            "assemblyVersion": "0.11.1.0",
+            "fileVersion": "0.11.1.0"
+          },
+          "lib/netstandard2.0/Mono.Cecil.Pdb.dll": {
+            "assemblyVersion": "0.11.1.0",
+            "fileVersion": "0.11.1.0"
+          },
+          "lib/netstandard2.0/Mono.Cecil.Rocks.dll": {
+            "assemblyVersion": "0.11.1.0",
+            "fileVersion": "0.11.1.0"
+          },
+          "lib/netstandard2.0/Mono.Cecil.dll": {
+            "assemblyVersion": "0.11.1.0",
+            "fileVersion": "0.11.1.0"
+          }
+        }
+      },
       "NETStandard.Library/2.0.3": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0"
@@ -35,6 +56,13 @@
       "sha512": "sha512-kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
       "path": "microsoft.netcore.platforms/1.1.0",
       "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "Mono.Cecil/0.11.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RWBcccuMn8gxAasJxBBAb848qkt3S2t/7bEaEXtxQU6ROv1v0p7kk3+Xga4G+k+bKbLBla1bsrUt+8pAccaDwQ==",
+      "path": "mono.cecil/0.11.1",
+      "hashPath": "mono.cecil.0.11.1.nupkg.sha512"
     },
     "NETStandard.Library/2.0.3": {
       "type": "package",
