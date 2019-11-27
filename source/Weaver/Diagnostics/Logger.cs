@@ -6,6 +6,11 @@ namespace Weaver.Diagnostics
 {
     public class Logger : ILogger
     {
+        /// <summary>
+        /// Gets the default instance of a logger. 
+        /// </summary>
+        public static ILogger Default { get; } = new Logger();
+
         private Stopwatch m_sessionTimer; 
 
         private Logger()
