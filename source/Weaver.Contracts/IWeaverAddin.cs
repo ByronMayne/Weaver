@@ -7,6 +7,11 @@ namespace Weaver.Contracts
     public interface IWeaverAddin
     {
         /// <summary>
+        /// Gets the name.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// Gets or sets the logger used for writing to output. 
         /// </summary>
         ILogger Logger { get; set; }
@@ -15,6 +20,12 @@ namespace Weaver.Contracts
         /// Invoked before all Addins have started their weaving process.
         /// </summary>
         void BeforeWeave();
+
+        /// <summary>I
+        /// nvoked whenver we enter the specified assembly definition.
+        /// </summary>
+        /// <param name="assemblyDefinition">The assembly definition.</param>
+        void Visit(AssemblyDefinition assemblyDefinition);
 
         /// <summary>I
         /// nvoked whenver we enter the specified module definition.
