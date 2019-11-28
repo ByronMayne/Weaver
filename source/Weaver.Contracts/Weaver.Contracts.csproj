@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Seed.IO\Source\Seed.IO\Seed.IO.csproj" />
     <ProjectReference Include="..\Weaver.Core\Weaver.Core.csproj" />
   </ItemGroup>
 

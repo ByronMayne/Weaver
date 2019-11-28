@@ -19,6 +19,12 @@ namespace Weaver.Contracts
         bool Has(AbsolutePath assemblyPath);
 
         /// <summary>
+        /// Removes the specified assembly from the cache.
+        /// </summary>
+        /// <param name="absolutePath">The absolute path to the assembly</param>
+        bool Remove(AbsolutePath absolutePath);
+
+        /// <summary>
         /// Gets the specified assembly definition from a given path.
         /// </summary>
         /// <param name="assemblyPath">The assembly path.</param>

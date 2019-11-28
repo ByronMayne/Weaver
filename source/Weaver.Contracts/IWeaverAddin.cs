@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using Weaver.Contracts.Diagnostics;
+using Weaver.Core;
 
 namespace Weaver.Contracts
 {
@@ -15,6 +16,12 @@ namespace Weaver.Contracts
         /// Gets or sets the logger used for writing to output. 
         /// </summary>
         ILogger Logger { get; set; }
+
+        /// <summary>
+        /// Gets or sets the affected definitions. Only the Visit methods of the
+        /// types returned by this will be invoked. 
+        /// </summary>
+        DefinitionType AffectedDefinitions { get; }
 
         /// <summary>
         /// Invoked before all Addins have started their weaving process.

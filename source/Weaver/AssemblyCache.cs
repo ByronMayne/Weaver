@@ -32,7 +32,6 @@ namespace Weaver
         /// <summary>
         /// Clears this instance of all assembly definitions
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         public void Clear()
         {
             foreach (AssemblyDefinition value in m_assemblyDefinitions.Values)
@@ -42,6 +41,26 @@ namespace Weaver
             m_assemblyDefinitions.Clear();
         }
 
+        /// <summary>
+        /// Removes the specified assembly from the cache.
+        /// </summary>
+        /// <param name="absolutePath">
+        /// The absolute path to the assembly
+        /// </param>
+        /// <returns>
+        /// True if an assembly exists in the cache at that path and it was removed otherwise false.
+        /// </returns>
+        public bool Remove(AbsolutePath absolutePath)
+        {
+            if(Has(absolutePath))
+            {
+                AssemblyDefinition assemblyDefinition = Get(absolutePath);
+                assemblyDefinition.Dispose();
+                m_assemblyDefinitions.Remove(absolutePath);
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Gets the specified assembly definition from a given path.
@@ -112,5 +131,7 @@ namespace Weaver
             Clear();
             m_assemblyDefinitions.Clear();
         }
+
+     
     }
 }

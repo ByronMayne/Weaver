@@ -98,37 +98,89 @@ namespace Weaver
                 throw new FileNotFoundException($"Unable to find the assembly {Path.GetFileName(assemblyPath)} at path '{assemblyPath}'.");
             }
 
-            AssemblyDefinition assemblyDefinition = AssemblyCache.Get(assemblyLocation);
-
             try
             {
                 Logger.Info(nameof(AssemblyWeaver), "WeaveAssembly");
                 Logger.Info(nameof(AssemblyWeaver), $"Path: {assemblyPath}");
-                Logger.Info(nameof(AssemblyWeaver), $"Addins:");
 
-                IWeaverAddin[] addinArray = addIns.ToArray();
+                Logger.Info(nameof(AssemblyWeaver), $"Starting");
 
-                foreach (IWeaverAddin addin in addinArray)
-                {
-                    Logger.Info(nameof(AssemblyWeaver), $" - {addin.Name}");
-                }
-
-                Logger.Info(nameof(AssemblyWeaver), $"Visiting");
-                Visit(assemblyDefinition, addinArray);
-
-                WriterParameters writerParameters = GetWriterParameters(assemblyLocation);
-
-                Logger.Info(nameof(AssemblyWeaver), $"Writing");
-                assemblyDefinition.Write(writerParameters);
+                // Make a copy so that we can edit it.
+                Start(assemblyLocation, new List<IWeaverAddin>(addIns));
             }
             catch (Exception e)
             {
+                Logger.Error(nameof(AssemblyWeaver), $"Exception was thrown while weaving no changes will be applied to the assembly.");
+
+                // Clear it from the cache as it could be invalid now
+                AssemblyCache.Remove(assemblyLocation);
+
                 Logger.Exception(nameof(AssemblyWeaver), e);
                 return false;
             }
 
             Logger.Info(nameof(AssemblyWeaver), $"Successful");
             return true;
+        }
+
+        /// <summary>
+        /// Starts the weaving process for an assembly. If one of our addins throws an exception it will be removed and we 
+        /// will retry again. 
+        /// </summary>
+        /// <param name="assemblyLocation">The assembly location.</param>
+        /// <param name="affectedDefintions">The affected defintions.</param>
+        /// <param name="addins">The addins we are going to be running.</param>
+        private void Start(AbsolutePath assemblyLocation, List<IWeaverAddin> addins)
+        {
+            DefinitionType affectedDefintions = DefinitionType.None;
+
+            try
+            {
+                Logger.Info(nameof(AssemblyWeaver), $"Addins:");
+
+                foreach (IWeaverAddin addin in addins)
+                {
+                    affectedDefintions |= addin.AffectedDefinitions;
+                    Logger.Info(nameof(AssemblyWeaver), $" - {addin.Name}");
+                }
+
+                AssemblyDefinition assemblyDefinition = AssemblyCache.Get(assemblyLocation);
+
+                Visit(assemblyDefinition, affectedDefintions, addins);
+
+                WriterParameters writerParameters = GetWriterParameters(assemblyLocation);
+
+                Logger.Info(nameof(AssemblyWeaver), $"Writing");
+
+                assemblyDefinition.Write(writerParameters);
+            }
+            catch (AddinException addinException)
+            {
+                if (addins.Count > 1)
+                {
+                    Logger.Error(nameof(AssemblyWeaver), $"An expection was thrown by {addinException.Context.Name} while weaving. The addin will be removed and we will retry again");
+
+                    // Just remove the add in so we can run the ones that work.
+                    addins.Remove(addinException.Context);
+
+                    // It's in a broken state, it must be removed. 
+                    AssemblyCache.Remove(assemblyLocation);
+
+                    Logger.Info(nameof(AssemblyWeaver), "Retrying");
+
+                    // Run it again
+                    Start(assemblyLocation, addins);
+
+                    // We are done here.
+                    return; 
+                }
+                else
+                {
+                    Logger.Error(nameof(AssemblyWeaver), $"No addins run succssful so no modifications were made to the assembly");
+                }
+
+                Logger.Exception(nameof(AssemblyWeaver), addinException);
+            }
         }
 
         /// <summary>
@@ -150,14 +202,14 @@ namespace Weaver
                 if (!typeof(IWeaverAddin).IsAssignableFrom(type))
                 {
                     Exception exception = new ArgumentException($"The type {type.FullName} does not inherit from the required type {typeof(IWeaverAddin)}");
-                    outputLog.Exception(nameof(AssemblyWeaver), exception);
+                    Logger.Exception(nameof(AssemblyWeaver), exception);
                 }
 
                 IWeaverAddin instance = (IWeaverAddin)Activator.CreateInstance(type, true);
                 createdAddins.Add(instance);
             }
 
-            return WeaveAssembly(assemblyPath, outputLog, addIns);
+            return WeaveAssembly(assemblyPath, createdAddins);
         }
 
         /// <summary>
@@ -165,7 +217,7 @@ namespace Weaver
         /// </summary>
         private static WriterParameters GetWriterParameters(AbsolutePath assemblyPath)
         {
-            ISymbolWriterProvider symbolWriterProvider = null; 
+            ISymbolWriterProvider symbolWriterProvider = null;
             DebugSymbolType symbolType = DebugSymbolUtility.GetFromAssemblyPath(assemblyPath);
             switch (symbolType)
             {
@@ -174,7 +226,7 @@ namespace Weaver
                     break;
                 case DebugSymbolType.Program:
                     symbolWriterProvider = new PortablePdbWriterProvider();
-                    break; 
+                    break;
             }
 
             WriterParameters writeParams = new WriterParameters()
@@ -190,13 +242,21 @@ namespace Weaver
         /// Visits the specified assembly definition.
         /// </summary>
         /// <param name="assemblyDefinition">The assembly definition.</param>
+        /// <param name="affectedDefintions">The types of definitions all addins affect</param>
         /// <param name="addins">The addins.</param>
-        private void Visit(AssemblyDefinition assemblyDefinition, IReadOnlyCollection<IWeaverAddin> addins)
+        private void Visit(AssemblyDefinition assemblyDefinition, DefinitionType affectedDefintions, IReadOnlyCollection<IWeaverAddin> addins)
         {
-            ForEach(addins, e => e.Visit(assemblyDefinition));
+            if (affectedDefintions == DefinitionType.None)
+            {
+                Logger.Warning(nameof(AssemblyWeaver), "No Add Ins had any affected definitions defined. " +
+                    $"You most likely missed setting the filed {nameof(IWeaverAddin)}.{nameof(IWeaverAddin.AffectedDefinitions)}");
+                return;
+            }
+
+            VisitAddIn(addins, e => e.Visit(assemblyDefinition), DefinitionType.Assembly);
             foreach (ModuleDefinition moduleDefinition in assemblyDefinition.Modules)
             {
-                Visit(moduleDefinition, addins);
+                Visit(moduleDefinition, affectedDefintions, addins);
             }
         }
 
@@ -205,12 +265,12 @@ namespace Weaver
         /// </summary>
         /// <param name="moduleDefinition">The module definition.</param>
         /// <param name="addins">The addins.</param>
-        private void Visit(ModuleDefinition moduleDefinition, IReadOnlyCollection<IWeaverAddin> addins)
+        private void Visit(ModuleDefinition moduleDefinition, DefinitionType affectedDefintions, IReadOnlyCollection<IWeaverAddin> addins)
         {
-            ForEach(addins, e => e.Visit(moduleDefinition));
+            VisitAddIn(addins, e => e.Visit(moduleDefinition), DefinitionType.Modules);
             foreach (TypeDefinition typeDefinition in moduleDefinition.Types)
             {
-                Visit(typeDefinition, addins);
+                Visit(typeDefinition, affectedDefintions, addins);
             }
         }
 
@@ -219,45 +279,67 @@ namespace Weaver
         /// </summary>
         /// <param name="typeDefinition">The type definition.</param>
         /// <param name="addins">The addins.</param>
-        private void Visit(TypeDefinition typeDefinition, IReadOnlyCollection<IWeaverAddin> addins)
+        private void Visit(TypeDefinition typeDefinition, DefinitionType affectedDefintions, IReadOnlyCollection<IWeaverAddin> addins)
         {
-            ForEach(addins, e => e.Visit(typeDefinition));
+            VisitAddIn(addins, e => e.Visit(typeDefinition), DefinitionType.Type);
 
             if (typeDefinition.HasNestedTypes)
             {
                 foreach (TypeDefinition nestTypeDefinition in typeDefinition.NestedTypes)
                 {
-                    Visit(typeDefinition, addins);
+                    Visit(typeDefinition, affectedDefintions, addins);
                 }
             }
 
-            foreach (MethodDefinition methodDefinition in typeDefinition.Methods)
+            if ((affectedDefintions & DefinitionType.Method) != 0)
             {
-                ForEach(addins, e => e.Visit(methodDefinition));
+                foreach (MethodDefinition methodDefinition in typeDefinition.Methods)
+                {
+                    VisitAddIn(addins, e => e.Visit(methodDefinition), DefinitionType.Method);
+                }
             }
 
-            foreach (PropertyDefinition propertyDefinition in typeDefinition.Properties)
+            if ((affectedDefintions & DefinitionType.Property) != 0)
             {
-                ForEach(addins, e => e.Visit(propertyDefinition));
+                foreach (PropertyDefinition propertyDefinition in typeDefinition.Properties)
+                {
+                    VisitAddIn(addins, e => e.Visit(propertyDefinition), DefinitionType.Property);
+                }
             }
 
-            foreach (FieldDefinition fieldDefinition in typeDefinition.Fields)
+            if ((affectedDefintions & DefinitionType.Field) != 0)
             {
-                ForEach(addins, e => e.Visit(fieldDefinition));
+                foreach (FieldDefinition fieldDefinition in typeDefinition.Fields)
+                {
+                    VisitAddIn(addins, e => e.Visit(fieldDefinition), DefinitionType.Field);
+                }
             }
 
-            foreach (EventDefinition eventDefinition in typeDefinition.Events)
+            if ((affectedDefintions & DefinitionType.Event) != 0)
             {
-                ForEach(addins, e => e.Visit(eventDefinition));
+                foreach (EventDefinition eventDefinition in typeDefinition.Events)
+                {
+                    VisitAddIn(addins, e => e.Visit(eventDefinition), DefinitionType.Event);
+                }
             }
         }
 
         // Invokes an action on all of our addins 
-        private static void ForEach(IEnumerable<IWeaverAddin> targets, Action<IWeaverAddin> action)
+        private static void VisitAddIn(IEnumerable<IWeaverAddin> targets, Action<IWeaverAddin> action, DefinitionType definitionType)
         {
             foreach (IWeaverAddin addin in targets)
             {
-                action(addin);
+                if ((addin.AffectedDefinitions & definitionType) != 0)
+                {
+                    try
+                    {
+                        action(addin);
+                    }
+                    catch (Exception e)
+                    {
+                        AddinException addinException = new AddinException(addin, e);
+                    }
+                }
             }
         }
     }
