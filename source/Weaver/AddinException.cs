@@ -15,7 +15,7 @@ namespace Weaver
             Context = context;
         }
 
-        private static string FormatError(IWeaverAddin weaverAddin, string details)
+        private static string FormatError(IWeaverAddin weaverAddin)
         {
             return $"An exception was thrown by the addin {weaverAddin.Name} [{weaverAddin.GetType().FullName} durning weaving process. See inner exception for more details";
         }

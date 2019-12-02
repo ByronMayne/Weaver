@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Some short hands to make the paths shorter to reference -->
+  <PropertyGroup Condition="$(ProjectName.EndsWith('Editor'))">
+    <ExportPath>$(EditorPath)</ExportPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(!ProjectName.EndsWith('Editor'))">
+    <ExportPath>$(AssetPath)</ExportPath>
+  </PropertyGroup>
+  <Target Name="Export" AfterTargets="AfterBuild">
+    <Message Condition="'$(DistributeSource)' == 'false' Or  '$(DistributeSource)' == 'False'" Text="[Export Option]    : (DLL) Dynamic Link Library" Importance="high"/>
+    <Message Condition="'$(DistributeSource)' == 'true' Or  '$(DistributeSource)' == 'True'"  Text="[Export Option]    : Source Code" Importance="high"/>
+  </Target>
+  <Import Project="$(ProjectDir)\MSBuild\Export\export_dll.xml"/>
+</Project>

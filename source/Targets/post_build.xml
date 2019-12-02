@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <UnityPath>$(SolutionDir)../Assets/Weaver/</UnityPath>
+  </PropertyGroup>
+    <PropertyGroup Condition="'$(IsEditorAssembly.ToLower())' == 'true'" >
+      <UnityPath>$(UnityPath)Editor/</UnityPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="$(TargetName.Contains('Addin'))">
+      <UnityPath>$(UnityPath)Addin/</UnityPath>
+    </PropertyGroup>
+  <Target Name="CopyAfterBuild" AfterTargets="Build">
+    <Message Text="$(UnityPath)" Importance="high"/>
+    <MSBuild Projects="$(SolutionDir)Targets/export.xml"  Properties="OutputPath=$(UnityPath);TargetPath=$(TargetPath)" Targets="ExportAssembly"/>
+  </Target>
+</Project>

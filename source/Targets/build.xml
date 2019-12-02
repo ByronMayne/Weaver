@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <CopyDebugSymbols>True</CopyDebugSymbols>
+  </PropertyGroup>
+    <Import Project="$(SolutionDir)Targets/post_build.xml"/>
+    <Import Project="$(SolutionDir)Targets/export_external.xml"/>
+</Project>

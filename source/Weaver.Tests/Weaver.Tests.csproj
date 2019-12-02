@@ -45,18 +45,6 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil, Version=0.11.1.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.1\lib\net40\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.11.1.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.1\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.11.1.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.1\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.11.1.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.1\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -79,10 +67,6 @@
     <ProjectReference Include="..\Weaver.Core\Weaver.Core.csproj">
       <Project>{b9fd5a77-7c91-4d9f-8633-73f4bb70f6c4}</Project>
       <Name>Weaver.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Weaver.Unity\Weaver.Unity.csproj">
-      <Project>{10360b09-8e97-4fe5-a77f-638b835c99a7}</Project>
-      <Name>Weaver.Unity</Name>
     </ProjectReference>
     <ProjectReference Include="..\Weaver\Weaver.csproj">
       <Project>{26039b82-352a-44d7-aef6-bcbc780c5e57}</Project>

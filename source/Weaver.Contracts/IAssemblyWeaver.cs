@@ -26,11 +26,6 @@ namespace Weaver.Contracts
         IAssemblyCache AssemblyCache { get; }
 
         /// <summary>
-        /// Gets or sets the assembly resolver.
-        /// </summary>
-        IAssemblyResolver AssemblyResolver { get; }
-
-        /// <summary>
         /// Weaves an assembly from disk.
         /// </summary>
         /// <param name="assemblyPath">The system path to the assembly.</param>

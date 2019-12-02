@@ -131,7 +131,5 @@ namespace Weaver
             Clear();
             m_assemblyDefinitions.Clear();
         }
-
-     
     }
 }

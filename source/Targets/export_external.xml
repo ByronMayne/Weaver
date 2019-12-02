@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ExternalAssembly Include="$(SolutionDir)Seed.IO\Source\Seed.IO\bin\$(ConfigurationName)\netstandard2.0\Seed.IO.dll" />
+  </ItemGroup>
+  <Target Name="ExportExternal" AfterTargets="Build" Inputs="@(ExternalAssembly)" Outputs="%(ExternalAssembly.Identity)">
+    <MSBuild Projects="$(SolutionDir)Targets/export.xml"  Properties="OutputPath=$(UnityPath);TargetPath=%(ExternalAssembly.Identity)" Targets="ExportAssembly"/>
+  </Target>
+</Project>

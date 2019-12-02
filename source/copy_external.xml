@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <UnityPath>$(SolutionDir)../Assets/Weaver/</UnityPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(IsEditorAssembly.ToUpper())' == 'TRUE'">
+    <UnityPath>$(UnityPath)Editor/</UnityPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <CopyTargets Include="$(TargetDir)$(TargetName).dll"/>
+    <CopyTargets Include="$(TargetDir)$(TargetName).dll.mdb"/>
+    <CopyTargets Include="$(TargetDir)$(TargetName).pdb"/>
+  </ItemGroup>
+  <Target Name="ExportDll"
+      Inputs="@(CopyTargets)"
+      Outputs="$(UnityPath)%(CopyTargets.FileName)%(CopyTargets.Extension)"
+      AfterTargets="Build">
+    <Message Text="   Export: %(CopyTargets.FileName)%(CopyTargets.Extension)" Importance="high"/>
+    <Message Text="           src: %(CopyTargets.Identity)" Importance="high"/>
+    <Message Text="           dst: $(UnityPath)%(CopyTargets.FileName)%(CopyTargets.Extension)" Importance="high"/>
+    <Copy SourceFiles="%(CopyTargets.Identity)" DestinationFolder="$(UnityPath)" Condition="Exists(%(CopyTargets.Identity))"/>
+  </Target>
+</Project>

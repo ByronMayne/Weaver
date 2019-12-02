@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Assembly Include="$(TargetPath)" />
+  </ItemGroup>
+  <Target Name="ExportAssembly"
+          Inputs="@(Assembly)"
+          Outputs="$(UnityExportPath)%(Assembly.FileName)%(Assembly.Extension)">
+    <PropertyGroup>
+      <FilePath>%(Assembly.RootDir)%(Assembly.Directory)%(Assembly.Filename)</FilePath>
+      <OuputLog>Dll</OuputLog>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="Exists('$(FilePath).pdb')">
+      <OuputLog>$(OuputLog), Pdb</OuputLog>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="Exists('$(FilePath).dll.mdb')">
+      <OuputLog>$(OuputLog), Mdb</OuputLog>
+    </PropertyGroup>
+    
+    
+    <Message Text="   Export: %(Assembly.FileName) [$(OuputLog)]" Importance="high"/>
+    <Message Text="           src: %(Assembly.Identity)" Importance="high"/>
+    <Message Text="           dst: $(OutputPath)%(Assembly.FileName)%(Assembly.Extension)" Importance="high"/>
+
+    <!-- Copy Dll -->
+    <Copy SourceFiles="$(FilePath).dll"
+          DestinationFolder="$(OutputPath)"
+          Condition="Exists('$(FilePath).dll')"/>
+    <!-- Copy Mono Debug Symbols -->
+    <Copy SourceFiles="(FilePath).dll.mdb"
+          DestinationFolder="$(OutputPath)"
+          Condition="Exists('$(FilePath).dll.mdb') And '$(CopyDebugSymbols.ToLower())' == 'true'"/>
+    <!-- Copy Program Debug Symbols -->
+    <Copy SourceFiles="$(FilePath).pdb"
+          DestinationFolder="$(OutputPath)"
+          Condition="Exists('$(FilePath).pdb') And '$(CopyDebugSymbols.ToLower())' == 'true'"/>
+
+  </Target>
+</Project>
