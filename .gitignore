@@ -41,3 +41,5 @@ Assembly-CSharp\.csproj
 
 
 source/Weaver/obj/
+
+source/**/bin/
