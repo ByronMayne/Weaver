@@ -26,5 +26,5 @@
   <PropertyGroup>
     <ExportPath>$(SolutionDir)Assets/Weaver</ExportPath>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)Targets/build.xml"/>
+  <Import Project="$(SolutionDir)Targets/build.xml" />
 </Project>

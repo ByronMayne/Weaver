@@ -23,9 +23,9 @@ namespace Weaver
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyCache"/> class.
         /// </summary>
-        public AssemblyCache(IAssemblyResolver assemblyResolver)
+        public AssemblyCache()
         {
-            m_assemblyResolver = assemblyResolver;
+            m_assemblyResolver = new AssemblyResolver(this);
             m_assemblyDefinitions = new Dictionary<AbsolutePath, AssemblyDefinition>();
         }
 

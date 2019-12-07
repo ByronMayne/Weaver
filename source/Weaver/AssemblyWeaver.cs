@@ -20,11 +20,6 @@ namespace Weaver
     public class AssemblyWeaver : IAssemblyWeaver
     {
         /// <summary>
-        /// Gets or sets the assembly resolver.
-        /// </summary>
-        public IAssemblyResolver AssemblyResolver { get; }
-
-        /// <summary>
         /// Gets or sets the working directory.
         /// </summary>
         public string WorkingDirectory { get; set; }
@@ -42,18 +37,10 @@ namespace Weaver
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyWeaver"/> class.
         /// </summary>
-        public AssemblyWeaver() : this(new DefaultAssemblyResolver())
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyWeaver"/> class.
-        /// </summary>
-        /// <param name="assemblyResolver">The assembly resolver to use.</param>
-        public AssemblyWeaver(IAssemblyResolver assemblyResolver)
+        public AssemblyWeaver()
         {
             WorkingDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            AssemblyResolver = assemblyResolver;
-            AssemblyCache = new AssemblyCache(assemblyResolver);
+            AssemblyCache = new AssemblyCache();
             Logger = Diagnostics.Logger.Default;
         }
 
