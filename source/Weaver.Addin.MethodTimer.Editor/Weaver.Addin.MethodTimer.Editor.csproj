@@ -4,5 +4,18 @@
     <IsEditorAssembly>True</IsEditorAssembly>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)Targets/build.xml"/>
+  <Import Project="$(SolutionDir)Targets/build.xml" />
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="8.6.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Weaver.Addin.MethodTimer\Weaver.Addin.MethodTimer.csproj" />
+    <ProjectReference Include="..\Weaver.Contracts\Weaver.Contracts.csproj" />
+    <ProjectReference Include="..\Weaver\Weaver.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\lib\Mono.Cecil.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
