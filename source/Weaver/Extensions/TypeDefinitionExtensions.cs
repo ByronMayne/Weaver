@@ -2,6 +2,7 @@
 using Mono.Cecil.Cil;
 using System;
 using Weaver.DataTypes;
+using Weaver.Fluent;
 
 namespace Weaver
 {
@@ -10,6 +11,11 @@ namespace Weaver
     /// </summary>
     public static class TypeDefinitionExtensions
     {
+        public static ITypeImport<T> Import<T>(this ModuleDefinition module)
+        {
+            return new TypeImport<T>(module);
+        }
+
         /// <summary>
         /// Given a type this returns back the file it was declaired within and the postion and line number. 
         /// </summary>
@@ -166,6 +172,14 @@ namespace Weaver
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="ITypeImport{T}"/> that allows you to import types with a fluent api.
+        /// </summary>
+        public static ITypeImport<T> ImportType<T>(this ModuleDefinition moduleDefinition)
+        {
+            return new TypeImport<T>(moduleDefinition);
         }
     }
 }
