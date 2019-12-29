@@ -11,9 +11,20 @@ namespace Weaver
     /// </summary>
     public static class TypeDefinitionExtensions
     {
-        public static ITypeImport<T> Import<T>(this ModuleDefinition module)
+        public static ITypeImport<T> ImportFluent<T>(this ModuleDefinition module)
         {
-            return new TypeImport<T>(module);
+            return new TypeImport<T>(module, typeof(T));
+        }
+
+        /// <summary>
+        /// Used to import memebers for a static type. This can also be used for an unknown runtime type.
+        /// </summary>
+        /// <param name="module">The module.</param>
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns></returns>
+        public static ITypeImport ImportFluent(this ModuleDefinition module, Type memberType)
+        {
+            return new TypeImport<object>(module, memberType);
         }
 
         /// <summary>
@@ -57,6 +68,44 @@ namespace Weaver
                 if (string.CompareOrdinal(methodDef.Name, name) == 0)
                 {
                     return methodDef;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the field based on it's name
+        /// </summary>
+        /// <param name="typeDefinition">The type definition.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public static FieldDefinition GetField(this TypeDefinition typeDefinition, string name)
+        {
+            for (int i = 0; i < typeDefinition.Fields.Count; i++)
+            {
+                FieldDefinition fieldDefinition = typeDefinition.Fields[i];
+                if (string.CompareOrdinal(fieldDefinition.Name, name) == 0)
+                {
+                    return fieldDefinition;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the field based of a predeicate 
+        /// </summary>
+        /// <param name="typeDefinition">The type definition.</param>
+        /// <param name="filter">The filter.</param>
+        /// <returns></returns>
+        public static FieldDefinition GetField(this TypeDefinition typeDefinition, Predicate<FieldDefinition> filter)
+        {
+            for (int i = 0; i < typeDefinition.Fields.Count; i++)
+            {
+                FieldDefinition fieldDefinition = typeDefinition.Fields[i];
+                if (filter(fieldDefinition))
+                {
+                    return fieldDefinition;
                 }
             }
             return null;
@@ -172,14 +221,6 @@ namespace Weaver
                 }
             }
             return null;
-        }
-
-        /// <summary>
-        /// Creates a <see cref="ITypeImport{T}"/> that allows you to import types with a fluent api.
-        /// </summary>
-        public static ITypeImport<T> ImportType<T>(this ModuleDefinition moduleDefinition)
-        {
-            return new TypeImport<T>(moduleDefinition);
         }
     }
 }

@@ -28,8 +28,9 @@ namespace Weaver.Contracts
         /// Gets the specified assembly definition from a given path.
         /// </summary>
         /// <param name="assemblyPath">The assembly path.</param>
+        /// <param name="isReadOnly">If true we only need to read the assembly and not write to i.</param>
         /// <returns>The AssemblyDefinition for the assembly at the given path</returns>
-        AssemblyDefinition Get(AbsolutePath assemblyPath);
+        AssemblyDefinition Get(AbsolutePath assemblyPath, bool isReadOnly);
 
         /// <summary>
         /// Clears this instance of all assembly definitions

@@ -57,7 +57,7 @@ namespace Weaver
                 AbsolutePath assemblyPath = location / $"{name.Name}.dll";
                 if(File.Exists(assemblyPath))
                 {
-                    return m_assemblyCache.Get(assemblyPath); 
+                    return m_assemblyCache.Get(assemblyPath, true); 
                 }
             }
 

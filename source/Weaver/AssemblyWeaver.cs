@@ -39,7 +39,7 @@ namespace Weaver
         /// </summary>
         public AssemblyWeaver()
         {
-            WorkingDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            WorkingDirectory = Environment.CurrentDirectory;
             AssemblyCache = new AssemblyCache();
             Logger = Diagnostics.Logger.Default;
         }
@@ -131,7 +131,7 @@ namespace Weaver
                     Logger.Info(nameof(AssemblyWeaver), $" - {addin.Name}");
                 }
 
-                AssemblyDefinition assemblyDefinition = AssemblyCache.Get(assemblyLocation);
+                AssemblyDefinition assemblyDefinition = AssemblyCache.Get(assemblyLocation, false);
 
                 Visit(assemblyDefinition, affectedDefintions, addins);
 
@@ -240,7 +240,7 @@ namespace Weaver
                 return;
             }
 
-            VisitAddIn(addins, e => e.Visit(assemblyDefinition), DefinitionType.Assembly);
+            VisitAddIn(addins, e => e.VisitAssembly(assemblyDefinition), DefinitionType.Assembly);
             foreach (ModuleDefinition moduleDefinition in assemblyDefinition.Modules)
             {
                 Visit(moduleDefinition, affectedDefintions, addins);
@@ -254,7 +254,7 @@ namespace Weaver
         /// <param name="addins">The addins.</param>
         private void Visit(ModuleDefinition moduleDefinition, DefinitionType affectedDefintions, IReadOnlyCollection<IWeaverAddin> addins)
         {
-            VisitAddIn(addins, e => e.Visit(moduleDefinition), DefinitionType.Modules);
+            VisitAddIn(addins, e => e.VisitModule(moduleDefinition), DefinitionType.Modules);
             foreach (TypeDefinition typeDefinition in moduleDefinition.Types)
             {
                 Visit(typeDefinition, affectedDefintions, addins);
@@ -268,7 +268,7 @@ namespace Weaver
         /// <param name="addins">The addins.</param>
         private void Visit(TypeDefinition typeDefinition, DefinitionType affectedDefintions, IReadOnlyCollection<IWeaverAddin> addins)
         {
-            VisitAddIn(addins, e => e.Visit(typeDefinition), DefinitionType.Type);
+            VisitAddIn(addins, e => e.VisitType(typeDefinition), DefinitionType.Type);
 
             if (typeDefinition.HasNestedTypes)
             {
@@ -282,7 +282,7 @@ namespace Weaver
             {
                 foreach (MethodDefinition methodDefinition in typeDefinition.Methods)
                 {
-                    VisitAddIn(addins, e => e.Visit(methodDefinition), DefinitionType.Method);
+                    VisitAddIn(addins, e => e.VisitMethod(methodDefinition), DefinitionType.Method);
                 }
             }
 
@@ -290,7 +290,7 @@ namespace Weaver
             {
                 foreach (PropertyDefinition propertyDefinition in typeDefinition.Properties)
                 {
-                    VisitAddIn(addins, e => e.Visit(propertyDefinition), DefinitionType.Property);
+                    VisitAddIn(addins, e => e.VisitProperty(propertyDefinition), DefinitionType.Property);
                 }
             }
 
@@ -298,7 +298,7 @@ namespace Weaver
             {
                 foreach (FieldDefinition fieldDefinition in typeDefinition.Fields)
                 {
-                    VisitAddIn(addins, e => e.Visit(fieldDefinition), DefinitionType.Field);
+                    VisitAddIn(addins, e => e.VisitField(fieldDefinition), DefinitionType.Field);
                 }
             }
 
@@ -306,7 +306,7 @@ namespace Weaver
             {
                 foreach (EventDefinition eventDefinition in typeDefinition.Events)
                 {
-                    VisitAddIn(addins, e => e.Visit(eventDefinition), DefinitionType.Event);
+                    VisitAddIn(addins, e => e.VisitEvent(eventDefinition), DefinitionType.Event);
                 }
             }
         }
@@ -325,6 +325,7 @@ namespace Weaver
                     catch (Exception e)
                     {
                         AddinException addinException = new AddinException(addin, e);
+                        throw addinException;
                     }
                 }
             }

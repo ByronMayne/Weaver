@@ -54,7 +54,7 @@ namespace Weaver
         {
             if(Has(absolutePath))
             {
-                AssemblyDefinition assemblyDefinition = Get(absolutePath);
+                AssemblyDefinition assemblyDefinition = Get(absolutePath, false);
                 assemblyDefinition.Dispose();
                 m_assemblyDefinitions.Remove(absolutePath);
                 return true;
@@ -69,7 +69,7 @@ namespace Weaver
         /// <returns>
         /// The AssemblyDefinition for the assembly at the given path
         /// </returns>
-        public AssemblyDefinition Get(AbsolutePath assemblyPath)
+        public AssemblyDefinition Get(AbsolutePath assemblyPath, bool isReadOnly)
         {
             if (Has(assemblyPath))
                 return m_assemblyDefinitions[assemblyPath];
@@ -79,9 +79,9 @@ namespace Weaver
             ReaderParameters readerParameters = new ReaderParameters()
             {
                 ReadSymbols = readerProvider != null,
-                ReadWrite = true,
+                ReadWrite = !isReadOnly,
                 AssemblyResolver = m_assemblyResolver,
-                ReadingMode = ReadingMode.Immediate,
+                ReadingMode = ReadingMode.Deferred,
                 ThrowIfSymbolsAreNotMatching = false,
                 SymbolReaderProvider = readerProvider,
             };
