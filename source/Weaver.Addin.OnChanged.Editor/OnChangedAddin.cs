@@ -1,8 +1,6 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
-using System;
-using System.Collections.Generic;
 using Weaver.Extensions;
 
 namespace Weaver.Addin.OnChanged.Editor
@@ -85,5 +83,4 @@ namespace Weaver.Addin.OnChanged.Editor
         private string FormatError(PropertyDefinition propertyDefinition)
             => $"The property {propertyDefinition.Name} defined in {propertyDefinition.DeclaringType.FullName}";
     }
-
 }
