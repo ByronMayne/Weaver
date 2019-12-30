@@ -71,7 +71,11 @@ namespace Weaver.Addin.MethodTimer.Editor
                 Instruction.Create(OpCodes.Ldloc, stopwatchVariable),
                 Instruction.Create(OpCodes.Callvirt, m_stopwatchDefinition.Stop),
 
-                // Set up parameters
+                // Check if delegate is null
+                Instruction.Create(OpCodes.Ldsfld, m_timerDelegateField),
+                Instruction.Create(OpCodes.Brfalse_S, instructions[index]), // Skip over because it's null
+
+                // Invoke Delegate
                 Instruction.Create(OpCodes.Ldsfld, m_timerDelegateField),
                 Instruction.Create(OpCodes.Ldstr, method.DeclaringType.FullName),
                 Instruction.Create(OpCodes.Ldstr, method.Name),

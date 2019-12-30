@@ -10,8 +10,6 @@ namespace Weaver.Addin.MethodTimer.Tests
     [TestClass]
     public class MethodTimerTests : BaseComplicationTest
     {
-        private static int m_assemblyName;
-
         [TestMethod]
         public void BasicCompile()
         {
@@ -41,15 +39,13 @@ namespace Weaver.Addin.MethodTimer.Tests
 
             string source =
             @"using Weaver.Addin.MethodTimer;
-              using System.Runtime.CompilerServices;
-
 
             public class BasicExample
             {
                 [MethodTimer]
-                [MethodImpl(MethodImplOptions.NoOptimization)]
                 public static int Start(int input)
                 {
+                    int count = 4;
                     if(input < 0)
                     {
                         return 2;
