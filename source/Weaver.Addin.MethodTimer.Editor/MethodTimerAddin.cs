@@ -2,6 +2,7 @@
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using Weaver.Extensions;
 
 namespace Weaver.Addin.MethodTimer.Editor
@@ -12,22 +13,24 @@ namespace Weaver.Addin.MethodTimer.Editor
 
         private StopwatchDefinition m_stopwatchDefinition;
         private StringDefinition m_stringDefinition;
+        private ILType m_ilType;
 
         // Timer
         private FieldReference m_timerDelegateField;
-        private MethodReference m_timerDelegateInvoke; 
+        private MethodReference m_timerDelegateInvoke;
 
         public override void VisitModule(ModuleDefinition moduleDefinition)
         {
             base.VisitModule(moduleDefinition);
             m_stopwatchDefinition = new StopwatchDefinition(moduleDefinition);
             m_stringDefinition = new StringDefinition(moduleDefinition);
+            m_ilType = new ILType(moduleDefinition);
 
-            moduleDefinition.ImportFluent<MethodTimerAttribute>()
-                .GetStaticField(() => MethodTimerAttribute.OnMethodLogged, out m_timerDelegateField);
+            moduleDefinition.ImportFluent(typeof(MethodTimer))
+                .GetStaticField(() => MethodTimer.OnMethodLogged, out m_timerDelegateField);
 
-            moduleDefinition.ImportFluent<MethodTimerAttribute.MethodTimerDelegate>()
-                .GetMethod( d=> d.Invoke("", "", new TimeSpan()), out m_timerDelegateInvoke);
+            moduleDefinition.ImportFluent<MethodTimer.MethodTimerDelegate>()
+                .GetMethod(d => d.Invoke(null, "", new TimeSpan()), out m_timerDelegateInvoke);
         }
 
         public override void VisitMethod(MethodDefinition methodDefinition)
@@ -66,7 +69,7 @@ namespace Weaver.Addin.MethodTimer.Editor
         }
 
         private void InjectLog(int index, MethodDefinition method, Collection<Instruction> instructions, VariableDefinition stopwatchVariable)
-            => instructions.InsertRange(index, new []
+         => instructions.InsertRange(index, new[]
             {
                 Instruction.Create(OpCodes.Ldloc, stopwatchVariable),
                 Instruction.Create(OpCodes.Callvirt, m_stopwatchDefinition.Stop),
@@ -77,10 +80,15 @@ namespace Weaver.Addin.MethodTimer.Editor
 
                 // Invoke Delegate
                 Instruction.Create(OpCodes.Ldsfld, m_timerDelegateField),
-                Instruction.Create(OpCodes.Ldstr, method.DeclaringType.FullName),
+
+                // Get runtime type for first parameter 
+                Instruction.Create(OpCodes.Ldtoken, method.Module.ImportReference(method.DeclaringType)),
+                Instruction.Create(OpCodes.Call, m_ilType.GetTypeFromHandle),
+                // Method Name 
                 Instruction.Create(OpCodes.Ldstr, method.Name),
+                // Time span containing name 
                 Instruction.Create(OpCodes.Ldloc, stopwatchVariable),
-                Instruction.Create(OpCodes.Callvirt, m_stopwatchDefinition.Elapsed), 
+                Instruction.Create(OpCodes.Callvirt, m_stopwatchDefinition.Elapsed),
                 Instruction.Create(OpCodes.Callvirt, m_timerDelegateInvoke)
             });
 

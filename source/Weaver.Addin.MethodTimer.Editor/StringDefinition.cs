@@ -11,8 +11,7 @@ namespace Weaver.Addin.MethodTimer.Editor
         {
             moduleDefinition.ImportFluent<string>()
                   .GetType(out Definition)
-                  .GetMethod(() => string.Concat(string.Empty, string.Empty), out Concat);
-
+                  .GetStaticMethod(() => string.Concat(string.Empty, string.Empty), out Concat);
         }
     }
 }

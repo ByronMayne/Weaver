@@ -47,7 +47,7 @@ namespace Weaver.Tests.Fluent
         public void GetStaticMethod()
         {
             m_moduleDefinition.ImportFluent<string>()
-                .GetMethod(() => string.Concat(string.Empty, string.Empty), out MethodDefinition concat);
+                .GetStaticMethod(() => string.Concat(string.Empty, string.Empty), out MethodDefinition concat);
 
             Assert.IsNotNull(concat);
             Assert.AreEqual(2, concat.Parameters.Count);

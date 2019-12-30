@@ -73,16 +73,6 @@ namespace Weaver.Fluent
         ITypeImport<T> GetMethod(Expression<Func<T, Action>> expression, out MethodReference methodReference);
 
         /// <summary>
-        /// Given a lamda expression this will return a static function for the type
-        /// </summary>
-        ITypeImport<T> GetMethod(Expression<Action> expression, out MethodDefinition methodDefinition);
-
-        /// <summary>
-        /// Given a lamda expression this will return a static function for the type
-        /// </summary>
-        ITypeImport<T> GetMethod(Expression<Action> expression, out MethodReference methodReference);
-
-        /// <summary>
         /// Returns back the method with the given name.
         /// </summary>
         /// <param name="constructor">The constructor.</param>
@@ -105,6 +95,16 @@ namespace Weaver.Fluent
         /// Given a lamda expression this will return a static function for the type
         /// </summary>
         ITypeImport<T> GetStaticMethod(Expression<Func<Delegate>> expression, out MethodReference methodReference);
+
+        /// <summary>
+        /// Given a lamda expression this will return a static function for the type
+        /// </summary>
+        ITypeImport<T> GetStaticMethod(Expression<Action> expression, out MethodDefinition methodDefinition);
+
+        /// <summary>
+        /// Given a lamda expression this will return a static function for the type
+        /// </summary>
+        ITypeImport<T> GetStaticMethod(Expression<Action> expression, out MethodReference methodReference);
 
         /// <summary>
         /// Gets the definition for a static field.

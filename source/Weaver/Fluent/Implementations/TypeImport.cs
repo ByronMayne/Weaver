@@ -173,7 +173,7 @@ namespace Weaver.Fluent
         }
 
         /// <inheritdoc />
-        public ITypeImport<T> GetMethod(Expression<Action> expression, out MethodDefinition methodDefinition)
+        public ITypeImport<T> GetStaticMethod(Expression<Action> expression, out MethodDefinition methodDefinition)
         {
             if (expression == null)
                 throw new ArgumentNullException(nameof(expression));
@@ -189,9 +189,9 @@ namespace Weaver.Fluent
         }
 
         /// <inheritdoc />
-        public ITypeImport<T> GetMethod(Expression<Action> expression, out MethodReference methodReference)
+        public ITypeImport<T> GetStaticMethod(Expression<Action> expression, out MethodReference methodReference)
         {
-            GetMethod(expression, out MethodDefinition methodDefinition);
+            GetStaticMethod(expression, out MethodDefinition methodDefinition);
 
             if (m_isExternalType)
             {
@@ -211,7 +211,7 @@ namespace Weaver.Fluent
             methodReference = methodDefinition;
             if (m_isExternalType)
             {
-                methodReference = m_moduleDefinition.Import(methodReference);
+                methodReference = m_moduleDefinition.ImportReference(methodReference);
             }
             return this;
         }
@@ -372,16 +372,16 @@ namespace Weaver.Fluent
         }
 
         /// <inheritdoc />
-        ITypeImport ITypeImport.GetMethod(Expression<Action> expression, out MethodReference methodReference)
+        ITypeImport ITypeImport.GetStaticMethod(Expression<Action> expression, out MethodReference methodReference)
         {
-            GetMethod(expression, out methodReference);
+            GetStaticMethod(expression, out methodReference);
             return this;
         }
 
         /// <inheritdoc />
-        ITypeImport ITypeImport.GetMethod(Expression<Action> expression, out MethodDefinition methodDefinition)
+        ITypeImport ITypeImport.GetStaticMethod(Expression<Action> expression, out MethodDefinition methodDefinition)
         {
-            GetMethod(expression, out methodDefinition);
+            GetStaticMethod(expression, out methodDefinition);
             return this;
         }
 

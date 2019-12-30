@@ -62,7 +62,7 @@ namespace Weaver.Fluent
         /// <param name="expression">The expression.</param>
         /// <param name="methodReference">The method reference.</param>
         /// <returns></returns>
-        ITypeImport GetMethod(Expression<Action> expression, out MethodReference methodReference);
+        ITypeImport GetStaticMethod(Expression<Action> expression, out MethodReference methodReference);
 
         /// <summary>
         /// Gets the method.
@@ -70,7 +70,7 @@ namespace Weaver.Fluent
         /// <param name="expression">The expression.</param>
         /// <param name="methodDefinition">The method definition.</param>
         /// <returns></returns>
-        ITypeImport GetMethod(Expression<Action> expression, out MethodDefinition methodDefinition);
+        ITypeImport GetStaticMethod(Expression<Action> expression, out MethodDefinition methodDefinition);
 
         /// <summary>
         /// Gets the definition for a static field.
