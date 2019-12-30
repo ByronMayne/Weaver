@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Weaver.Addin.MethodTimer.Editor
 {
-    internal class StopwatchDefinition
+    internal class ILStopwatch
     {
         public readonly TypeDefinition Definition;
         public readonly TypeReference Reference;
@@ -12,7 +12,7 @@ namespace Weaver.Addin.MethodTimer.Editor
         public readonly MethodReference Stop;
         public readonly MethodReference Elapsed;
 
-        public StopwatchDefinition(ModuleDefinition moduleDefinition)
+        public ILStopwatch(ModuleDefinition moduleDefinition)
         {
             moduleDefinition.ImportFluent<Stopwatch>()
                 .GetType(out Definition)

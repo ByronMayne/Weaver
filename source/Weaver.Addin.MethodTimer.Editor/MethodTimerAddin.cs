@@ -11,8 +11,7 @@ namespace Weaver.Addin.MethodTimer.Editor
     {
         public override string Name => "Method Timer";
 
-        private StopwatchDefinition m_stopwatchDefinition;
-        private StringDefinition m_stringDefinition;
+        private ILStopwatch m_stopwatchDefinition;
         private ILType m_ilType;
 
         // Timer
@@ -22,8 +21,7 @@ namespace Weaver.Addin.MethodTimer.Editor
         public override void VisitModule(ModuleDefinition moduleDefinition)
         {
             base.VisitModule(moduleDefinition);
-            m_stopwatchDefinition = new StopwatchDefinition(moduleDefinition);
-            m_stringDefinition = new StringDefinition(moduleDefinition);
+            m_stopwatchDefinition = new ILStopwatch(moduleDefinition);
             m_ilType = new ILType(moduleDefinition);
 
             moduleDefinition.ImportFluent(typeof(MethodTimer))
