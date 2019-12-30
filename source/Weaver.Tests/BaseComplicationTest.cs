@@ -35,7 +35,9 @@ namespace Weaver.Tests
             string fileName = Path.GetRandomFileName();
             string outputPath = $"{Path.GetTempPath()}{fileName}.dll";
 
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(sourceCode, CSharpParseOptions.Default);
+            CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.LatestMajor);
+
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(sourceCode, parseOptions);
             ISet<string> assemblies = new HashSet<string>();
             AppendReferences(assemblies);
 
