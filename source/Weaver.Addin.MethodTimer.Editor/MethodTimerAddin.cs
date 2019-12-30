@@ -2,7 +2,6 @@
 using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
 using System;
-using System.Collections.Generic;
 using Weaver.Extensions;
 
 namespace Weaver.Addin.MethodTimer.Editor

@@ -4,5 +4,8 @@
     <IsEditorAssembly>True</IsEditorAssembly>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)Targets/build.xml"/>
+  <Import Project="$(SolutionDir)Targets/build.xml" />
+  <ItemGroup>
+    <ProjectReference Include="..\Weaver.Contracts\Weaver.Contracts.csproj" />
+  </ItemGroup>
 </Project>
