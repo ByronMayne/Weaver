@@ -2,19 +2,23 @@
 
 namespace Weaver.Addin.MethodTimer
 {
-    public class MethodTimerAttribute : Attribute
+    public sealed class MethodTimerAttribute : Attribute
     {
-        /// <summary>
-        /// The delegate for invoking logs 
-        /// </summary>
-        /// <param name="declaringClass">The declaring class.</param>
-        /// <param name="methodName">Name of the method.</param>
-        /// <param name="duration">The duration.</param>
-        public delegate void MethodTimerDelegate(string declaringClass, string methodName, TimeSpan duration);
+        public bool Recursive { get; }
+
+        public MethodTimerAttribute()
+        {
+            Recursive = false;
+        }
 
         /// <summary>
-        /// Invoked whenever any method has been logged.
+        /// Initializes a new instance of the <see cref="MethodTimerAttribute"/> class.
         /// </summary>
-        public static MethodTimerDelegate OnMethodLogged;
+        /// <param name="isRecursive">if set to <c>true</c> this function and every 
+        /// function it calls into will have the method logged otherwise just this function will. As note this will make the weaving time slower</param>
+        public MethodTimerAttribute(bool isRecursive)
+        {
+            Recursive = isRecursive;
+        }
     }
 }

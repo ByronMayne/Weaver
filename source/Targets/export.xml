@@ -31,11 +31,11 @@
     <!-- Copy Mono Debug Symbols -->
     <Copy SourceFiles="(FilePath).dll.mdb"
           DestinationFolder="$(OutputPath)"
-          Condition="Exists('$(FilePath).dll.mdb') And '$(CopyDebugSymbols.ToLower())' == 'true'"/>
+          Condition="Exists('$(FilePath).dll.mdb')"/>
     <!-- Copy Program Debug Symbols -->
     <Copy SourceFiles="$(FilePath).pdb"
           DestinationFolder="$(OutputPath)"
-          Condition="Exists('$(FilePath).pdb') And '$(CopyDebugSymbols.ToLower())' == 'true'"/>
+          Condition="Exists('$(FilePath).pdb')"/>
 
   </Target>
 </Project>

@@ -13,7 +13,7 @@ namespace Weaver.Unity
     {
         private readonly IAssemblyWeaver m_weaver;
         private readonly ILogger m_logger;
-        private readonly IEnumerable<IWeaverAddin> m_addins;
+        private readonly ICollection<IWeaverAddin> m_addins;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnityWeaver"/> class. Created in
@@ -27,13 +27,14 @@ namespace Weaver.Unity
                 // These assemblies can't have add-ins 
                 .Where(a => !a.FullName.StartsWith("Microsoft"))
                 .Where(a => !a.FullName.StartsWith("Unity"))
-                .Where(a => !a.FullName.StartsWith("Unity"))
                 .SelectMany(a => a.GetTypes())
                 .Where(t => !t.IsAbstract)
                 .Where(t => typeof(IWeaverAddin).IsAssignableFrom(t))
                 .Select(CreateInstance)
                 .Where(i => i != null)
                 .ToArray(); // We don't want them to load lazy 
+
+            m_logger = new UnityLog();
 
             m_weaver = new AssemblyWeaver();
             m_weaver.Logger = m_logger;
@@ -59,6 +60,8 @@ namespace Weaver.Unity
 
         internal void WeaveAssembly(AbsolutePath assemblyPath)
         {
+            Debug.Log($"WeaveAssembly: {assemblyPath}");
+
             m_weaver.WeaveAssembly(assemblyPath, m_addins);
         }
     }

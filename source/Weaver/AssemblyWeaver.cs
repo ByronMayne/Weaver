@@ -186,12 +186,16 @@ namespace Weaver
 
             foreach (Type type in addIns)
             {
+                if(type == null)
+                {
+                    throw new NullReferenceException("Unable to create null type");
+                }
+
                 if (!typeof(IWeaverAddin).IsAssignableFrom(type))
                 {
                     Exception exception = new ArgumentException($"The type {type.FullName} does not inherit from the required type {typeof(IWeaverAddin)}");
                     Logger.Exception(nameof(AssemblyWeaver), exception);
                 }
-
                 IWeaverAddin instance = (IWeaverAddin)Activator.CreateInstance(type, true);
                 createdAddins.Add(instance);
             }
