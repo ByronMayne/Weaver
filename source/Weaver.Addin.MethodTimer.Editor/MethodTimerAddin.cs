@@ -59,8 +59,6 @@ namespace Weaver.Addin.MethodTimer.Editor
             {
                 Instruction instruction = body.Instructions[i];
 
-                Instruction previous = instruction.Previous;
-
                 if (instruction.OpCode == OpCodes.Ret)
                 {
                     InjectLog(i, methodDefinition, body.Instructions, stopwatchVariable);
