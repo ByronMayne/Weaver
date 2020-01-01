@@ -29,7 +29,7 @@ namespace Weaver
             foreach (Assembly assembly in assemblies)
             {
 				// Dynamic assemblies don't live on disk. 
-				if (assembly.ReflectionOnly)
+		if (assembly.ReflectionOnly || assembly.IsDynamic)
 					continue;
 
                 // store locations
