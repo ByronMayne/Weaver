@@ -1,3 +1,4 @@
+> This branch is currently a work in progress. The goal is to abstract the weaving process away from Unity and just create Unity hooks. This branch also has support for newer Unity versions however the contracts have changed. 
 
 # Weaver
 A a code weaver built for use in [Unity Engine](https://unity3d.com/). Based very heavily off of [Fody](https://github.com/Fody/Fody). Implmented using [Mono.Cecil](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/).
