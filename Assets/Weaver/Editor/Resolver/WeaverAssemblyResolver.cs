@@ -28,9 +28,9 @@ namespace Weaver
             // for each currently loaded assembly,
             foreach (Assembly assembly in assemblies)
             {
-				// Dynamic assemblies don't live on disk. 
-		if (assembly.ReflectionOnly || assembly.IsDynamic)
-					continue;
+                // Dynamic assemblies don't live on disk. 
+                if (assembly.ReflectionOnly || assembly.IsDynamic || string.IsNullOrEmpty(assembly.Location))
+                    continue;
 
                 // store locations
                 _appDomainAssemblyLocations[assembly.FullName] = assembly.Location;
