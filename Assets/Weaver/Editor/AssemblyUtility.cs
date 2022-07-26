@@ -64,7 +64,7 @@ namespace Weaver
             // Force the database to refresh.
             UnityEditor.AssetDatabase.Refresh();
         }
-        }
+        
 
         /// <summary>
         /// Looks over all cached user assemblies for all types that inherit from
