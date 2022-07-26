@@ -42,7 +42,10 @@ namespace Weaver
         /// 
         [MenuItem("CONTEXT/WeaverSettings/Re-weave Assemblies")]
         public static void DirtyAllScripts()
-        {
+        {                   
+#if UNITY_2019_3_OR_NEWER
+            UnityEditor.Compilation.CompilationPipeline.RequestScriptCompilation();
+#else
             // Grab the UnityEditor assembly
             Assembly editorAssembly = typeof(UnityEditor.Editor).Assembly;
             // Find the type that contains the method we want 
@@ -57,9 +60,11 @@ namespace Weaver
                 // Invoke the static method with no arguments.
                 dirtyAllScriptsMethod.Invoke(null, null);
             }
+#endif
             // Force the database to refresh.
             UnityEditor.AssetDatabase.Refresh();
         }
+        
 
         /// <summary>
         /// Looks over all cached user assemblies for all types that inherit from
