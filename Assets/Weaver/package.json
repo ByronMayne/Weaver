@@ -5,7 +5,7 @@
     "name": "ByronMayne",
     "url": "https://github.com/ByronMayne/"
   },
-  "version": "2.0.0",
+  "version": "3.3.0",
   "unity": "2019.1",
   "description": "A a code weaver built for use in Unity Engine. Based very heavily off of Fody. Implmented using Mono.Cecil.",
   "keywords": [
@@ -14,7 +14,7 @@
   ],
   "license": "MIT",
    "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.11.4"
+        "com.unity.nuget.mono-cecil": "1.10.2"
    }
 }
 
