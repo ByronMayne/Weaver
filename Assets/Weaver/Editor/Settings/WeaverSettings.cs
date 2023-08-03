@@ -221,6 +221,8 @@ namespace Weaver
             {
                 return;
             }
+            if (!this.m_WeavedAssemblies.Any(x => Path.GetFileName(x.GetSystemPath()) == Path.GetFileName(assemblyPath)))
+                return;
 
             string name = Path.GetFileNameWithoutExtension(assemblyPath);
 
