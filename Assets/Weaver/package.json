@@ -14,7 +14,7 @@
   ],
   "license": "MIT",
    "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.10.2"
+        "com.unity.nuget.mono-cecil": "1.11.4"
    }
 }
 

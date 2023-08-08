@@ -188,13 +188,13 @@ namespace Weaver
         /// Returns back an instance of our symbol reader for 
         /// </summary>
         /// <returns></returns>
-        private static ReaderParameters GetReaderParameters()
+        private static ReaderParameters GetReaderParameters(string assemblyPath)
         {
             return new ReaderParameters()
             {
                 ReadingMode = ReadingMode.Immediate,
                 ReadWrite = true,
-                AssemblyResolver = new WeaverAssemblyResolver(),
+                AssemblyResolver = new WeaverAssemblyResolver(assemblyPath),
                 ReadSymbols = true,
                 SymbolReaderProvider = new PdbReaderProvider()
             };
@@ -221,6 +221,8 @@ namespace Weaver
             {
                 return;
             }
+            if (!this.m_WeavedAssemblies.Any(x => Path.GetFileName(x.GetSystemPath()) == Path.GetFileName(assemblyPath)))
+                return;
 
             string name = Path.GetFileNameWithoutExtension(assemblyPath);
 
@@ -247,7 +249,7 @@ namespace Weaver
 
             using (FileStream assemblyStream = new FileStream(assemblyPath, FileMode.Open, FileAccess.ReadWrite))
             {
-                using (ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(assemblyStream, GetReaderParameters()))
+                using (ModuleDefinition moduleDefinition = ModuleDefinition.ReadModule(assemblyStream, GetReaderParameters(assemblyPath)))
                 {
                     m_Components.Initialize(this);
 

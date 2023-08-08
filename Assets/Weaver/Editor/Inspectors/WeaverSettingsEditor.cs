@@ -152,9 +152,6 @@ namespace Weaver.Editors
             {
                 _hasModifiedProperties = true;
             }
-            GUILayout.Label("Log", EditorStyles.boldLabel);
-            DrawLogs();
-
             if (_hasModifiedProperties)
             {
                 if (GUILayout.Button("Apply Modified Properties"))
@@ -162,6 +159,10 @@ namespace Weaver.Editors
                     ApplyModifiedProperties();
                 }
             }
+            GUILayout.Label("Log", EditorStyles.boldLabel);
+            DrawLogs();
+
+
         }
 
         private void ApplyModifiedProperties()
